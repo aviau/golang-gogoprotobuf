@@ -1,0 +1,5 @@
+golang-gogoprotobuf (0.0~git20140427-1) UNRELEASED; urgency=medium
+
+  * Initial release. Closes: #746190
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 27 Apr 2014 23:17:30 +0200

@@ -1,0 +1,20 @@
+Source: golang-gogoprotobuf
+Section: devel
+Priority: extra
+Maintainer: Jelmer Vernooij <jelmer@debian.org>
+Build-Depends: debhelper (>= 9), dh-golang, golang-go (>= 1.0)
+Standards-Version: 3.9.5
+Homepage: https://code.google.com/p/gogoprotobuf
+Vcs-Git: git://anonscm.debian.org/users/jelmer/golang-gogoprotobuf.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/jelmer/golang-gogoprotobuf.git
+
+Package: golang-gogoprotobuf-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, protobuf-compiler
+Description: Alternative protocol buffer support for the Go programming language
+ An alternative protocol buffer support for the Go programming language,
+ forked from golang-goprotobuf. It is backwards compatible with
+ goprotobuf, but provides faster marshalling and unmarshalling and can
+ generate extra helper code, tests and benchmarks.
+ .
+ This package contains the source.
