@@ -4,7 +4,8 @@ Source: https://code.google.com/p/gogoprotobuf/
 
 Files: *
 Copyright:
-  2010, The Go Authors.
+  2008 Google Inc.
+  2010-2012, The Go Authors.
   2013, Vastech SA (PTY) LTD.
 License: BSD-3-Clause
 
