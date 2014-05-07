@@ -1,4 +1,4 @@
-golang-gogoprotobuf (0.0~git20140427-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (0.0~git20140427-1) unstable; urgency=medium
 
   * Initial release. Closes: #746190
 
