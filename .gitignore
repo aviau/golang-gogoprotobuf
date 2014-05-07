@@ -3,3 +3,5 @@
 obj-*
 *.debhelper.log
 *.substvars
+/debian/golang-gogoprotobuf-dev/
+/debian/files
