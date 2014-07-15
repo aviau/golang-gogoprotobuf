@@ -2,6 +2,7 @@ golang-gogoprotobuf (0.0~git20140427-2) UNRELEASED; urgency=medium
 
   * Add branch to Vcs-Git header.
   * Add protoc-gen-gogo.1 manpage.
+  * Don't install mixbench.
 
  -- Jelmer Vernooij <jelmer@debian.org>  Tue, 15 Jul 2014 17:34:04 +0200
 

@@ -6,6 +6,10 @@ export DH_GOPKG := code.google.com/p/gogoprotobuf
 %:
 	dh $@ --buildsystem=golang --with=golang
 
+override_dh_auto_build:
+	dh_auto_build
+	rm -f debian/tmp/usr/bin/mixbench
+
 override_dh_auto_test:
 	# Not running testsuite, as there is no support for
 	# running the tests in a custom build directory.
