@@ -34,7 +34,7 @@ import (
 )
 
 func TestEmbedConflict(t *testing.T) {
-	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:.", "ec.proto")
+	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:../../protobuf/:.", "ec.proto")
 	data, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Errorf("Expected error")
@@ -46,11 +46,12 @@ func TestEmbedConflict(t *testing.T) {
 }
 
 func TestEmbedMarshaler(t *testing.T) {
-	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:.", "em.proto")
+	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:../../protobuf/:.", "em.proto")
 	data, err := cmd.CombinedOutput()
-	t.Logf("received error = %v and output = %v", err, string(data))
-	if !strings.Contains(string(data), "WARNING: found non-[marshaler unsafe_marshaler]") {
-		t.Errorf("Expected WARNING: found non-marshaler C with embedded marshaler D")
+	dataStr := string(data)
+	t.Logf("received error = %v and output = %v", err, dataStr)
+	if !strings.Contains(dataStr, "WARNING: found non-") || !strings.Contains(dataStr, "unsafe_marshaler") {
+		t.Errorf("Expected WARNING: found non-[marshaler unsafe_marshaler] C with embedded marshaler D")
 	}
 	if err := os.Remove("em.pb.go"); err != nil {
 		panic(err)
@@ -58,7 +59,7 @@ func TestEmbedMarshaler(t *testing.T) {
 }
 
 func TestEmbedExtend(t *testing.T) {
-	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:.", "ee.proto")
+	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:../../protobuf/:.", "ee.proto")
 	data, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Errorf("Expected error")
@@ -70,7 +71,7 @@ func TestEmbedExtend(t *testing.T) {
 }
 
 func TestCustomName(t *testing.T) {
-	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:.", "en.proto")
+	cmd := exec.Command("protoc", "--gogo_out=.", "-I=../../../../../:../../protobuf/:.", "en.proto")
 	data, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Errorf("Expected error")

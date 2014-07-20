@@ -1148,8 +1148,15 @@ func (g *Generator) generateImports() {
 		if _, ok := g.usedPackages[fd.PackageName()]; ok {
 			if strings.Contains(filename, "/") {
 				dir, _ := path.Split(filename)
-				g.P("import ", fd.PackageName(), " ", strconv.Quote(path.Clean(dir)))
-				c[path.Clean(dir)] = true
+				dir = path.Clean(dir)
+				if dir == "google/protobuf" && strings.HasSuffix(filename, "descriptor.pb") {
+					// This allows protos to import a single google/protobuf/descriptor.proto so as not to cause conflicts with C++ or other code generators.
+					// Also this allows the go generated descriptor to live inside the gogoprotobuf package
+					dir = "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
+					g.P("// renamed import google/protobuf/descriptor to code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor")
+				}
+				g.P("import ", fd.PackageName(), " ", strconv.Quote(dir))
+				c[dir] = true
 			} else {
 				g.P("import ", fd.PackageName(), " ", strconv.Quote(filename))
 			}
@@ -1571,7 +1578,11 @@ func (g *Generator) generateMessage(message *Descriptor) {
 		g.RecordTypeUse(field.GetTypeName())
 	}
 	if len(message.ExtensionRange) > 0 {
-		g.P("XXX_extensions\t\tmap[int32]", g.Pkg["proto"], ".Extension `json:\"-\"`")
+		if gogoproto.HasExtensionsMap(g.file.FileDescriptorProto, message.DescriptorProto) {
+			g.P("XXX_extensions\t\tmap[int32]", g.Pkg["proto"], ".Extension `json:\"-\"`")
+		} else {
+			g.P("XXX_extensions\t\t[]byte `protobuf:\"bytes,0,opt\" json:\"-\"`")
+		}
 	}
 	g.P("XXX_unrecognized\t[]byte `json:\"-\"`")
 	g.Out()
@@ -1621,16 +1632,29 @@ func (g *Generator) generateMessage(message *Descriptor) {
 		g.P("return extRange_", ccTypeName)
 		g.Out()
 		g.P("}")
-		g.P("func (m *", ccTypeName, ") ExtensionMap() map[int32]", g.Pkg["proto"], ".Extension {")
-		g.In()
-		g.P("if m.XXX_extensions == nil {")
-		g.In()
-		g.P("m.XXX_extensions = make(map[int32]", g.Pkg["proto"], ".Extension)")
-		g.Out()
-		g.P("}")
-		g.P("return m.XXX_extensions")
-		g.Out()
-		g.P("}")
+		if gogoproto.HasExtensionsMap(g.file.FileDescriptorProto, message.DescriptorProto) {
+			g.P("func (m *", ccTypeName, ") ExtensionMap() map[int32]", g.Pkg["proto"], ".Extension {")
+			g.In()
+			g.P("if m.XXX_extensions == nil {")
+			g.In()
+			g.P("m.XXX_extensions = make(map[int32]", g.Pkg["proto"], ".Extension)")
+			g.Out()
+			g.P("}")
+			g.P("return m.XXX_extensions")
+			g.Out()
+			g.P("}")
+		} else {
+			g.P("func (m *", ccTypeName, ") GetExtensions() *[]byte {")
+			g.In()
+			g.P("if m.XXX_extensions == nil {")
+			g.In()
+			g.P("m.XXX_extensions = make([]byte, 0)")
+			g.Out()
+			g.P("}")
+			g.P("return &m.XXX_extensions")
+			g.Out()
+			g.P("}")
+		}
 	}
 
 	// Default constants

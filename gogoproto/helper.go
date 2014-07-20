@@ -88,7 +88,7 @@ func HasGoGetters(file *google_protobuf.FileDescriptorProto, message *google_pro
 }
 
 func IsUnion(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
-	return proto.GetBoolExtension(message.Options, E_Union, proto.GetBoolExtension(file.Options, E_UnionAll, false))
+	return proto.GetBoolExtension(message.Options, E_Onlyone, proto.GetBoolExtension(file.Options, E_OnlyoneAll, false))
 }
 
 func HasGoString(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
@@ -157,4 +157,8 @@ func IsUnsafeMarshaler(file *google_protobuf.FileDescriptorProto, message *googl
 
 func IsUnsafeUnmarshaler(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
 	return proto.GetBoolExtension(message.Options, E_UnsafeUnmarshaler, proto.GetBoolExtension(file.Options, E_UnsafeUnmarshalerAll, false))
+}
+
+func HasExtensionsMap(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
+	return proto.GetBoolExtension(message.Options, E_GoprotoExtensionsMap, proto.GetBoolExtension(file.Options, E_GoprotoExtensionsMapAll, true))
 }

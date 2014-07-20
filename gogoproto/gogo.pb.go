@@ -15,6 +15,8 @@ package gogoproto
 import proto "code.google.com/p/gogoprotobuf/proto"
 import json "encoding/json"
 import math "math"
+
+// renamed import google/protobuf/descriptor to code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor
 import google_protobuf "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
 
 // Reference proto, json, and math imports to suppress error if they are not otherwise used.
@@ -110,12 +112,12 @@ var E_StringerAll = &proto.ExtensionDesc{
 	Tag:           "varint,63008,opt,name=stringer_all",
 }
 
-var E_UnionAll = &proto.ExtensionDesc{
+var E_OnlyoneAll = &proto.ExtensionDesc{
 	ExtendedType:  (*google_protobuf.FileOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         63009,
-	Name:          "gogoproto.union_all",
-	Tag:           "varint,63009,opt,name=union_all",
+	Name:          "gogoproto.onlyone_all",
+	Tag:           "varint,63009,opt,name=onlyone_all",
 }
 
 var E_EqualAll = &proto.ExtensionDesc{
@@ -214,6 +216,14 @@ var E_UnsafeUnmarshalerAll = &proto.ExtensionDesc{
 	Tag:           "varint,63024,opt,name=unsafe_unmarshaler_all",
 }
 
+var E_GoprotoExtensionsMapAll = &proto.ExtensionDesc{
+	ExtendedType:  (*google_protobuf.FileOptions)(nil),
+	ExtensionType: (*bool)(nil),
+	Field:         63025,
+	Name:          "gogoproto.goproto_extensions_map_all",
+	Tag:           "varint,63025,opt,name=goproto_extensions_map_all",
+}
+
 var E_GoprotoGetters = &proto.ExtensionDesc{
 	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
 	ExtensionType: (*bool)(nil),
@@ -270,12 +280,12 @@ var E_Stringer = &proto.ExtensionDesc{
 	Tag:           "varint,67008,opt,name=stringer",
 }
 
-var E_Union = &proto.ExtensionDesc{
+var E_Onlyone = &proto.ExtensionDesc{
 	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
 	ExtensionType: (*bool)(nil),
 	Field:         64009,
-	Name:          "gogoproto.union",
-	Tag:           "varint,64009,opt,name=union",
+	Name:          "gogoproto.onlyone",
+	Tag:           "varint,64009,opt,name=onlyone",
 }
 
 var E_Equal = &proto.ExtensionDesc{
@@ -358,6 +368,14 @@ var E_UnsafeUnmarshaler = &proto.ExtensionDesc{
 	Tag:           "varint,64024,opt,name=unsafe_unmarshaler",
 }
 
+var E_GoprotoExtensionsMap = &proto.ExtensionDesc{
+	ExtendedType:  (*google_protobuf.MessageOptions)(nil),
+	ExtensionType: (*bool)(nil),
+	Field:         64025,
+	Name:          "gogoproto.goproto_extensions_map",
+	Tag:           "varint,64025,opt,name=goproto_extensions_map",
+}
+
 var E_Nullable = &proto.ExtensionDesc{
 	ExtendedType:  (*google_protobuf.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
@@ -402,7 +420,7 @@ func init() {
 	proto.RegisterExtension(E_GostringAll)
 	proto.RegisterExtension(E_PopulateAll)
 	proto.RegisterExtension(E_StringerAll)
-	proto.RegisterExtension(E_UnionAll)
+	proto.RegisterExtension(E_OnlyoneAll)
 	proto.RegisterExtension(E_EqualAll)
 	proto.RegisterExtension(E_DescriptionAll)
 	proto.RegisterExtension(E_TestgenAll)
@@ -415,6 +433,7 @@ func init() {
 	proto.RegisterExtension(E_EnumStringerAll)
 	proto.RegisterExtension(E_UnsafeMarshalerAll)
 	proto.RegisterExtension(E_UnsafeUnmarshalerAll)
+	proto.RegisterExtension(E_GoprotoExtensionsMapAll)
 	proto.RegisterExtension(E_GoprotoGetters)
 	proto.RegisterExtension(E_GoprotoStringer)
 	proto.RegisterExtension(E_VerboseEqual)
@@ -422,7 +441,7 @@ func init() {
 	proto.RegisterExtension(E_Gostring)
 	proto.RegisterExtension(E_Populate)
 	proto.RegisterExtension(E_Stringer)
-	proto.RegisterExtension(E_Union)
+	proto.RegisterExtension(E_Onlyone)
 	proto.RegisterExtension(E_Equal)
 	proto.RegisterExtension(E_Description)
 	proto.RegisterExtension(E_Testgen)
@@ -433,6 +452,7 @@ func init() {
 	proto.RegisterExtension(E_Sizer)
 	proto.RegisterExtension(E_UnsafeMarshaler)
 	proto.RegisterExtension(E_UnsafeUnmarshaler)
+	proto.RegisterExtension(E_GoprotoExtensionsMap)
 	proto.RegisterExtension(E_Nullable)
 	proto.RegisterExtension(E_Embed)
 	proto.RegisterExtension(E_Customtype)

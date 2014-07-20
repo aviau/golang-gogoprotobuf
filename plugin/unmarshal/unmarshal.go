@@ -155,6 +155,10 @@ given to the unmarshal plugin, will generate the following code:
 	return nil
   }
 
+Remember when using this code to call proto.Unmarshal.
+This will call m.Reset and invoke the generated Unmarshal method for you.
+If you call m.Unmarshal without m.Reset you could be merging protocol buffers.
+
 */
 package unmarshal
 
@@ -619,17 +623,21 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 			p.P(`return err`)
 			p.Out()
 			p.P(`}`)
-			p.P(`if m.XXX_extensions == nil {`)
-			p.In()
-			p.P(`m.XXX_extensions = make(map[int32]`, protoPkg.Use(), `.Extension)`)
-			p.Out()
-			p.P(`}`)
 			p.P(`if (index + skippy) > l {`)
 			p.In()
 			p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 			p.Out()
 			p.P(`}`)
-			p.P(`m.XXX_extensions[int32(fieldNum)] = `, protoPkg.Use(), `.NewExtension(data[index:index+skippy])`)
+			if gogoproto.HasExtensionsMap(file.FileDescriptorProto, message.DescriptorProto) {
+				p.P(`if m.XXX_extensions == nil {`)
+				p.In()
+				p.P(`m.XXX_extensions = make(map[int32]`, protoPkg.Use(), `.Extension)`)
+				p.Out()
+				p.P(`}`)
+				p.P(`m.XXX_extensions[int32(fieldNum)] = `, protoPkg.Use(), `.NewExtension(data[index:index+skippy])`)
+			} else {
+				p.P(`m.XXX_extensions = append(m.XXX_extensions, data[index:index+skippy]...)`)
+			}
 			p.P(`index += skippy`)
 			p.Out()
 			p.P(`} else {`)
