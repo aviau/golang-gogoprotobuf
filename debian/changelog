@@ -1,5 +1,6 @@
-golang-gogoprotobuf (0.0~git20140427-2) unstable; urgency=medium
+golang-gogoprotobuf (0.0~git20140719-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Add branch to Vcs-Git header.
   * Add protoc-gen-gogo.1 manpage.
   * Don't install mixbench.
