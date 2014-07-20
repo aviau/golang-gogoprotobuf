@@ -1,4 +1,4 @@
-golang-gogoprotobuf (0.0~git20140719-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (0.0~git20140719-1) unstable; urgency=medium
 
   * New upstream release.
   * Add branch to Vcs-Git header.
