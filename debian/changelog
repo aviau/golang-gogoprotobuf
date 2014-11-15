@@ -1,3 +1,9 @@
+golang-gogoprotobuf (0.0~git20140719-2) UNRELEASED; urgency=medium
+
+  * Change debian-branch in gbp.conf to 'unstable'.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sat, 15 Nov 2014 21:29:15 +0000
+
 golang-gogoprotobuf (0.0~git20140719-1) unstable; urgency=medium
 
   * New upstream release.
