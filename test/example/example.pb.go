@@ -18,7 +18,6 @@
 package test
 
 import proto "code.google.com/p/gogoprotobuf/proto"
-import json "encoding/json"
 import math "math"
 
 // discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
@@ -27,15 +26,16 @@ import code_google_com_p_gogoprotobuf_test "code.google.com/p/gogoprotobuf/test"
 import code_google_com_p_gogoprotobuf_test_custom "code.google.com/p/gogoprotobuf/test/custom"
 
 import io "io"
+import fmt "fmt"
 import code_google_com_p_gogoprotobuf_proto "code.google.com/p/gogoprotobuf/proto"
 
-import fmt "fmt"
+import fmt1 "fmt"
 import strings "strings"
 import reflect "reflect"
 
 import code_google_com_p_gogoprotobuf_proto1 "code.google.com/p/gogoprotobuf/proto"
 
-import fmt1 "fmt"
+import fmt2 "fmt"
 import strings1 "strings"
 import code_google_com_p_gogoprotobuf_proto2 "code.google.com/p/gogoprotobuf/proto"
 import sort "sort"
@@ -44,14 +44,13 @@ import reflect1 "reflect"
 
 import code_google_com_p_gogoprotobuf_proto3 "code.google.com/p/gogoprotobuf/proto"
 
-import fmt2 "fmt"
+import fmt3 "fmt"
 import bytes "bytes"
 
 import google_protobuf "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type A struct {
@@ -156,7 +155,7 @@ func (m *A) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -178,7 +177,7 @@ func (m *A) Unmarshal(data []byte) error {
 			index = postIndex
 		case 2:
 			if wireType != 0 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field Number", wireType)
 			}
 			for shift := uint(0); ; shift += 7 {
 				if index >= l {
@@ -193,7 +192,7 @@ func (m *A) Unmarshal(data []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -259,7 +258,7 @@ func (m *B) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field A", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -283,7 +282,7 @@ func (m *B) Unmarshal(data []byte) error {
 			index = postIndex
 		case 2:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field G", wireType)
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
@@ -348,7 +347,7 @@ func (m *C) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field MySize", wireType)
 			}
 			var v int64
 			for shift := uint(0); ; shift += 7 {
@@ -407,7 +406,7 @@ func (m *U) Unmarshal(data []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field A", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -434,7 +433,7 @@ func (m *U) Unmarshal(data []byte) error {
 			index = postIndex
 		case 2:
 			if wireType != 2 {
-				return code_google_com_p_gogoprotobuf_proto.ErrWrongType
+				return fmt.Errorf("proto: wrong wireType = %d for field B", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -570,10 +569,10 @@ func (this *A) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&A{`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`Number:` + fmt.Sprintf("%v", this.Number) + `,`,
-		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
-		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
+		`Description:` + fmt1.Sprintf("%v", this.Description) + `,`,
+		`Number:` + fmt1.Sprintf("%v", this.Number) + `,`,
+		`Id:` + fmt1.Sprintf("%v", this.Id) + `,`,
+		`XXX_unrecognized:` + fmt1.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -584,8 +583,8 @@ func (this *B) String() string {
 	}
 	s := strings.Join([]string{`&B{`,
 		`A:` + strings.Replace(strings.Replace(this.A.String(), "A", "A", 1), `&`, ``, 1) + `,`,
-		`G:` + fmt.Sprintf("%v", this.G) + `,`,
-		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
+		`G:` + fmt1.Sprintf("%v", this.G) + `,`,
+		`XXX_unrecognized:` + fmt1.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -596,7 +595,7 @@ func (this *C) String() string {
 	}
 	s := strings.Join([]string{`&C{`,
 		`MySize:` + valueToStringExample(this.MySize) + `,`,
-		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
+		`XXX_unrecognized:` + fmt1.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -606,9 +605,9 @@ func (this *U) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&U{`,
-		`A:` + strings.Replace(fmt.Sprintf("%v", this.A), "A", "A", 1) + `,`,
-		`B:` + strings.Replace(fmt.Sprintf("%v", this.B), "B", "B", 1) + `,`,
-		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
+		`A:` + strings.Replace(fmt1.Sprintf("%v", this.A), "A", "A", 1) + `,`,
+		`B:` + strings.Replace(fmt1.Sprintf("%v", this.B), "B", "B", 1) + `,`,
+		`XXX_unrecognized:` + fmt1.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -619,7 +618,7 @@ func (this *E) String() string {
 	}
 	s := strings.Join([]string{`&E{`,
 		`XXX_extensions:` + proto.StringFromExtensionsBytes(this.XXX_extensions) + `,`,
-		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
+		`XXX_unrecognized:` + fmt1.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -630,7 +629,7 @@ func valueToStringExample(v interface{}) string {
 		return "nil"
 	}
 	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("*%v", pv)
+	return fmt1.Sprintf("*%v", pv)
 }
 func (m *A) Size() (n int) {
 	var l int
@@ -1054,35 +1053,35 @@ func (this *A) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings1.Join([]string{`&test.A{` + `Description:` + fmt1.Sprintf("%#v", this.Description), `Number:` + fmt1.Sprintf("%#v", this.Number), `Id:` + fmt1.Sprintf("%#v", this.Id), `XXX_unrecognized:` + fmt1.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
+	s := strings1.Join([]string{`&test.A{` + `Description:` + fmt2.Sprintf("%#v", this.Description), `Number:` + fmt2.Sprintf("%#v", this.Number), `Id:` + fmt2.Sprintf("%#v", this.Id), `XXX_unrecognized:` + fmt2.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
 	return s
 }
 func (this *B) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings1.Join([]string{`&test.B{` + `A:` + strings1.Replace(this.A.GoString(), `&`, ``, 1), `G:` + fmt1.Sprintf("%#v", this.G), `XXX_unrecognized:` + fmt1.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
+	s := strings1.Join([]string{`&test.B{` + `A:` + strings1.Replace(this.A.GoString(), `&`, ``, 1), `G:` + fmt2.Sprintf("%#v", this.G), `XXX_unrecognized:` + fmt2.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
 	return s
 }
 func (this *C) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings1.Join([]string{`&test.C{` + `MySize:` + valueToGoStringExample(this.MySize, "int64"), `XXX_unrecognized:` + fmt1.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
+	s := strings1.Join([]string{`&test.C{` + `MySize:` + valueToGoStringExample(this.MySize, "int64"), `XXX_unrecognized:` + fmt2.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
 	return s
 }
 func (this *U) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings1.Join([]string{`&test.U{` + `A:` + fmt1.Sprintf("%#v", this.A), `B:` + fmt1.Sprintf("%#v", this.B), `XXX_unrecognized:` + fmt1.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
+	s := strings1.Join([]string{`&test.U{` + `A:` + fmt2.Sprintf("%#v", this.A), `B:` + fmt2.Sprintf("%#v", this.B), `XXX_unrecognized:` + fmt2.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
 	return s
 }
 func (this *E) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings1.Join([]string{`&test.E{` + `XXX_extensions:` + fmt1.Sprintf("%#v", this.XXX_extensions), `XXX_unrecognized:` + fmt1.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
+	s := strings1.Join([]string{`&test.E{` + `XXX_extensions:` + fmt2.Sprintf("%#v", this.XXX_extensions), `XXX_unrecognized:` + fmt2.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
 	return s
 }
 func valueToGoStringExample(v interface{}, typ string) string {
@@ -1091,7 +1090,7 @@ func valueToGoStringExample(v interface{}, typ string) string {
 		return "nil"
 	}
 	pv := reflect1.Indirect(rv).Interface()
-	return fmt1.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+	return fmt2.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
 func extensionToGoStringExample(e map[int32]code_google_com_p_gogoprotobuf_proto2.Extension) string {
 	if e == nil {
@@ -1151,32 +1150,32 @@ func (this *A) VerboseEqual(that interface{}) error {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that == nil && this != nil")
+		return fmt3.Errorf("that == nil && this != nil")
 	}
 
 	that1, ok := that.(*A)
 	if !ok {
-		return fmt2.Errorf("that is not of type *A")
+		return fmt3.Errorf("that is not of type *A")
 	}
 	if that1 == nil {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that is type *A but is nil && this != nil")
+		return fmt3.Errorf("that is type *A but is nil && this != nil")
 	} else if this == nil {
-		return fmt2.Errorf("that is type *Abut is not nil && this == nil")
+		return fmt3.Errorf("that is type *Abut is not nil && this == nil")
 	}
 	if this.Description != that1.Description {
-		return fmt2.Errorf("Description this(%v) Not Equal that(%v)", this.Description, that1.Description)
+		return fmt3.Errorf("Description this(%v) Not Equal that(%v)", this.Description, that1.Description)
 	}
 	if this.Number != that1.Number {
-		return fmt2.Errorf("Number this(%v) Not Equal that(%v)", this.Number, that1.Number)
+		return fmt3.Errorf("Number this(%v) Not Equal that(%v)", this.Number, that1.Number)
 	}
 	if !this.Id.Equal(that1.Id) {
-		return fmt2.Errorf("Id this(%v) Not Equal that(%v)", this.Id, that1.Id)
+		return fmt3.Errorf("Id this(%v) Not Equal that(%v)", this.Id, that1.Id)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return fmt2.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+		return fmt3.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
 	}
 	return nil
 }
@@ -1219,34 +1218,34 @@ func (this *B) VerboseEqual(that interface{}) error {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that == nil && this != nil")
+		return fmt3.Errorf("that == nil && this != nil")
 	}
 
 	that1, ok := that.(*B)
 	if !ok {
-		return fmt2.Errorf("that is not of type *B")
+		return fmt3.Errorf("that is not of type *B")
 	}
 	if that1 == nil {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that is type *B but is nil && this != nil")
+		return fmt3.Errorf("that is type *B but is nil && this != nil")
 	} else if this == nil {
-		return fmt2.Errorf("that is type *Bbut is not nil && this == nil")
+		return fmt3.Errorf("that is type *Bbut is not nil && this == nil")
 	}
 	if !this.A.Equal(&that1.A) {
-		return fmt2.Errorf("A this(%v) Not Equal that(%v)", this.A, that1.A)
+		return fmt3.Errorf("A this(%v) Not Equal that(%v)", this.A, that1.A)
 	}
 	if len(this.G) != len(that1.G) {
-		return fmt2.Errorf("G this(%v) Not Equal that(%v)", len(this.G), len(that1.G))
+		return fmt3.Errorf("G this(%v) Not Equal that(%v)", len(this.G), len(that1.G))
 	}
 	for i := range this.G {
 		if !this.G[i].Equal(that1.G[i]) {
-			return fmt2.Errorf("G this[%v](%v) Not Equal that[%v](%v)", i, this.G[i], i, that1.G[i])
+			return fmt3.Errorf("G this[%v](%v) Not Equal that[%v](%v)", i, this.G[i], i, that1.G[i])
 		}
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return fmt2.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+		return fmt3.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
 	}
 	return nil
 }
@@ -1291,32 +1290,32 @@ func (this *C) VerboseEqual(that interface{}) error {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that == nil && this != nil")
+		return fmt3.Errorf("that == nil && this != nil")
 	}
 
 	that1, ok := that.(*C)
 	if !ok {
-		return fmt2.Errorf("that is not of type *C")
+		return fmt3.Errorf("that is not of type *C")
 	}
 	if that1 == nil {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that is type *C but is nil && this != nil")
+		return fmt3.Errorf("that is type *C but is nil && this != nil")
 	} else if this == nil {
-		return fmt2.Errorf("that is type *Cbut is not nil && this == nil")
+		return fmt3.Errorf("that is type *Cbut is not nil && this == nil")
 	}
 	if this.MySize != nil && that1.MySize != nil {
 		if *this.MySize != *that1.MySize {
-			return fmt2.Errorf("MySize this(%v) Not Equal that(%v)", *this.MySize, *that1.MySize)
+			return fmt3.Errorf("MySize this(%v) Not Equal that(%v)", *this.MySize, *that1.MySize)
 		}
 	} else if this.MySize != nil {
-		return fmt2.Errorf("this.MySize == nil && that.MySize != nil")
+		return fmt3.Errorf("this.MySize == nil && that.MySize != nil")
 	} else if that1.MySize != nil {
-		return fmt2.Errorf("MySize this(%v) Not Equal that(%v)", this.MySize, that1.MySize)
+		return fmt3.Errorf("MySize this(%v) Not Equal that(%v)", this.MySize, that1.MySize)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return fmt2.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+		return fmt3.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
 	}
 	return nil
 }
@@ -1359,29 +1358,29 @@ func (this *U) VerboseEqual(that interface{}) error {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that == nil && this != nil")
+		return fmt3.Errorf("that == nil && this != nil")
 	}
 
 	that1, ok := that.(*U)
 	if !ok {
-		return fmt2.Errorf("that is not of type *U")
+		return fmt3.Errorf("that is not of type *U")
 	}
 	if that1 == nil {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that is type *U but is nil && this != nil")
+		return fmt3.Errorf("that is type *U but is nil && this != nil")
 	} else if this == nil {
-		return fmt2.Errorf("that is type *Ubut is not nil && this == nil")
+		return fmt3.Errorf("that is type *Ubut is not nil && this == nil")
 	}
 	if !this.A.Equal(that1.A) {
-		return fmt2.Errorf("A this(%v) Not Equal that(%v)", this.A, that1.A)
+		return fmt3.Errorf("A this(%v) Not Equal that(%v)", this.A, that1.A)
 	}
 	if !this.B.Equal(that1.B) {
-		return fmt2.Errorf("B this(%v) Not Equal that(%v)", this.B, that1.B)
+		return fmt3.Errorf("B this(%v) Not Equal that(%v)", this.B, that1.B)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return fmt2.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+		return fmt3.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
 	}
 	return nil
 }
@@ -1421,26 +1420,26 @@ func (this *E) VerboseEqual(that interface{}) error {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that == nil && this != nil")
+		return fmt3.Errorf("that == nil && this != nil")
 	}
 
 	that1, ok := that.(*E)
 	if !ok {
-		return fmt2.Errorf("that is not of type *E")
+		return fmt3.Errorf("that is not of type *E")
 	}
 	if that1 == nil {
 		if this == nil {
 			return nil
 		}
-		return fmt2.Errorf("that is type *E but is nil && this != nil")
+		return fmt3.Errorf("that is type *E but is nil && this != nil")
 	} else if this == nil {
-		return fmt2.Errorf("that is type *Ebut is not nil && this == nil")
+		return fmt3.Errorf("that is type *Ebut is not nil && this == nil")
 	}
 	if !bytes.Equal(this.XXX_extensions, that1.XXX_extensions) {
-		return fmt2.Errorf("XXX_extensions this(%v) Not Equal that(%v)", this.XXX_extensions, that1.XXX_extensions)
+		return fmt3.Errorf("XXX_extensions this(%v) Not Equal that(%v)", this.XXX_extensions, that1.XXX_extensions)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return fmt2.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+		return fmt3.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
 	}
 	return nil
 }
@@ -1993,6 +1992,14 @@ func ExampleDescription() (desc *google_protobuf.FileDescriptorSet) {
 	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
 		return &v
 	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("customname"), Number: func(v int32) *int32 { return &v }(65004), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
+		return &v
+	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
+		return &v
+	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("jsontag"), Number: func(v int32) *int32 { return &v }(65005), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
+		return &v
+	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
+		return &v
+	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("moretags"), Number: func(v int32) *int32 { return &v }(65006), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
 		return &v
 	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
 		return &v

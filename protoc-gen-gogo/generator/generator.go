@@ -383,7 +383,9 @@ func (es enumSymbol) GenerateAlias(g *Generator, pkg string) {
 	g.P("type ", s, " ", pkg, ".", s)
 	g.P("var ", s, "_name = ", pkg, ".", s, "_name")
 	g.P("var ", s, "_value = ", pkg, ".", s, "_value")
-	g.P("func New", s, "(x ", s, ") *", s, " { e := ", s, "(x); return &e }")
+	g.P("func (x ", s, ") Enum() *", s, "{ return (*", s, ")((", pkg, ".", s, ")(x).Enum()) }")
+	g.P("func (x ", s, ") String() string { return (", pkg, ".", s, ")(x).String() }")
+	g.P("func (x *", s, ") UnmarshalJSON(data []byte) error { return (*", pkg, ".", s, ")(x).UnmarshalJSON(data) }")
 }
 
 type constOrVarSymbol struct {
@@ -631,7 +633,6 @@ func (g *Generator) SetPackageNames() {
 	// Register the support package names. They might collide with the
 	// name of a package we import.
 	g.Pkg = map[string]string{
-		"json":  RegisterUniquePackageName("json", nil),
 		"math":  RegisterUniquePackageName("math", nil),
 		"proto": RegisterUniquePackageName("proto", nil),
 	}
@@ -1120,11 +1121,9 @@ func (g *Generator) generateImports() {
 	// We almost always need a proto import.  Rather than computing when we
 	// do, which is tricky when there's a plugin, just import it and
 	// reference it later. The same argument applies to the math package,
-	// for handling bit patterns for floating-point numbers, and to the
-	// json package, for symbolic names of enum values for JSON marshaling.
+	// for handling bit patterns for floating-point numbers.
 	c := make(map[string]bool)
 	g.P("import " + g.Pkg["proto"] + " " + strconv.Quote(g.ImportPrefix+"code.google.com/p/gogoprotobuf/proto"))
-	g.P("import " + g.Pkg["json"] + ` "encoding/json"`)
 	g.P("import " + g.Pkg["math"] + ` "math"`)
 	for i, s := range g.file.Dependency {
 		fd := g.fileByName(s)
@@ -1182,9 +1181,8 @@ func (g *Generator) generateImports() {
 		p.GenerateImports(g.file)
 		g.P()
 	}
-	g.P("// Reference proto, json, and math imports to suppress error if they are not otherwise used.")
+	g.P("// Reference imports to suppress errors if they are not otherwise used.")
 	g.P("var _ = ", g.Pkg["proto"], ".Marshal")
-	g.P("var _ = &", g.Pkg["json"], ".SyntaxError{}")
 	g.P("var _ = ", g.Pkg["math"], ".Inf")
 	g.P()
 }
@@ -1224,7 +1222,7 @@ func (g *Generator) generateEnum(enum *EnumDescriptor) {
 	ccPrefix := enum.prefix()
 
 	g.PrintComments(enum.path)
-	if !gogoproto.EnabledGoEnumPrefix(g.file.FileDescriptorProto, enum.EnumDescriptorProto) {
+	if !gogoproto.EnabledGoEnumPrefix(enum.file, enum.EnumDescriptorProto) {
 		ccPrefix = ""
 	}
 	g.P("type ", ccTypeName, " int32")
@@ -1565,10 +1563,20 @@ func (g *Generator) generateMessage(message *Descriptor) {
 		usedNames[fieldName] = true
 		typename, wiretype := g.GoType(message, field)
 		jsonName := *field.Name
-		tag := fmt.Sprintf("`protobuf:%s json:%q`", g.goTag(field, wiretype), jsonName+",omitempty")
+		jsonTag := jsonName + ",omitempty"
 		if !gogoproto.IsNullable(field) {
-			tag = fmt.Sprintf("`protobuf:%s json:%q`", g.goTag(field, wiretype), jsonName)
+			jsonTag = jsonName
 		}
+		gogoJsonTag := gogoproto.GetJsonTag(field)
+		if gogoJsonTag != nil {
+			jsonTag = *gogoJsonTag
+		}
+		gogoMoreTags := gogoproto.GetMoreTags(field)
+		moreTags := ""
+		if gogoMoreTags != nil {
+			moreTags = " " + *gogoMoreTags
+		}
+		tag := fmt.Sprintf("`protobuf:%s json:%q%s`", g.goTag(field, wiretype), jsonTag, moreTags)
 		if *field.Type == descriptor.FieldDescriptorProto_TYPE_MESSAGE && gogoproto.IsEmbed(field) {
 			fieldName = ""
 		}
@@ -1709,7 +1717,7 @@ func (g *Generator) generateMessage(message *Descriptor) {
 				log.Printf("don't know how to generate constant for %s", fieldname)
 				continue
 			}
-			if gogoproto.EnabledGoEnumPrefix(g.file.FileDescriptorProto, enum.EnumDescriptorProto) {
+			if gogoproto.EnabledGoEnumPrefix(enum.file, enum.EnumDescriptorProto) {
 				def = g.DefaultPackageName(obj) + enum.prefix() + def
 			} else {
 				def = g.DefaultPackageName(obj) + def
@@ -1849,7 +1857,7 @@ func (g *Generator) generateMessage(message *Descriptor) {
 					g.P("return 0 // empty enum")
 				} else {
 					first := enum.Value[0].GetName()
-					if gogoproto.EnabledGoEnumPrefix(g.file.FileDescriptorProto, enum.EnumDescriptorProto) {
+					if gogoproto.EnabledGoEnumPrefix(enum.file, enum.EnumDescriptorProto) {
 						g.P("return ", g.DefaultPackageName(obj)+enum.prefix()+first)
 					} else {
 						g.P("return ", g.DefaultPackageName(obj)+first)

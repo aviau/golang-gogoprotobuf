@@ -65,6 +65,9 @@ regenerate:
 	make -C test/unmarshalmerge regenerate
 	make -C test/moredefaults regenerate
 	make -C test/issue8 regenerate
+	make -C test/enumprefix regenerate
+	make -C test/packed regenerate
+	make -C test/tags regenerate
 	gofmt -l -s -w .
 
 tests:
@@ -72,6 +75,7 @@ tests:
 	go test -v ./proto
 	go test -v ./fieldpath
 	go test -v ./io
+	go test -v ./test/custom
 	go test -v ./test/embedconflict
 	go test -v ./test/defaultconflict
 	go test -v ./test/unrecognized
@@ -83,16 +87,15 @@ tests:
 	go test -v ./test/issue8
 	go test -v ./test/example
 	go test -v ./test/dashfilename
+	go build ./test/enumprefix
+	go test -v ./test/packed
+	go test -v ./test/tags
 	go test -v ./parser
 
 drone:
 	sudo apt-get install protobuf-compiler
 	git clone https://code.google.com/p/gogoprotobuf
-	(cd $(GOPATH) && svn checkout http://protobuf.googlecode.com/svn/tags/2.4.1/ protobuf-readonly)
-	mv $(GOPATH)/protobuf-readonly/src/google $(GOPATH)/src/google
 	(cd $(GOPATH)/src/code.google.com/p/gogoprotobuf && make all)
-	(cd $(GOPATH)/src && protoc -I=. --cpp_out=. ./code.google.com/p/gogoprotobuf/gogoproto/gogo.proto)
-	(cd $(GOPATH)/src && g++ -I$(GOPATH)/src -c -o $(GOPATH)/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.o $(GOPATH)/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.cc)
 
 testall: tests
 	make -C protoc-gen-gogo/testdata test
