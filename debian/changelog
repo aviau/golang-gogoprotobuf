@@ -1,6 +1,7 @@
 golang-gogoprotobuf (0.0~git20150426-1) UNRELEASED; urgency=medium
 
   * New upstream snapshot.
+  * Bump standards version to 3.9.6 (no changes).
 
  -- Jelmer Vernooij <jelmer@debian.org>  Sun, 26 Apr 2015 08:39:16 +0000
 
