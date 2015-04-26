@@ -1,3 +1,9 @@
+golang-gogoprotobuf (0.0~git20150426-1) UNRELEASED; urgency=medium
+
+  * New upstream snapshot.
+
+ -- Jelmer Vernooij <jelmer@debian.org>  Sun, 26 Apr 2015 08:39:16 +0000
+
 golang-gogoprotobuf (0.0~git20140719-2) experimental; urgency=medium
 
   * Change debian-branch in gbp.conf to 'unstable'.
