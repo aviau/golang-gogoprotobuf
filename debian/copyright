@@ -11,6 +11,7 @@ License: BSD-3-Clause
 
 Files: debian/*
 Copyright: 2014 Jelmer Vernooij <jelmer@debian.org>
+           2015 Alexandre Viau <alexandre@alexandreviau.net>
 License: BSD-3-Clause
 
 License: BSD-3-Clause
