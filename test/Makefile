@@ -1,7 +1,7 @@
 # Extensions for Protocol Buffers to create more go like structures.
 #
 # Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-# http://code.google.com/p/gogoprotobuf/gogoproto
+# http://github.com/gogo/protobuf/gogoproto
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -27,4 +27,18 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 regenerate:
-	(protoc --proto_path=../:../../../../:../protobuf/:. --gogo_out=. thetest.proto)
+	go install github.com/gogo/protobuf/protoc-gen-gogo/protoc-gen-combo
+	protoc-gen-combo --default=false --proto_path=../:../../../../:../protobuf/:. thetest.proto
+	protoc --gogo_out=. --proto_path=../:../../../../:../protobuf/:. thetest.proto
+	cp uuid.go ./combos/both/
+	cp uuid.go ./combos/marshaler/
+	cp uuid.go ./combos/unmarshaler/
+	cp uuid.go ./combos/unsafeboth/
+	cp uuid.go ./combos/unsafemarshaler/
+	cp uuid.go ./combos/unsafeunmarshaler/
+	cp bug_test.go ./combos/both/
+	cp bug_test.go ./combos/marshaler/
+	cp bug_test.go ./combos/unmarshaler/
+	cp bug_test.go ./combos/unsafeboth/
+	cp bug_test.go ./combos/unsafemarshaler/
+	cp bug_test.go ./combos/unsafeunmarshaler/

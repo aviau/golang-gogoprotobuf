@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM phusion/baseimage
 
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list
 RUN apt-get update
@@ -41,34 +41,35 @@ ENV GOPATH /gopath
 ENV PATH $PATH:$GOPATH/bin:$GOROOT/bin
 
 #setup paths for my repositories
-RUN mkdir -p $GOPATH/src/code.google.com/p
-ENV GOGOPROTOPATH $GOPATH/src/code.google.com/p/gogoprotobuf
-ENV GOGOTESTPATH $GOPATH/src/code.google.com/p/gogoprototest
-ENV GOPROTOPATH $GOPATH/src/code.google.com/p/goprotobuf
+RUN mkdir -p $GOPATH/src/github.com/gogo
+RUN mkdir -p $GOPATH/src/github.com/golang
+ENV GOGOPROTOPATH $GOPATH/src/github.com/gogo/protobuf
+ENV GOGOTESTPATH $GOPATH/src/github.com/gogo/harmonytests
+ENV GOPROTOPATH $GOPATH/src/github.com/golang/protobuf
 
 #setup the script to run everytime the docker runs
 RUN echo '#!/bin/bash' >> /test.sh
 RUN echo 'set -xe' >> /test.sh
 RUN echo 'go version' >> /test.sh
 RUN echo 'protoc --version || true' >> /test.sh
-RUN echo 'git clone https://code.google.com/p/gogoprotobuf $GOGOPROTOPATH' >> /test.sh
+RUN echo 'git clone https://github.com/gogo/protobuf $GOGOPROTOPATH' >> /test.sh
 RUN echo 'cd $GOGOPROTOPATH' >> /test.sh
 RUN echo 'make' >> /test.sh
 
 RUN echo '#build cpp the same as go' >> /test.sh
 RUN echo 'cd $GOPATH/src' >> /test.sh
-RUN echo 'protoc -I=.:./code.google.com/p/gogoprotobuf/protobuf/ --cpp_out=. ./code.google.com/p/gogoprotobuf/gogoproto/gogo.proto' >> /test.sh
-RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.o $GOPATH/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.cc' >> /test.sh
-RUN echo 'protoc -I=.:./code.google.com/p/gogoprotobuf/protobuf/ --cpp_out=. ./code.google.com/p/gogoprotobuf/test/example/example.proto' >> /test.sh
-RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/code.google.com/p/gogoprotobuf/test/example/example.pb.o $GOPATH/src/code.google.com/p/gogoprotobuf/test/example/example.pb.cc' >> /test.sh
+RUN echo 'protoc -I=.:./github.com/gogo/protobuf/protobuf/ --cpp_out=. ./github.com/gogo/protobuf/gogoproto/gogo.proto' >> /test.sh
+RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/github.com/gogo/protobuf/gogoproto/gogo.pb.o $GOPATH/src/github.com/gogo/protobuf/gogoproto/gogo.pb.cc' >> /test.sh
+RUN echo 'protoc -I=.:./github.com/gogo/protobuf/protobuf/ --cpp_out=. ./github.com/gogo/protobuf/test/example/example.proto' >> /test.sh
+RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/github.com/gogo/protobuf/test/example/example.pb.o $GOPATH/src/github.com/gogo/protobuf/test/example/example.pb.cc' >> /test.sh
 
 RUN echo '#cpp will probably have the google folder with the descriptors in the right place, since it will have protoc cpp code available.' >> /test.sh
 RUN echo '#This simulates that by moving our google folder and then running protoc see without the extra path.' >> /test.sh
-RUN echo 'mv ./code.google.com/p/gogoprotobuf/protobuf/google .' >> /test.sh
-RUN echo 'protoc -I=. --cpp_out=. ./code.google.com/p/gogoprotobuf/gogoproto/gogo.proto' >> /test.sh
-RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.o $GOPATH/src/code.google.com/p/gogoprotobuf/gogoproto/gogo.pb.cc' >> /test.sh
-RUN echo 'protoc -I=. --cpp_out=. ./code.google.com/p/gogoprotobuf/test/example/example.proto' >> /test.sh
-RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/code.google.com/p/gogoprotobuf/test/example/example.pb.o $GOPATH/src/code.google.com/p/gogoprotobuf/test/example/example.pb.cc' >> /test.sh
+RUN echo 'mv ./github.com/gogo/protobuf/protobuf/google .' >> /test.sh
+RUN echo 'protoc -I=. --cpp_out=. ./github.com/gogo/protobuf/gogoproto/gogo.proto' >> /test.sh
+RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/github.com/gogo/protobuf/gogoproto/gogo.pb.o $GOPATH/src/github.com/gogo/protobuf/gogoproto/gogo.pb.cc' >> /test.sh
+RUN echo 'protoc -I=. --cpp_out=. ./github.com/gogo/protobuf/test/example/example.proto' >> /test.sh
+RUN echo 'g++ -I$GOPATH/src -c -o $GOPATH/src/github.com/gogo/protobuf/test/example/example.pb.o $GOPATH/src/github.com/gogo/protobuf/test/example/example.pb.cc' >> /test.sh
 
 RUN chmod +x /test.sh
 

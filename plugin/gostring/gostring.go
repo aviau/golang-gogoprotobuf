@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -46,11 +46,11 @@ The gostring plugin also generates a test given it is enabled using one of the f
 
 Let us look at:
 
-  code.google.com/p/gogoprotobuf/test/example/example.proto
+  github.com/gogo/protobuf/test/example/example.proto
 
 Btw all the output can be seen at:
 
-  code.google.com/p/gogoprotobuf/test/example/*
+  github.com/gogo/protobuf/test/example/*
 
 The following message:
 
@@ -59,7 +59,7 @@ The following message:
   message A {
 	optional string Description = 1 [(gogoproto.nullable) = false];
 	optional int64 Number = 2 [(gogoproto.nullable) = false];
-	optional bytes Id = 3 [(gogoproto.customtype) = "code.google.com/p/gogoprotobuf/test/custom.Uuid", (gogoproto.nullable) = false];
+	optional bytes Id = 3 [(gogoproto.customtype) = "github.com/gogo/protobuf/test/custom.Uuid", (gogoproto.nullable) = false];
   }
 
 given to the gostring plugin, will generate the following code:
@@ -95,8 +95,8 @@ not print their values, while the generated GoString method will always print al
 package gostring
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 	"strings"
 )
 
@@ -120,6 +120,7 @@ func (p *gostring) Init(g *generator.Generator) {
 }
 
 func (p *gostring) Generate(file *generator.FileDescriptor) {
+	proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 	p.atleastOne = false
 
@@ -127,13 +128,20 @@ func (p *gostring) Generate(file *generator.FileDescriptor) {
 
 	fmtPkg := p.NewImport("fmt")
 	stringsPkg := p.NewImport("strings")
-	protoPkg := p.NewImport("code.google.com/p/gogoprotobuf/proto")
+	protoPkg := p.NewImport("github.com/gogo/protobuf/proto")
+	if !gogoproto.ImportsGoGoProto(file.FileDescriptorProto) {
+		protoPkg = p.NewImport("github.com/golang/protobuf/proto")
+	}
 	sortPkg := p.NewImport("sort")
 	strconvPkg := p.NewImport("strconv")
 	reflectPkg := p.NewImport("reflect")
+	sortKeysPkg := p.NewImport("github.com/gogo/protobuf/sortkeys")
 
 	for _, message := range file.Messages() {
 		if !gogoproto.HasGoString(file.FileDescriptorProto, message.DescriptorProto) {
+			continue
+		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
 		}
 		p.atleastOne = true
@@ -147,52 +155,85 @@ func (p *gostring) Generate(file *generator.FileDescriptor) {
 		p.P(`return "nil"`)
 		p.Out()
 		p.P(`}`)
-		plus := "+"
-		out := strings.Join([]string{"s := ", stringsPkg.Use(), ".Join([]string{`&", packageName, ".", ccTypeName, "{` ", plus, " "}, "")
+
+		outFlds := []string{}
 		for _, field := range message.Field {
 			nullable := gogoproto.IsNullable(field)
 			repeated := field.IsRepeated()
 			fieldname := p.GetFieldName(message, field)
-			if field.IsMessage() || p.IsGroup(field) {
-				out += strings.Join([]string{"`", fieldname, ":` + "}, "")
+			if generator.IsMap(file.FileDescriptorProto, field) {
+				mapMsg := generator.GetMap(file.FileDescriptorProto, field)
+				keyField, valueField := mapMsg.GetMapFields()
+				keysName := `keysFor` + fieldname
+				keygoTyp, _ := p.GoType(nil, keyField)
+				keygoTyp = strings.Replace(keygoTyp, "*", "", 1)
+				keyCapTyp := generator.CamelCase(keygoTyp)
+				valuegoTyp, _ := p.GoType(nil, valueField)
+				if !valueField.IsMessage() {
+					valuegoTyp = strings.Replace(valuegoTyp, "*", "", 1)
+				}
+				p.P(keysName, ` := make([]`, keygoTyp, `, 0, len(this.`, fieldname, `))`)
+				p.P(`for k, _ := range this.`, fieldname, ` {`)
+				p.In()
+				p.P(keysName, ` = append(`, keysName, `, k)`)
+				p.Out()
+				p.P(`}`)
+				p.P(sortKeysPkg.Use(), `.`, keyCapTyp, `s(`, keysName, `)`)
+				mapName := `mapStringFor` + fieldname
+				p.P(mapName, ` := "map[`, keygoTyp, `]`, valuegoTyp, `{"`)
+				p.P(`for _, k := range `, keysName, ` {`)
+				p.In()
+				p.P(mapName, ` += fmt.Sprintf("%#v: %#v,", k, this.`, fieldname, `[k])`)
+				p.Out()
+				p.P(`}`)
+				p.P(mapName, ` += "}"`)
+				tmp := strings.Join([]string{"`", fieldname, ":` + ", mapName}, "")
+				outFlds = append(outFlds, tmp)
+			} else if field.IsMessage() || p.IsGroup(field) {
+				tmp := strings.Join([]string{"`", fieldname, ":` + "}, "")
 				if nullable {
-					out += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, `)`}, "")
+					tmp += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, `)`}, "")
 				} else if repeated {
-					out += strings.Join([]string{stringsPkg.Use(), `.Replace(`, fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, `)`, ",`&`,``,1)"}, "")
+					tmp += strings.Join([]string{stringsPkg.Use(), `.Replace(`, fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, `)`, ",`&`,``,1)"}, "")
 				} else {
-					out += strings.Join([]string{stringsPkg.Use(), `.Replace(this.`, fieldname, `.GoString()`, ",`&`,``,1)"}, "")
+					tmp += strings.Join([]string{stringsPkg.Use(), `.Replace(this.`, fieldname, `.GoString()`, ",`&`,``,1)"}, "")
 				}
+				outFlds = append(outFlds, tmp)
 			} else {
-				out += strings.Join([]string{"`", fieldname, ":` + "}, "")
+				tmp := strings.Join([]string{"`", fieldname, ":` + "}, "")
 				if field.IsEnum() {
-					if nullable && !repeated {
+					if nullable && !repeated && !proto3 {
 						goTyp, _ := p.GoType(message, field)
-						out += strings.Join([]string{`valueToGoString`, p.localName, `(this.`, fieldname, `,"`, packageName, ".", generator.GoTypeToName(goTyp), `"`, ")"}, "")
+						tmp += strings.Join([]string{`valueToGoString`, p.localName, `(this.`, fieldname, `,"`, packageName, ".", generator.GoTypeToName(goTyp), `"`, ")"}, "")
 					} else {
-						out += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, ")"}, "")
+						tmp += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, ")"}, "")
 					}
 				} else {
-					if nullable && !repeated {
+					if nullable && !repeated && !proto3 {
 						goTyp, _ := p.GoType(message, field)
-						out += strings.Join([]string{`valueToGoString`, p.localName, `(this.`, fieldname, `,"`, generator.GoTypeToName(goTyp), `"`, ")"}, "")
+						tmp += strings.Join([]string{`valueToGoString`, p.localName, `(this.`, fieldname, `,"`, generator.GoTypeToName(goTyp), `"`, ")"}, "")
 					} else {
-						out += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, ")"}, "")
+						tmp += strings.Join([]string{fmtPkg.Use(), `.Sprintf("%#v", this.`, fieldname, ")"}, "")
 					}
 				}
+				outFlds = append(outFlds, tmp)
 			}
-			out += ", "
 		}
 		if message.DescriptorProto.HasExtension() {
 			if gogoproto.HasExtensionsMap(file.FileDescriptorProto, message.DescriptorProto) {
-				out += strings.Join([]string{"`XXX_extensions: ` + extensionToGoString", p.localName, `(this.XXX_extensions),`}, "")
+				outFlds = append(outFlds, strings.Join([]string{"`XXX_extensions: ` + extensionToGoString", p.localName, `(this.XXX_extensions)`}, ""))
 			} else {
-				out += strings.Join([]string{"`XXX_extensions:` + ", fmtPkg.Use(), `.Sprintf("%#v", this.XXX_extensions),`}, "")
+				outFlds = append(outFlds, strings.Join([]string{"`XXX_extensions:` + ", fmtPkg.Use(), `.Sprintf("%#v", this.XXX_extensions)`}, ""))
 			}
 		}
-		out += strings.Join([]string{"`XXX_unrecognized:` + ", fmtPkg.Use(), `.Sprintf("%#v", this.XXX_unrecognized)`}, "")
-		out += "+ `}`"
-		out = strings.Join([]string{out, `}`, `,", "`, ")"}, "")
-		p.P(out)
+		if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
+			outFlds = append(outFlds, strings.Join([]string{"`XXX_unrecognized:` + ", fmtPkg.Use(), `.Sprintf("%#v", this.XXX_unrecognized)`}, ""))
+		}
+
+		outStr := strings.Join([]string{"s := ", stringsPkg.Use(), ".Join([]string{`&", packageName, ".", ccTypeName, "{` + \n"}, "")
+		outStr += strings.Join(outFlds, ",\n")
+		outStr += strings.Join([]string{" + `}`", `}`, `,", "`, ")"}, "")
+		p.P(outStr)
 		p.P(`return s`)
 		p.Out()
 		p.P(`}`)

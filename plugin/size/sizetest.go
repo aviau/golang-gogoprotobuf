@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -27,9 +27,9 @@
 package size
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/plugin/testgen"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/plugin/testgen"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
 
 type test struct {
@@ -45,10 +45,16 @@ func (p *test) Generate(imports generator.PluginImports, file *generator.FileDes
 	randPkg := imports.NewImport("math/rand")
 	timePkg := imports.NewImport("time")
 	testingPkg := imports.NewImport("testing")
-	protoPkg := imports.NewImport("code.google.com/p/gogoprotobuf/proto")
+	protoPkg := imports.NewImport("github.com/gogo/protobuf/proto")
+	if !gogoproto.ImportsGoGoProto(file.FileDescriptorProto) {
+		protoPkg = imports.NewImport("github.com/golang/protobuf/proto")
+	}
 	for _, message := range file.Messages() {
 		ccTypeName := generator.CamelCaseSlice(message.TypeName())
 		if !gogoproto.IsSizer(file.FileDescriptorProto, message.DescriptorProto) {
+			continue
+		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
 		}
 
@@ -68,18 +74,18 @@ func (p *test) Generate(imports generator.PluginImports, file *generator.FileDes
 			p.P(`size := p.Size()`)
 			p.P(`if len(data) != size {`)
 			p.In()
-			p.P(`t.Fatalf("size %v != marshalled size %v", size, len(data))`)
+			p.P(`t.Errorf("size %v != marshalled size %v", size, len(data))`)
 			p.Out()
 			p.P(`}`)
 			p.P(`if size2 != size {`)
 			p.In()
-			p.P(`t.Fatalf("size %v != before marshal proto.Size %v", size, size2)`)
+			p.P(`t.Errorf("size %v != before marshal proto.Size %v", size, size2)`)
 			p.Out()
 			p.P(`}`)
 			p.P(`size3 := `, protoPkg.Use(), `.Size(p)`)
 			p.P(`if size3 != size {`)
 			p.In()
-			p.P(`t.Fatalf("size %v != after marshal proto.Size %v", size, size3)`)
+			p.P(`t.Errorf("size %v != after marshal proto.Size %v", size, size3)`)
 			p.Out()
 			p.P(`}`)
 			p.Out()

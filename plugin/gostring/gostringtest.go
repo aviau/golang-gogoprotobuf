@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -27,9 +27,9 @@
 package gostring
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/plugin/testgen"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/plugin/testgen"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
 
 type test struct {
@@ -50,6 +50,9 @@ func (p *test) Generate(imports generator.PluginImports, file *generator.FileDes
 	for _, message := range file.Messages() {
 		ccTypeName := generator.CamelCaseSlice(message.TypeName())
 		if !gogoproto.HasGoString(file.FileDescriptorProto, message.DescriptorProto) {
+			continue
+		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
 		}
 

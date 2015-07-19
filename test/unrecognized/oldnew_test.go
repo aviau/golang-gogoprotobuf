@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -27,7 +27,7 @@
 package unrecognized
 
 import (
-	code_google_com_p_gogoprotobuf_proto "code.google.com/p/gogoprotobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	math_rand "math/rand"
 	"testing"
 	time "time"
@@ -36,20 +36,20 @@ import (
 func TestNewOld(t *testing.T) {
 	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
 	newer := NewPopulatedA(popr, true)
-	data1, err := code_google_com_p_gogoprotobuf_proto.Marshal(newer)
+	data1, err := proto.Marshal(newer)
 	if err != nil {
 		panic(err)
 	}
 	older := &OldA{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data1, older); err != nil {
+	if err := proto.Unmarshal(data1, older); err != nil {
 		panic(err)
 	}
-	data2, err := code_google_com_p_gogoprotobuf_proto.Marshal(older)
+	data2, err := proto.Marshal(older)
 	if err != nil {
 		panic(err)
 	}
 	bluer := &A{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data2, bluer); err != nil {
+	if err := proto.Unmarshal(data2, bluer); err != nil {
 		panic(err)
 	}
 	if err := newer.VerboseEqual(bluer); err != nil {
@@ -60,20 +60,20 @@ func TestNewOld(t *testing.T) {
 func TestOldNew(t *testing.T) {
 	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
 	older := NewPopulatedOldA(popr, true)
-	data1, err := code_google_com_p_gogoprotobuf_proto.Marshal(older)
+	data1, err := proto.Marshal(older)
 	if err != nil {
 		panic(err)
 	}
 	newer := &A{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data1, newer); err != nil {
+	if err := proto.Unmarshal(data1, newer); err != nil {
 		panic(err)
 	}
-	data2, err := code_google_com_p_gogoprotobuf_proto.Marshal(newer)
+	data2, err := proto.Marshal(newer)
 	if err != nil {
 		panic(err)
 	}
 	bluer := &OldA{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data2, bluer); err != nil {
+	if err := proto.Unmarshal(data2, bluer); err != nil {
 		panic(err)
 	}
 	if err := older.VerboseEqual(bluer); err != nil {
@@ -84,43 +84,115 @@ func TestOldNew(t *testing.T) {
 func TestOldNewOldNew(t *testing.T) {
 	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
 	older := NewPopulatedOldA(popr, true)
-	data1, err := code_google_com_p_gogoprotobuf_proto.Marshal(older)
+	data1, err := proto.Marshal(older)
 	if err != nil {
 		panic(err)
 	}
 	newer := &A{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data1, newer); err != nil {
+	if err := proto.Unmarshal(data1, newer); err != nil {
 		panic(err)
 	}
-	data2, err := code_google_com_p_gogoprotobuf_proto.Marshal(newer)
+	data2, err := proto.Marshal(newer)
 	if err != nil {
 		panic(err)
 	}
 	bluer := &OldA{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data2, bluer); err != nil {
+	if err := proto.Unmarshal(data2, bluer); err != nil {
 		panic(err)
 	}
 	if err := older.VerboseEqual(bluer); err != nil {
 		t.Fatalf("%#v !VerboseProto %#v, since %v", older, bluer, err)
 	}
 
-	data3, err := code_google_com_p_gogoprotobuf_proto.Marshal(bluer)
+	data3, err := proto.Marshal(bluer)
 	if err != nil {
 		panic(err)
 	}
 	purple := &A{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data3, purple); err != nil {
+	if err := proto.Unmarshal(data3, purple); err != nil {
 		panic(err)
 	}
-	data4, err := code_google_com_p_gogoprotobuf_proto.Marshal(purple)
+	data4, err := proto.Marshal(purple)
 	if err != nil {
 		panic(err)
 	}
 	magenta := &OldA{}
-	if err := code_google_com_p_gogoprotobuf_proto.Unmarshal(data4, magenta); err != nil {
+	if err := proto.Unmarshal(data4, magenta); err != nil {
 		panic(err)
 	}
 	if err := older.VerboseEqual(magenta); err != nil {
 		t.Fatalf("%#v !VerboseProto %#v, since %v", older, magenta, err)
+	}
+}
+
+func TestOldUToU(t *testing.T) {
+	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
+	older := NewPopulatedOldU(popr, true)
+	// need optional field to be always initialized, to check it's lost in this test
+	older.Field1 = proto.String(randStringUnrecognized(popr))
+	data1, err := proto.Marshal(older)
+	if err != nil {
+		panic(err)
+	}
+
+	newer := &U{}
+	if err := proto.Unmarshal(data1, newer); err != nil {
+		panic(err)
+	}
+	data2, err := proto.Marshal(newer)
+	if err != nil {
+		panic(err)
+	}
+
+	older2 := &OldU{}
+	if err := proto.Unmarshal(data2, older2); err != nil {
+		panic(err)
+	}
+
+	// check that Field1 is lost
+	if older2.Field1 != nil {
+		t.Fatalf("field must be lost, but it's not, older: %#v, older2: %#v", older, older2)
+	}
+
+	// now restore Field1 and messages should be equal now
+	older2.Field1 = older.Field1
+	if err := older.VerboseEqual(older2); err != nil {
+		t.Fatalf("%#v !VerboseProto %#v, since %v", older, older2, err)
+	}
+}
+
+func TestOldUnoM(t *testing.T) {
+	popr := math_rand.New(math_rand.NewSource(time.Now().UnixNano()))
+	older := NewPopulatedOldUnoM(popr, true)
+	// need optional field to be always initialized, to check it's lost in this test
+	older.Field1 = proto.String(randStringUnrecognized(popr))
+	data1, err := proto.Marshal(older)
+	if err != nil {
+		panic(err)
+	}
+
+	newer := &UnoM{}
+	if err := proto.Unmarshal(data1, newer); err != nil {
+		panic(err)
+	}
+	data2, err := proto.Marshal(newer)
+	if err != nil {
+		panic(err)
+	}
+
+	older2 := &OldUnoM{}
+	if err := proto.Unmarshal(data2, older2); err != nil {
+		panic(err)
+	}
+
+	// check that Field1 is lost
+	if older2.Field1 != nil {
+		t.Fatalf("field must be lost, but it's not, older: %#v, older2: %#v", older, older2)
+	}
+
+	// now restore Field1 and messages should be equal now
+	older2.Field1 = older.Field1
+	if err := older.VerboseEqual(older2); err != nil {
+		t.Fatalf("%#v !VerboseProto %#v, since %v", older, older2, err)
 	}
 }

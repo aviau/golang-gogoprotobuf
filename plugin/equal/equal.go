@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -48,11 +48,11 @@ The equal plugin also generates a test given it is enabled using one of the foll
 
 Let us look at:
 
-  code.google.com/p/gogoprotobuf/test/example/example.proto
+  github.com/gogo/protobuf/test/example/example.proto
 
 Btw all the output can be seen at:
 
-  code.google.com/p/gogoprotobuf/test/example/*
+  github.com/gogo/protobuf/test/example/*
 
 The following message:
 
@@ -61,7 +61,7 @@ The following message:
 
   message B {
 	optional A A = 1 [(gogoproto.nullable) = false, (gogoproto.embed) = true];
-	repeated bytes G = 2 [(gogoproto.customtype) = "code.google.com/p/gogoprotobuf/test/custom.Uint128", (gogoproto.nullable) = false];
+	repeated bytes G = 2 [(gogoproto.customtype) = "github.com/gogo/protobuf/test/custom.Uint128", (gogoproto.nullable) = false];
   }
 
 given to the equal plugin, will generate the following code:
@@ -145,12 +145,12 @@ and the following test code:
 	func TestBVerboseEqual(t *testing8.T) {
 		popr := math_rand8.New(math_rand8.NewSource(time8.Now().UnixNano()))
 		p := NewPopulatedB(popr, false)
-		data, err := code_google_com_p_gogoprotobuf_proto2.Marshal(p)
+		data, err := github_com_gogo_protobuf_proto2.Marshal(p)
 		if err != nil {
 			panic(err)
 		}
 		msg := &B{}
-		if err := code_google_com_p_gogoprotobuf_proto2.Unmarshal(data, msg); err != nil {
+		if err := github_com_gogo_protobuf_proto2.Unmarshal(data, msg); err != nil {
 			panic(err)
 		}
 		if err := p.VerboseEqual(msg); err != nil {
@@ -161,8 +161,8 @@ and the following test code:
 package equal
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
 
 type plugin struct {
@@ -190,11 +190,14 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 	p.bytesPkg = p.NewImport("bytes")
 
 	for _, msg := range file.Messages() {
+		if msg.DescriptorProto.GetOptions().GetMapEntry() {
+			continue
+		}
 		if gogoproto.HasVerboseEqual(file.FileDescriptorProto, msg.DescriptorProto) {
-			p.generateMessage(msg, true, gogoproto.HasExtensionsMap(file.FileDescriptorProto, msg.DescriptorProto))
+			p.generateMessage(file, msg, true)
 		}
 		if gogoproto.HasEqual(file.FileDescriptorProto, msg.DescriptorProto) {
-			p.generateMessage(msg, false, gogoproto.HasExtensionsMap(file.FileDescriptorProto, msg.DescriptorProto))
+			p.generateMessage(file, msg, false)
 		}
 	}
 }
@@ -223,7 +226,8 @@ func (p *plugin) generateNullableField(fieldname string, verbose bool) {
 	p.P(`} else if that1.`, fieldname, ` != nil {`)
 }
 
-func (p *plugin) generateMessage(message *generator.Descriptor, verbose bool, hasExtensionsMap bool) {
+func (p *plugin) generateMessage(file *generator.FileDescriptor, message *generator.Descriptor, verbose bool) {
+	proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
 	ccTypeName := generator.CamelCaseSlice(message.TypeName())
 	if verbose {
 		p.P(`func (this *`, ccTypeName, `) VerboseEqual(that interface{}) error {`)
@@ -321,13 +325,13 @@ func (p *plugin) generateMessage(message *generator.Descriptor, verbose bool, ha
 				} else if field.IsBytes() {
 					p.P(`if !`, p.bytesPkg.Use(), `.Equal(this.`, fieldname, `, that1.`, fieldname, `) {`)
 				} else if field.IsString() {
-					if nullable {
+					if nullable && !proto3 {
 						p.generateNullableField(fieldname, verbose)
 					} else {
 						p.P(`if this.`, fieldname, ` != that1.`, fieldname, `{`)
 					}
 				} else {
-					if nullable {
+					if nullable && !proto3 {
 						p.generateNullableField(fieldname, verbose)
 					} else {
 						p.P(`if this.`, fieldname, ` != that1.`, fieldname, `{`)
@@ -357,7 +361,19 @@ func (p *plugin) generateMessage(message *generator.Descriptor, verbose bool, ha
 			if ctype {
 				p.P(`if !this.`, fieldname, `[i].Equal(that1.`, fieldname, `[i]) {`)
 			} else {
-				if field.IsMessage() || p.IsGroup(field) {
+				if generator.IsMap(file.FileDescriptorProto, field) {
+					mapMsg := generator.GetMap(file.FileDescriptorProto, field)
+					_, mapValue := mapMsg.GetMapFields()
+					if mapValue.IsMessage() || p.IsGroup(mapValue) {
+						p.P(`if !this.`, fieldname, `[i].Equal(that1.`, fieldname, `[i]) {`)
+					} else if mapValue.IsBytes() {
+						p.P(`if !`, p.bytesPkg.Use(), `.Equal(this.`, fieldname, `[i], that1.`, fieldname, `[i]) {`)
+					} else if mapValue.IsString() {
+						p.P(`if this.`, fieldname, `[i] != that1.`, fieldname, `[i] {`)
+					} else {
+						p.P(`if this.`, fieldname, `[i] != that1.`, fieldname, `[i] {`)
+					}
+				} else if field.IsMessage() || p.IsGroup(field) {
 					if nullable {
 						p.P(`if !this.`, fieldname, `[i].Equal(that1.`, fieldname, `[i]) {`)
 					} else {
@@ -385,7 +401,7 @@ func (p *plugin) generateMessage(message *generator.Descriptor, verbose bool, ha
 	}
 	if message.DescriptorProto.HasExtension() {
 		fieldname := "XXX_extensions"
-		if hasExtensionsMap {
+		if gogoproto.HasExtensionsMap(file.FileDescriptorProto, message.DescriptorProto) {
 			p.P(`for k, v := range this.`, fieldname, ` {`)
 			p.In()
 			p.P(`if v2, ok := that1.`, fieldname, `[k]; ok {`)
@@ -437,16 +453,18 @@ func (p *plugin) generateMessage(message *generator.Descriptor, verbose bool, ha
 			p.P(`}`)
 		}
 	}
-	fieldname := "XXX_unrecognized"
-	p.P(`if !`, p.bytesPkg.Use(), `.Equal(this.`, fieldname, `, that1.`, fieldname, `) {`)
-	p.In()
-	if verbose {
-		p.P(`return `, p.fmtPkg.Use(), `.Errorf("`, fieldname, ` this(%v) Not Equal that(%v)", this.`, fieldname, `, that1.`, fieldname, `)`)
-	} else {
-		p.P(`return false`)
+	if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
+		fieldname := "XXX_unrecognized"
+		p.P(`if !`, p.bytesPkg.Use(), `.Equal(this.`, fieldname, `, that1.`, fieldname, `) {`)
+		p.In()
+		if verbose {
+			p.P(`return `, p.fmtPkg.Use(), `.Errorf("`, fieldname, ` this(%v) Not Equal that(%v)", this.`, fieldname, `, that1.`, fieldname, `)`)
+		} else {
+			p.P(`return false`)
+		}
+		p.Out()
+		p.P(`}`)
 	}
-	p.Out()
-	p.P(`}`)
 	if verbose {
 		p.P(`return nil`)
 	} else {

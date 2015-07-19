@@ -13,14 +13,14 @@ It has these top-level messages:
 */
 package proto
 
-import proto1 "code.google.com/p/gogoprotobuf/proto"
+import proto1 "github.com/gogo/protobuf/proto"
 import math "math"
 
-// discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
 
 import io "io"
 import fmt "fmt"
-import code_google_com_p_gogoprotobuf_proto "code.google.com/p/gogoprotobuf/proto"
+import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 
 import bytes "bytes"
 
@@ -44,19 +44,18 @@ func (m *Foo) GetBar() uint64 {
 	return 0
 }
 
-func init() {
-}
 func (m *Foo) Unmarshal(data []byte) error {
+	var hasFields [1]uint64
 	l := len(data)
-	index := 0
-	for index < l {
+	iNdEx := 0
+	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
-			if index >= l {
+			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := data[index]
-			index++
+			b := data[iNdEx]
+			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
 				break
@@ -71,17 +70,18 @@ func (m *Foo) Unmarshal(data []byte) error {
 			}
 			var v uint64
 			for shift := uint(0); ; shift += 7 {
-				if index >= l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := data[index]
-				index++
+				b := data[iNdEx]
+				iNdEx++
 				v |= (uint64(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 			m.Bar = &v
+			hasFields[0] |= uint64(0x00000001)
 		default:
 			var sizeOfWire int
 			for {
@@ -91,23 +91,111 @@ func (m *Foo) Unmarshal(data []byte) error {
 					break
 				}
 			}
-			index -= sizeOfWire
-			skippy, err := code_google_com_p_gogoprotobuf_proto.Skip(data[index:])
+			iNdEx -= sizeOfWire
+			skippy, err := skipProto(data[iNdEx:])
 			if err != nil {
 				return err
 			}
-			if (index + skippy) > l {
+			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+skippy]...)
-			index += skippy
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
 		}
 	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return github_com_gogo_protobuf_proto.NewRequiredNotSetError("bar")
+	}
+
 	return nil
+}
+func skipProto(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for {
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipProto(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
 }
 func NewPopulatedFoo(r randyProto, easy bool) *Foo {
 	this := &Foo{}
-	v1 := uint64(r.Uint32())
+	v1 := uint64(uint64(r.Uint32()))
 	this.Bar = &v1
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedProto(r, 2)
@@ -125,11 +213,13 @@ type randyProto interface {
 }
 
 func randUTF8RuneProto(r randyProto) rune {
-	res := rune(r.Uint32() % 1112064)
-	if 55296 <= res {
-		res += 2047
+	ru := r.Intn(62)
+	if ru < 10 {
+		return rune(ru + 48)
+	} else if ru < 36 {
+		return rune(ru + 55)
 	}
-	return res
+	return rune(ru + 61)
 }
 func randStringProto(r randyProto) string {
 	v2 := r.Intn(100)

@@ -1,7 +1,7 @@
-# Go support for Protocol Buffers - Google's data interchange format
+# Extensions for Protocol Buffers to create more go like structures.
 #
-# Copyright 2010 The Go Authors.  All rights reserved.
-# http://code.google.com/p/goprotobuf/
+# Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
+# http://github.com/gogo/protobuf/gogoproto
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -13,9 +13,6 @@
 # copyright notice, this list of conditions and the following disclaimer
 # in the documentation and/or other materials provided with the
 # distribution.
-#     * Neither the name of Google Inc. nor the names of its
-# contributors may be used to endorse or promote products derived from
-# this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,12 +31,19 @@
 install:
 	go install ./proto
 	go install ./gogoproto
+	go install ./jsonpb
 	go install ./protoc-gen-gogo
+	go install ./protoc-gen-gofast
+	go install ./protoc-gen-gogofast
+	go install ./protoc-gen-gogofaster
+	go install ./protoc-gen-gogoslick
 	go install ./fieldpath/fieldpath-gen
 	go install ./fieldpath
 	go install ./pbpath
+	go install ./protoc-gen-gogo/version/protoc-min-version
+	go install ./protoc-gen-gogo/protoc-gen-combo
 
-all: clean install regenerate gofmt install tests
+all: clean install regenerate install tests
 
 clean:
 	go clean ./...
@@ -56,6 +60,7 @@ regenerate:
 	make -C gogoproto regenerate
 	make -C fieldpath/fieldpath-gen regenerate
 	make -C proto/testdata regenerate
+	make -C jsonpb/jsonpb_test_proto regenerate
 	make -C test regenerate
 	make -C test/example regenerate
 	make -C test/unrecognized regenerate
@@ -68,12 +73,27 @@ regenerate:
 	make -C test/enumprefix regenerate
 	make -C test/packed regenerate
 	make -C test/tags regenerate
-	gofmt -l -s -w .
+	make -C test/oneof regenerate
+	make -C test/theproto3 regenerate
+	make -C test/mapsproto2 regenerate
+	make -C test/issue42order regenerate
+	make -C proto generate-test-pbs
+	make -C test/importdedup regenerate
+	make -C test/custombytesnonstruct regenerate
+	make -C test/required regenerate
+	make -C test/casttype regenerate
+	make -C vanity/test regenerate
+	make -C test/sizeunderscore regenerate
+	make -C test/issue34 regenerate
+	make -C test/empty-issue70 regenerate
+	make -C test/indeximport-issue72 regenerate
+	make gofmt
 
 tests:
 	go test -v ./test
 	go test -v ./proto
-	go test -v ./fieldpath
+	go test -v ./jsonpb
+	go test -v ./fieldpath/...
 	go test -v ./io
 	go test -v ./test/custom
 	go test -v ./test/embedconflict
@@ -91,15 +111,37 @@ tests:
 	go test -v ./test/packed
 	go test -v ./test/tags
 	go test -v ./parser
+	go test -v ./test/oneof
+	go test -v ./test/theproto3/...
+	go test -v ./test/combos/...
+	go test -v ./test/mapsproto2/...
+	go test -v ./test/issue42order
+	go test -v ./test/importdedup
+	go test -v ./test/custombytesnonstruct
+	go test -v ./test/required
+	go test -v ./test/casttype/...
+	go test -v ./vanity/test
+	go test -v ./test/sizeunderscore
+	go test -v ./test/issue34
+	go test -v ./test/empty-issue70
+	go test -v ./test/indeximport-issue72
+	make vet
+
+vet:
+	go vet ./...
+
+errcheck:
+	go get -u github.com/kisielk/errcheck
+	errcheck ./test/...
 
 drone:
 	sudo apt-get install protobuf-compiler
-	git clone https://code.google.com/p/gogoprotobuf
-	(cd $(GOPATH)/src/code.google.com/p/gogoprotobuf && make all)
+	(cd $(GOPATH)/src/github.com/gogo/protobuf && make all)
 
-testall: tests
+testall:
 	make -C protoc-gen-gogo/testdata test
-	go test -v ./test/mixmatch
+	make -C vanity/test test
+	make tests
 
 bench:
 	(cd test/mixbench && go build .)

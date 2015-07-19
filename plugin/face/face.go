@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -48,11 +48,11 @@ The face plugin also generates a test given it is enabled using one of the follo
 
 Let us look at:
 
-  code.google.com/p/gogoprotobuf/test/example/example.proto
+  github.com/gogo/protobuf/test/example/example.proto
 
 Btw all the output can be seen at:
 
-  code.google.com/p/gogoprotobuf/test/example/*
+  github.com/gogo/protobuf/test/example/*
 
 The following message:
 
@@ -61,23 +61,23 @@ The following message:
 	option (gogoproto.goproto_getters) = false;
 	optional string Description = 1 [(gogoproto.nullable) = false];
 	optional int64 Number = 2 [(gogoproto.nullable) = false];
-	optional bytes Id = 3 [(gogoproto.customtype) = "code.google.com/p/gogoprotobuf/test/custom.Uuid", (gogoproto.nullable) = false];
+	optional bytes Id = 3 [(gogoproto.customtype) = "github.com/gogo/protobuf/test/custom.Uuid", (gogoproto.nullable) = false];
   }
 
 given to the face plugin, will generate the following code:
 
 	type AFace interface {
-		Proto() code_google_com_p_gogoprotobuf_proto.Message
+		Proto() github_com_gogo_protobuf_proto.Message
 		GetDescription() string
 		GetNumber() int64
-		GetId() code_google_com_p_gogoprotobuf_test_custom.Uuid
+		GetId() github_com_gogo_protobuf_test_custom.Uuid
 	}
 
-	func (this *A) Proto() code_google_com_p_gogoprotobuf_proto.Message {
+	func (this *A) Proto() github_com_gogo_protobuf_proto.Message {
 		return this
 	}
 
-	func (this *A) TestProto() code_google_com_p_gogoprotobuf_proto.Message {
+	func (this *A) TestProto() github_com_gogo_protobuf_proto.Message {
 		return NewAFromFace(this)
 	}
 
@@ -89,7 +89,7 @@ given to the face plugin, will generate the following code:
 		return this.Number
 	}
 
-	func (this *A) GetId() code_google_com_p_gogoprotobuf_test_custom.Uuid {
+	func (this *A) GetId() github_com_gogo_protobuf_test_custom.Uuid {
 		return this.Id
 	}
 
@@ -129,8 +129,10 @@ just the like TestProto method which is used to test the NewAFromFace function.
 package face
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
+	"strings"
 )
 
 type plugin struct {
@@ -150,11 +152,30 @@ func (p *plugin) Init(g *generator.Generator) {
 	p.Generator = g
 }
 
+func (p *plugin) GetMapGoType(file *descriptor.FileDescriptorProto, field *descriptor.FieldDescriptorProto) string {
+	mapMsg := generator.GetMap(file, field)
+	keyField, valueField := mapMsg.GetMapFields()
+	keygoTyp, _ := p.GoType(nil, keyField)
+	keygoTyp = strings.Replace(keygoTyp, "*", "", 1)
+	valuegoTyp, _ := p.GoType(nil, valueField)
+	if !valueField.IsMessage() {
+		valuegoTyp = strings.Replace(valuegoTyp, "*", "", 1)
+	}
+	goTyp := "map[" + keygoTyp + "]" + valuegoTyp
+	return goTyp
+}
+
 func (p *plugin) Generate(file *generator.FileDescriptor) {
 	p.PluginImports = generator.NewPluginImports(p.Generator)
-	protoPkg := p.NewImport("code.google.com/p/gogoprotobuf/proto")
+	protoPkg := p.NewImport("github.com/gogo/protobuf/proto")
+	if !gogoproto.ImportsGoGoProto(file.FileDescriptorProto) {
+		protoPkg = p.NewImport("github.com/golang/protobuf/proto")
+	}
 	for _, message := range file.Messages() {
 		if !gogoproto.IsFace(file.FileDescriptorProto, message.DescriptorProto) {
+			continue
+		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
 		}
 		if message.DescriptorProto.HasExtension() {
@@ -170,6 +191,9 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		for _, field := range message.Field {
 			fieldname := p.GetFieldName(message, field)
 			goTyp, _ := p.GoType(message, field)
+			if generator.IsMap(file.FileDescriptorProto, field) {
+				goTyp = p.GetMapGoType(file.FileDescriptorProto, field)
+			}
 			p.P(`Get`, fieldname, `() `, goTyp)
 		}
 		p.Out()
@@ -190,6 +214,9 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		for _, field := range message.Field {
 			fieldname := p.GetFieldName(message, field)
 			goTyp, _ := p.GoType(message, field)
+			if generator.IsMap(file.FileDescriptorProto, field) {
+				goTyp = p.GetMapGoType(file.FileDescriptorProto, field)
+			}
 			p.P(`func (this *`, ccTypeName, `) Get`, fieldname, `() `, goTyp, `{`)
 			p.In()
 			p.P(` return this.`, fieldname)

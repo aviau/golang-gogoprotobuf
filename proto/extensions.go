@@ -1,7 +1,7 @@
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2010 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -37,6 +37,7 @@ package proto
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strconv"
 	"sync"
@@ -174,29 +175,36 @@ func extensionProperties(ed *ExtensionDesc) *Properties {
 // encodeExtensionMap encodes any unmarshaled (unencoded) extensions in m.
 func encodeExtensionMap(m map[int32]Extension) error {
 	for k, e := range m {
-		if e.value == nil || e.desc == nil {
-			// Extension is only in its encoded form.
-			continue
-		}
-
-		// We don't skip extensions that have an encoded form set,
-		// because the extension value may have been mutated after
-		// the last time this function was called.
-
-		et := reflect.TypeOf(e.desc.ExtensionType)
-		props := extensionProperties(e.desc)
-
-		p := NewBuffer(nil)
-		// If e.value has type T, the encoder expects a *struct{ X T }.
-		// Pass a *T with a zero field and hope it all works out.
-		x := reflect.New(et)
-		x.Elem().Set(reflect.ValueOf(e.value))
-		if err := props.enc(p, props, toStructPointer(x)); err != nil {
+		err := encodeExtension(&e)
+		if err != nil {
 			return err
 		}
-		e.enc = p.buf
 		m[k] = e
 	}
+	return nil
+}
+
+func encodeExtension(e *Extension) error {
+	if e.value == nil || e.desc == nil {
+		// Extension is only in its encoded form.
+		return nil
+	}
+	// We don't skip extensions that have an encoded form set,
+	// because the extension value may have been mutated after
+	// the last time this function was called.
+
+	et := reflect.TypeOf(e.desc.ExtensionType)
+	props := extensionProperties(e.desc)
+
+	p := NewBuffer(nil)
+	// If e.value has type T, the encoder expects a *struct{ X T }.
+	// Pass a *T with a zero field and hope it all works out.
+	x := reflect.New(et)
+	x.Elem().Set(reflect.ValueOf(e.value))
+	if err := props.enc(p, props, toStructPointer(x)); err != nil {
+		return err
+	}
+	e.enc = p.buf
 	return nil
 }
 
@@ -300,9 +308,12 @@ func GetExtension(pb extendableProto, extension *ExtensionDesc) (interface{}, er
 	}
 
 	if epb, doki := pb.(extensionsMap); doki {
-		e, ok := epb.ExtensionMap()[extension.Field]
+		emap := epb.ExtensionMap()
+		e, ok := emap[extension.Field]
 		if !ok {
-			return nil, ErrMissingExtension
+			// defaultExtensionValue returns the default value or
+			// ErrMissingExtension if there is no default.
+			return defaultExtensionValue(extension)
 		}
 		if e.value != nil {
 			// Already decoded. Check the descriptor, though.
@@ -325,6 +336,7 @@ func GetExtension(pb extendableProto, extension *ExtensionDesc) (interface{}, er
 		e.value = v
 		e.desc = extension
 		e.enc = nil
+		emap[extension.Field] = e
 		return e.value, nil
 	} else if epb, doki := pb.(extensionsBytes); doki {
 		ext := epb.GetExtensions()
@@ -346,8 +358,44 @@ func GetExtension(pb extendableProto, extension *ExtensionDesc) (interface{}, er
 			}
 			o += n + l
 		}
+		return defaultExtensionValue(extension)
 	}
 	panic("unreachable")
+}
+
+// defaultExtensionValue returns the default value for extension.
+// If no default for an extension is defined ErrMissingExtension is returned.
+func defaultExtensionValue(extension *ExtensionDesc) (interface{}, error) {
+	t := reflect.TypeOf(extension.ExtensionType)
+	props := extensionProperties(extension)
+
+	sf, _, err := fieldDefault(t, props)
+	if err != nil {
+		return nil, err
+	}
+
+	if sf == nil || sf.value == nil {
+		// There is no default value.
+		return nil, ErrMissingExtension
+	}
+
+	if t.Kind() != reflect.Ptr {
+		// We do not need to return a Ptr, we can directly return sf.value.
+		return sf.value, nil
+	}
+
+	// We need to return an interface{} that is a pointer to sf.value.
+	value := reflect.New(t).Elem()
+	value.Set(reflect.New(value.Type().Elem()))
+	if sf.kind == reflect.Int32 {
+		// We may have an int32 or an enum, but the underlying data is int32.
+		// Since we can't set an int32 into a non int32 reflect.value directly
+		// set it as a int32.
+		value.Elem().SetInt(int64(sf.value.(int32)))
+	} else {
+		value.Elem().Set(reflect.ValueOf(sf.value))
+	}
+	return value.Interface(), nil
 }
 
 // decodeExtension decodes an extension encoded in b.
@@ -413,6 +461,14 @@ func SetExtension(pb extendableProto, extension *ExtensionDesc, value interface{
 	typ := reflect.TypeOf(extension.ExtensionType)
 	if typ != reflect.TypeOf(value) {
 		return errors.New("proto: bad extension value type")
+	}
+	// nil extension values need to be caught early, because the
+	// encoder can't distinguish an ErrNil due to a nil extension
+	// from an ErrNil due to a missing field. Extensions are
+	// always optional, so the encoder would just swallow the error
+	// and drop all the extensions from the encoded message.
+	if reflect.ValueOf(value).IsNil() {
+		return fmt.Errorf("proto: SetExtension called with nil value of type %T", value)
 	}
 	return setExtension(pb, extension, value)
 }

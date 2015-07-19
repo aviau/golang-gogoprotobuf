@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -24,9 +24,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+syntax = "proto2";
 package gogoproto;
 
 import "google/protobuf/descriptor.proto";
+
+option java_package = "com.google.protobuf";
+option java_outer_classname = "GoGoProtos";
 
 extend google.protobuf.EnumOptions {
 	optional bool goproto_enum_prefix = 62001;
@@ -51,7 +55,7 @@ extend google.protobuf.FileOptions {
 	optional bool benchgen_all = 63016;
 	optional bool marshaler_all = 63017;
 	optional bool unmarshaler_all = 63018;
-	optional bool bufferto_all = 63019;
+
 	optional bool sizer_all = 63020;
 
 	optional bool goproto_enum_stringer_all = 63021;
@@ -61,6 +65,8 @@ extend google.protobuf.FileOptions {
 	optional bool unsafe_unmarshaler_all = 63024;
 
 	optional bool goproto_extensions_map_all = 63025;
+	optional bool goproto_unrecognized_all = 63026;
+	optional bool gogoproto_import = 63027;
 }
 
 extend google.protobuf.MessageOptions {
@@ -79,13 +85,14 @@ extend google.protobuf.MessageOptions {
 	optional bool benchgen = 64016;
 	optional bool marshaler = 64017;
 	optional bool unmarshaler = 64018;
-	optional bool bufferto = 64019;
+
 	optional bool sizer = 64020;
 
 	optional bool unsafe_marshaler = 64023;
 	optional bool unsafe_unmarshaler = 64024;
 
 	optional bool goproto_extensions_map = 64025;
+	optional bool goproto_unrecognized = 64026;
 }
 
 extend google.protobuf.FieldOptions {
@@ -95,5 +102,6 @@ extend google.protobuf.FieldOptions {
   optional string customname = 65004;
   optional string jsontag = 65005;
   optional string moretags = 65006;
+  optional string casttype = 65007;
 }
 

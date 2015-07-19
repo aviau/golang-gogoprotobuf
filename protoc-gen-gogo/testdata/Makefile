@@ -1,7 +1,7 @@
 # Go support for Protocol Buffers - Google's data interchange format
 #
 # Copyright 2010 The Go Authors.  All rights reserved.
-# http://code.google.com/p/goprotobuf/
+# https://github.com/golang/protobuf
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -39,7 +39,8 @@ test:	golden testbuild
 #	@echo PASS
 
 golden:
-	protoc --gogo_out=. ./my_test/test.proto
+	go install github.com/gogo/protobuf/protoc-gen-gogo/version/protoc-min-version
+	protoc-min-version --version="3.0.0" --gogo_out=. ./my_test/test.proto
 	diff -w my_test/test.pb.go my_test/test.pb.go.golden
 
 nuke:	clean

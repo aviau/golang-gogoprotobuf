@@ -5,21 +5,25 @@
 /*
 Package my_test is a generated protocol buffer package.
 
+This package holds interesting messages.
+
 It is generated from these files:
 	my_test/test.proto
 
 It has these top-level messages:
 	Request
 	Reply
+	OtherBase
 	ReplyExtensions
+	OtherReplyExtensions
 	OldReply
 */
 package my_test
 
-import proto "code.google.com/p/gogoprotobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
 import math "math"
 
-// discarding unused import multi2 "multi/multi1.pb"
+// discarding unused import multitest2 "multi"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -172,10 +176,14 @@ type Request struct {
 	Hue *Request_Color `protobuf:"varint,3,opt,name=hue,enum=my.test.Request_Color" json:"hue,omitempty"`
 	Hat *HatType       `protobuf:"varint,4,opt,name=hat,enum=my.test.HatType,def=1" json:"hat,omitempty"`
 	//  optional imp.ImportedMessage.Owner owner = 6;
-	Deadline         *float32           `protobuf:"fixed32,7,opt,name=deadline,def=inf" json:"deadline,omitempty"`
-	Somegroup        *Request_SomeGroup `protobuf:"group,8,opt,name=SomeGroup" json:"somegroup,omitempty"`
-	Reset_           *int32             `protobuf:"varint,12,opt,name=reset" json:"reset,omitempty"`
-	XXX_unrecognized []byte             `json:"-"`
+	Deadline  *float32           `protobuf:"fixed32,7,opt,name=deadline,def=inf" json:"deadline,omitempty"`
+	Somegroup *Request_SomeGroup `protobuf:"group,8,opt,name=SomeGroup" json:"somegroup,omitempty"`
+	// This is a map field. It will generate map[int32]string.
+	NameMapping map[int32]string `protobuf:"bytes,14,rep,name=name_mapping" json:"name_mapping,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// This is a map field whose value type is a message.
+	MsgMapping       map[int64]*Reply `protobuf:"bytes,15,rep,name=msg_mapping" json:"msg_mapping,omitempty" protobuf_key:"zigzag64,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Reset_           *int32           `protobuf:"varint,12,opt,name=reset" json:"reset,omitempty"`
+	XXX_unrecognized []byte           `json:"-"`
 }
 
 func (m *Request) Reset()         { *m = Request{} }
@@ -217,6 +225,20 @@ func (m *Request) GetDeadline() float32 {
 func (m *Request) GetSomegroup() *Request_SomeGroup {
 	if m != nil {
 		return m.Somegroup
+	}
+	return nil
+}
+
+func (m *Request) GetNameMapping() map[int32]string {
+	if m != nil {
+		return m.NameMapping
+	}
+	return nil
+}
+
+func (m *Request) GetMsgMapping() map[int64]*Reply {
+	if m != nil {
+		return m.MsgMapping
 	}
 	return nil
 }
@@ -317,6 +339,37 @@ func (m *Reply_Entry) GetXMyFieldName_2() int64 {
 	return 0
 }
 
+type OtherBase struct {
+	Name             *string                   `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	XXX_extensions   map[int32]proto.Extension `json:"-"`
+	XXX_unrecognized []byte                    `json:"-"`
+}
+
+func (m *OtherBase) Reset()         { *m = OtherBase{} }
+func (m *OtherBase) String() string { return proto.CompactTextString(m) }
+func (*OtherBase) ProtoMessage()    {}
+
+var extRange_OtherBase = []proto.ExtensionRange{
+	{100, 536870911},
+}
+
+func (*OtherBase) ExtensionRangeArray() []proto.ExtensionRange {
+	return extRange_OtherBase
+}
+func (m *OtherBase) ExtensionMap() map[int32]proto.Extension {
+	if m.XXX_extensions == nil {
+		m.XXX_extensions = make(map[int32]proto.Extension)
+	}
+	return m.XXX_extensions
+}
+
+func (m *OtherBase) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
 type ReplyExtensions struct {
 	XXX_unrecognized []byte `json:"-"`
 }
@@ -333,6 +386,38 @@ var E_ReplyExtensions_Time = &proto.ExtensionDesc{
 	Tag:           "fixed64,101,opt,name=time",
 }
 
+var E_ReplyExtensions_Carrot = &proto.ExtensionDesc{
+	ExtendedType:  (*Reply)(nil),
+	ExtensionType: (*ReplyExtensions)(nil),
+	Field:         105,
+	Name:          "my.test.ReplyExtensions.carrot",
+	Tag:           "bytes,105,opt,name=carrot",
+}
+
+var E_ReplyExtensions_Donut = &proto.ExtensionDesc{
+	ExtendedType:  (*OtherBase)(nil),
+	ExtensionType: (*ReplyExtensions)(nil),
+	Field:         101,
+	Name:          "my.test.ReplyExtensions.donut",
+	Tag:           "bytes,101,opt,name=donut",
+}
+
+type OtherReplyExtensions struct {
+	Key              *int32 `protobuf:"varint,1,opt,name=key" json:"key,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *OtherReplyExtensions) Reset()         { *m = OtherReplyExtensions{} }
+func (m *OtherReplyExtensions) String() string { return proto.CompactTextString(m) }
+func (*OtherReplyExtensions) ProtoMessage()    {}
+
+func (m *OtherReplyExtensions) GetKey() int32 {
+	if m != nil && m.Key != nil {
+		return *m.Key
+	}
+	return 0
+}
+
 type OldReply struct {
 	XXX_extensions   map[int32]proto.Extension `json:"-"`
 	XXX_unrecognized []byte                    `json:"-"`
@@ -347,6 +432,12 @@ func (m *OldReply) Marshal() ([]byte, error) {
 }
 func (m *OldReply) Unmarshal(buf []byte) error {
 	return proto.UnmarshalMessageSet(buf, m.ExtensionMap())
+}
+func (m *OldReply) MarshalJSON() ([]byte, error) {
+	return proto.MarshalMessageSetJSON(m.XXX_extensions)
+}
+func (m *OldReply) UnmarshalJSON(buf []byte) error {
+	return proto.UnmarshalMessageSetJSON(buf, m.XXX_extensions)
 }
 
 // ensure OldReply satisfies proto.Marshaler and proto.Unmarshaler
@@ -375,11 +466,22 @@ var E_Tag = &proto.ExtensionDesc{
 	Tag:           "bytes,103,opt,name=tag",
 }
 
+var E_Donut = &proto.ExtensionDesc{
+	ExtendedType:  (*Reply)(nil),
+	ExtensionType: (*OtherReplyExtensions)(nil),
+	Field:         106,
+	Name:          "my.test.donut",
+	Tag:           "bytes,106,opt,name=donut",
+}
+
 func init() {
 	proto.RegisterEnum("my.test.HatType", HatType_name, HatType_value)
 	proto.RegisterEnum("my.test.Days", Days_name, Days_value)
 	proto.RegisterEnum("my.test.Request_Color", Request_Color_name, Request_Color_value)
 	proto.RegisterEnum("my.test.Reply_Entry_Game", Reply_Entry_Game_name, Reply_Entry_Game_value)
 	proto.RegisterExtension(E_ReplyExtensions_Time)
+	proto.RegisterExtension(E_ReplyExtensions_Carrot)
+	proto.RegisterExtension(E_ReplyExtensions_Donut)
 	proto.RegisterExtension(E_Tag)
+	proto.RegisterExtension(E_Donut)
 }

@@ -1,12 +1,12 @@
 // Extensions for Protocol Buffers to create more go like structures.
 //
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2010 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -150,17 +150,20 @@ func (sp *StructProperties) Swap(i, j int) { sp.order[i], sp.order[j] = sp.order
 
 // Properties represents the protocol-specific behavior of a single struct field.
 type Properties struct {
-	Name       string // name of the field, for error messages
-	OrigName   string // original name before protocol compiler (always set)
-	Wire       string
-	WireType   int
-	Tag        int
-	Required   bool
-	Optional   bool
-	Repeated   bool
-	Packed     bool   // relevant for repeated primitives only
-	Enum       string // set for enum types only
+	Name     string // name of the field, for error messages
+	OrigName string // original name before protocol compiler (always set)
+	Wire     string
+	WireType int
+	Tag      int
+	Required bool
+	Optional bool
+	Repeated bool
+	Packed   bool   // relevant for repeated primitives only
+	Enum     string // set for enum types only
+	proto3   bool   // whether this is known to be a proto3 field; set for []byte only
+
 	Default    string // default value
+	HasDefault bool   // whether an explicit default was provided
 	CustomType string
 	def_uint64 uint64
 
@@ -175,6 +178,10 @@ type Properties struct {
 	sprop         *StructProperties // set for struct types only
 	isMarshaler   bool
 	isUnmarshaler bool
+
+	mtype    reflect.Type // set for map types only
+	mkeyprop *Properties  // set for map types only
+	mvalprop *Properties  // set for map types only
 
 	size    sizer
 	valSize valueSizer // set for bool and numeric types only
@@ -206,10 +213,13 @@ func (p *Properties) String() string {
 	if p.OrigName != p.Name {
 		s += ",name=" + p.OrigName
 	}
+	if p.proto3 {
+		s += ",proto3"
+	}
 	if len(p.Enum) > 0 {
 		s += ",enum=" + p.Enum
 	}
-	if len(p.Default) > 0 {
+	if p.HasDefault {
 		s += ",def=" + p.Default
 	}
 	return s
@@ -280,7 +290,10 @@ func (p *Properties) Parse(s string) {
 			p.OrigName = f[5:]
 		case strings.HasPrefix(f, "enum="):
 			p.Enum = f[5:]
+		case f == "proto3":
+			p.proto3 = true
 		case strings.HasPrefix(f, "def="):
+			p.HasDefault = true
 			p.Default = f[4:] // rest of string
 			if i+1 < len(fields) {
 				// Commas aren't escaped, and def is always last.
@@ -302,7 +315,7 @@ func logNoSliceEnc(t1, t2 reflect.Type) {
 var protoMessageType = reflect.TypeOf((*Message)(nil)).Elem()
 
 // Initialize the fields for encoding and decoding.
-func (p *Properties) setEncAndDec(typ reflect.Type, lockGetProp bool) {
+func (p *Properties) setEncAndDec(typ reflect.Type, f *reflect.StructField, lockGetProp bool) {
 	p.enc = nil
 	p.dec = nil
 	p.size = nil
@@ -313,30 +326,117 @@ func (p *Properties) setEncAndDec(typ reflect.Type, lockGetProp bool) {
 	}
 	switch t1 := typ; t1.Kind() {
 	default:
-		if !p.setNonNullableEncAndDec(t1) {
-			fmt.Fprintf(os.Stderr, "proto: no coders for %T\n", t1)
+		fmt.Fprintf(os.Stderr, "proto: no coders for %v\n", t1)
+
+	// proto3 scalar types
+
+	case reflect.Bool:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_bool
+			p.dec = (*Buffer).dec_proto3_bool
+			p.size = size_proto3_bool
+		} else {
+			p.enc = (*Buffer).enc_ref_bool
+			p.dec = (*Buffer).dec_proto3_bool
+			p.size = size_ref_bool
 		}
+	case reflect.Int32:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_int32
+			p.dec = (*Buffer).dec_proto3_int32
+			p.size = size_proto3_int32
+		} else {
+			p.enc = (*Buffer).enc_ref_int32
+			p.dec = (*Buffer).dec_proto3_int32
+			p.size = size_ref_int32
+		}
+	case reflect.Uint32:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_uint32
+			p.dec = (*Buffer).dec_proto3_int32 // can reuse
+			p.size = size_proto3_uint32
+		} else {
+			p.enc = (*Buffer).enc_ref_uint32
+			p.dec = (*Buffer).dec_proto3_int32 // can reuse
+			p.size = size_ref_uint32
+		}
+	case reflect.Int64, reflect.Uint64:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_int64
+			p.dec = (*Buffer).dec_proto3_int64
+			p.size = size_proto3_int64
+		} else {
+			p.enc = (*Buffer).enc_ref_int64
+			p.dec = (*Buffer).dec_proto3_int64
+			p.size = size_ref_int64
+		}
+	case reflect.Float32:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_uint32 // can just treat them as bits
+			p.dec = (*Buffer).dec_proto3_int32
+			p.size = size_proto3_uint32
+		} else {
+			p.enc = (*Buffer).enc_ref_uint32 // can just treat them as bits
+			p.dec = (*Buffer).dec_proto3_int32
+			p.size = size_ref_uint32
+		}
+	case reflect.Float64:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_int64 // can just treat them as bits
+			p.dec = (*Buffer).dec_proto3_int64
+			p.size = size_proto3_int64
+		} else {
+			p.enc = (*Buffer).enc_ref_int64 // can just treat them as bits
+			p.dec = (*Buffer).dec_proto3_int64
+			p.size = size_ref_int64
+		}
+	case reflect.String:
+		if p.proto3 {
+			p.enc = (*Buffer).enc_proto3_string
+			p.dec = (*Buffer).dec_proto3_string
+			p.size = size_proto3_string
+		} else {
+			p.enc = (*Buffer).enc_ref_string
+			p.dec = (*Buffer).dec_proto3_string
+			p.size = size_ref_string
+		}
+	case reflect.Struct:
+		p.stype = typ
+		p.isMarshaler = isMarshaler(typ)
+		p.isUnmarshaler = isUnmarshaler(typ)
+		if p.Wire == "bytes" {
+			p.enc = (*Buffer).enc_ref_struct_message
+			p.dec = (*Buffer).dec_ref_struct_message
+			p.size = size_ref_struct_message
+		} else {
+			fmt.Fprintf(os.Stderr, "proto: no coders for struct %T\n", typ)
+		}
+
 	case reflect.Ptr:
 		switch t2 := t1.Elem(); t2.Kind() {
 		default:
-			fmt.Fprintf(os.Stderr, "proto: no encoder function for %T -> %T\n", t1, t2)
+			fmt.Fprintf(os.Stderr, "proto: no encoder function for %v -> %v\n", t1, t2)
 			break
 		case reflect.Bool:
 			p.enc = (*Buffer).enc_bool
 			p.dec = (*Buffer).dec_bool
 			p.size = size_bool
-		case reflect.Int32, reflect.Uint32:
+		case reflect.Int32:
 			p.enc = (*Buffer).enc_int32
 			p.dec = (*Buffer).dec_int32
 			p.size = size_int32
+		case reflect.Uint32:
+			p.enc = (*Buffer).enc_uint32
+			p.dec = (*Buffer).dec_int32 // can reuse
+			p.size = size_uint32
 		case reflect.Int64, reflect.Uint64:
 			p.enc = (*Buffer).enc_int64
 			p.dec = (*Buffer).dec_int64
 			p.size = size_int64
 		case reflect.Float32:
-			p.enc = (*Buffer).enc_int32 // can just treat them as bits
+			p.enc = (*Buffer).enc_uint32 // can just treat them as bits
 			p.dec = (*Buffer).dec_int32
-			p.size = size_int32
+			p.size = size_uint32
 		case reflect.Float64:
 			p.enc = (*Buffer).enc_int64 // can just treat them as bits
 			p.dec = (*Buffer).dec_int64
@@ -375,48 +475,59 @@ func (p *Properties) setEncAndDec(typ reflect.Type, lockGetProp bool) {
 			}
 			p.dec = (*Buffer).dec_slice_bool
 			p.packedDec = (*Buffer).dec_slice_packed_bool
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-			switch t2.Bits() {
-			case 32:
-				if p.Packed {
-					p.enc = (*Buffer).enc_slice_packed_int32
-					p.size = size_slice_packed_int32
-				} else {
-					p.enc = (*Buffer).enc_slice_int32
-					p.size = size_slice_int32
-				}
-				p.dec = (*Buffer).dec_slice_int32
-				p.packedDec = (*Buffer).dec_slice_packed_int32
-			case 64:
-				if p.Packed {
-					p.enc = (*Buffer).enc_slice_packed_int64
-					p.size = size_slice_packed_int64
-				} else {
-					p.enc = (*Buffer).enc_slice_int64
-					p.size = size_slice_int64
-				}
-				p.dec = (*Buffer).dec_slice_int64
-				p.packedDec = (*Buffer).dec_slice_packed_int64
-			case 8:
-				if t2.Kind() == reflect.Uint8 {
-					p.enc = (*Buffer).enc_slice_byte
-					p.dec = (*Buffer).dec_slice_byte
-					p.size = size_slice_byte
-				}
-			default:
-				logNoSliceEnc(t1, t2)
-				break
+		case reflect.Int32:
+			if p.Packed {
+				p.enc = (*Buffer).enc_slice_packed_int32
+				p.size = size_slice_packed_int32
+			} else {
+				p.enc = (*Buffer).enc_slice_int32
+				p.size = size_slice_int32
+			}
+			p.dec = (*Buffer).dec_slice_int32
+			p.packedDec = (*Buffer).dec_slice_packed_int32
+		case reflect.Uint32:
+			if p.Packed {
+				p.enc = (*Buffer).enc_slice_packed_uint32
+				p.size = size_slice_packed_uint32
+			} else {
+				p.enc = (*Buffer).enc_slice_uint32
+				p.size = size_slice_uint32
+			}
+			p.dec = (*Buffer).dec_slice_int32
+			p.packedDec = (*Buffer).dec_slice_packed_int32
+		case reflect.Int64, reflect.Uint64:
+			if p.Packed {
+				p.enc = (*Buffer).enc_slice_packed_int64
+				p.size = size_slice_packed_int64
+			} else {
+				p.enc = (*Buffer).enc_slice_int64
+				p.size = size_slice_int64
+			}
+			p.dec = (*Buffer).dec_slice_int64
+			p.packedDec = (*Buffer).dec_slice_packed_int64
+		case reflect.Uint8:
+			p.enc = (*Buffer).enc_slice_byte
+			p.dec = (*Buffer).dec_slice_byte
+			p.size = size_slice_byte
+			// This is a []byte, which is either a bytes field,
+			// or the value of a map field. In the latter case,
+			// we always encode an empty []byte, so we should not
+			// use the proto3 enc/size funcs.
+			// f == nil iff this is the key/value of a map field.
+			if p.proto3 && f != nil {
+				p.enc = (*Buffer).enc_proto3_slice_byte
+				p.size = size_proto3_slice_byte
 			}
 		case reflect.Float32, reflect.Float64:
 			switch t2.Bits() {
 			case 32:
 				// can just treat them as bits
 				if p.Packed {
-					p.enc = (*Buffer).enc_slice_packed_int32
-					p.size = size_slice_packed_int32
+					p.enc = (*Buffer).enc_slice_packed_uint32
+					p.size = size_slice_packed_uint32
 				} else {
-					p.enc = (*Buffer).enc_slice_int32
-					p.size = size_slice_int32
+					p.enc = (*Buffer).enc_slice_uint32
+					p.size = size_slice_uint32
 				}
 				p.dec = (*Buffer).dec_slice_int32
 				p.packedDec = (*Buffer).dec_slice_packed_int32
@@ -471,6 +582,23 @@ func (p *Properties) setEncAndDec(typ reflect.Type, lockGetProp bool) {
 		case reflect.Struct:
 			p.setSliceOfNonPointerStructs(t1)
 		}
+
+	case reflect.Map:
+		p.enc = (*Buffer).enc_new_map
+		p.dec = (*Buffer).dec_new_map
+		p.size = size_new_map
+
+		p.mtype = t1
+		p.mkeyprop = &Properties{}
+		p.mkeyprop.init(reflect.PtrTo(p.mtype.Key()), "Key", f.Tag.Get("protobuf_key"), nil, lockGetProp)
+		p.mvalprop = &Properties{}
+		vtype := p.mtype.Elem()
+		if vtype.Kind() != reflect.Ptr && vtype.Kind() != reflect.Slice {
+			// The value type is not a message (*T) or bytes ([]byte),
+			// so we need encoders for the pointer to this type.
+			vtype = reflect.PtrTo(vtype)
+		}
+		p.mvalprop.init(vtype, "Value", f.Tag.Get("protobuf_val"), nil, lockGetProp)
 	}
 	p.setTag(lockGetProp)
 }
@@ -530,23 +658,40 @@ func (p *Properties) init(typ reflect.Type, name, tag string, f *reflect.StructF
 		return
 	}
 	p.Parse(tag)
-	p.setEncAndDec(typ, lockGetProp)
+	p.setEncAndDec(typ, f, lockGetProp)
 }
 
 var (
-	mutex         sync.Mutex
+	propertiesMu  sync.RWMutex
 	propertiesMap = make(map[reflect.Type]*StructProperties)
 )
 
 // GetProperties returns the list of properties for the type represented by t.
+// t must represent a generated struct type of a protocol message.
 func GetProperties(t reflect.Type) *StructProperties {
-	mutex.Lock()
-	sprop := getPropertiesLocked(t)
-	mutex.Unlock()
+	if t.Kind() != reflect.Struct {
+		panic("proto: type must have kind struct")
+	}
+
+	// Most calls to GetProperties in a long-running program will be
+	// retrieving details for types we have seen before.
+	propertiesMu.RLock()
+	sprop, ok := propertiesMap[t]
+	propertiesMu.RUnlock()
+	if ok {
+		if collectStats {
+			stats.Chit++
+		}
+		return sprop
+	}
+
+	propertiesMu.Lock()
+	sprop = getPropertiesLocked(t)
+	propertiesMu.Unlock()
 	return sprop
 }
 
-// getPropertiesLocked requires that mutex is held.
+// getPropertiesLocked requires that propertiesMu is held.
 func getPropertiesLocked(t reflect.Type) *StructProperties {
 	if prop, ok := propertiesMap[t]; ok {
 		if collectStats {

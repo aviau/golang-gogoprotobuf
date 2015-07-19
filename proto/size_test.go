@@ -1,7 +1,7 @@
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2012 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,10 +33,12 @@ package proto_test
 
 import (
 	"log"
+	"strings"
 	"testing"
 
-	pb "./testdata"
-	. "code.google.com/p/gogoprotobuf/proto"
+	. "github.com/gogo/protobuf/proto"
+	proto3pb "github.com/gogo/protobuf/proto/proto3_proto"
+	pb "github.com/gogo/protobuf/proto/testdata"
 )
 
 var messageWithExtension1 = &pb.MyMessage{Count: Int32(7)}
@@ -65,8 +67,10 @@ var SizeTests = []struct {
 	// Basic types.
 	{"bool", &pb.Defaults{F_Bool: Bool(true)}},
 	{"int32", &pb.Defaults{F_Int32: Int32(12)}},
+	{"negative int32", &pb.Defaults{F_Int32: Int32(-1)}},
 	{"small int64", &pb.Defaults{F_Int64: Int64(1)}},
 	{"big int64", &pb.Defaults{F_Int64: Int64(1 << 20)}},
+	{"negative int64", &pb.Defaults{F_Int64: Int64(-1)}},
 	{"fixed32", &pb.Defaults{F_Fixed32: Uint32(71)}},
 	{"fixed64", &pb.Defaults{F_Fixed64: Uint64(72)}},
 	{"uint32", &pb.Defaults{F_Uint32: Uint32(123)}},
@@ -83,7 +87,7 @@ var SizeTests = []struct {
 	{"empty repeated bool", &pb.MoreRepeated{Bools: []bool{}}},
 	{"repeated bool", &pb.MoreRepeated{Bools: []bool{false, true, true, false}}},
 	{"packed repeated bool", &pb.MoreRepeated{BoolsPacked: []bool{false, true, true, false, true, true, true}}},
-	{"repeated int32", &pb.MoreRepeated{Ints: []int32{1, 12203, 1729}}},
+	{"repeated int32", &pb.MoreRepeated{Ints: []int32{1, 12203, 1729, -1}}},
 	{"repeated int32 packed", &pb.MoreRepeated{IntsPacked: []int32{1, 12203, 1729}}},
 	{"repeated int64 packed", &pb.MoreRepeated{Int64SPacked: []int64{
 		// Need enough large numbers to verify that the header is counting the number of bytes
@@ -100,6 +104,26 @@ var SizeTests = []struct {
 	{"unrecognized", &pb.MoreRepeated{XXX_unrecognized: []byte{13<<3 | 0, 4}}},
 	{"extension (unencoded)", messageWithExtension1},
 	{"extension (encoded)", messageWithExtension3},
+	// proto3 message
+	{"proto3 empty", &proto3pb.Message{}},
+	{"proto3 bool", &proto3pb.Message{TrueScotsman: true}},
+	{"proto3 int64", &proto3pb.Message{ResultCount: 1}},
+	{"proto3 uint32", &proto3pb.Message{HeightInCm: 123}},
+	{"proto3 float", &proto3pb.Message{Score: 12.6}},
+	{"proto3 string", &proto3pb.Message{Name: "Snezana"}},
+	{"proto3 bytes", &proto3pb.Message{Data: []byte("wowsa")}},
+	{"proto3 bytes, empty", &proto3pb.Message{Data: []byte{}}},
+	{"proto3 enum", &proto3pb.Message{Hilarity: proto3pb.Message_PUNS}},
+	{"proto3 map field with empty bytes", &proto3pb.MessageWithMap{ByteMapping: map[bool][]byte{false: {}}}},
+
+	{"map field", &pb.MessageWithMap{NameMapping: map[int32]string{1: "Rob", 7: "Andrew"}}},
+	{"map field with message", &pb.MessageWithMap{MsgMapping: map[int64]*pb.FloatingPoint{0x7001: {F: Float64(2.0)}}}},
+	{"map field with bytes", &pb.MessageWithMap{ByteMapping: map[bool][]byte{true: []byte("this time for sure")}}},
+	{"map field with empty bytes", &pb.MessageWithMap{ByteMapping: map[bool][]byte{true: {}}}},
+
+	{"map field with big entry", &pb.MessageWithMap{NameMapping: map[int32]string{8: strings.Repeat("x", 125)}}},
+	{"map field with big key and val", &pb.MessageWithMap{StrToStr: map[string]string{strings.Repeat("x", 70): strings.Repeat("y", 70)}}},
+	{"map field with big numeric key", &pb.MessageWithMap{NameMapping: map[int32]string{0xf00d: "om nom nom"}}},
 }
 
 func TestSize(t *testing.T) {

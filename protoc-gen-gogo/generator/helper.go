@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -31,13 +31,12 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"strconv"
 	"strings"
 
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/proto"
-	descriptor "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
-	plugin "code.google.com/p/gogoprotobuf/protoc-gen-gogo/plugin"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/proto"
+	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+	plugin "github.com/gogo/protobuf/protoc-gen-gogo/plugin"
 	"path"
 )
 
@@ -91,7 +90,7 @@ func (this *pluginImports) NewImport(pkg string) Single {
 func (this *pluginImports) GenerateImports(file *FileDescriptor) {
 	for _, s := range this.singles {
 		if s.IsUsed() {
-			this.generator.P(s.Generate())
+			this.generator.PrintImport(s.Name(), s.Location())
 		}
 	}
 }
@@ -99,7 +98,8 @@ func (this *pluginImports) GenerateImports(file *FileDescriptor) {
 type Single interface {
 	Use() string
 	IsUsed() bool
-	Generate() string
+	Name() string
+	Location() string
 }
 
 type importedPackage struct {
@@ -128,8 +128,12 @@ func (this *importedPackage) IsUsed() bool {
 	return this.used
 }
 
-func (this *importedPackage) Generate() string {
-	return strings.Join([]string{`import `, this.name, ` `, strconv.Quote(this.importPrefix + this.pkg)}, "")
+func (this *importedPackage) Name() string {
+	return this.name
+}
+
+func (this *importedPackage) Location() string {
+	return this.importPrefix + this.pkg
 }
 
 func (g *Generator) GetFieldName(message *Descriptor, field *descriptor.FieldDescriptorProto) string {
@@ -141,7 +145,36 @@ func (g *Generator) GetFieldName(message *Descriptor, field *descriptor.FieldDes
 	if gogoproto.IsEmbed(field) {
 		fieldname = EmbedFieldName(goTyp)
 	}
+	for _, f := range methodNames {
+		if f == fieldname {
+			return fieldname + "_"
+		}
+	}
 	return fieldname
+}
+
+func GetMap(file *descriptor.FileDescriptorProto, field *descriptor.FieldDescriptorProto) *descriptor.DescriptorProto {
+	if !field.IsMessage() {
+		return nil
+	}
+	typeName := field.GetTypeName()
+	if strings.Contains(typeName, "Map") && !strings.HasSuffix(typeName, "Entry") {
+		typeName += "." + CamelCase(field.GetName()) + "Entry"
+	}
+	ts := strings.Split(typeName, ".")
+	if len(ts) == 1 {
+		return file.GetMessage(typeName)
+	}
+	newTypeName := strings.Join(ts[2:], ".")
+	return file.GetMessage(newTypeName)
+}
+
+func IsMap(file *descriptor.FileDescriptorProto, field *descriptor.FieldDescriptorProto) bool {
+	msg := GetMap(file, field)
+	if msg == nil {
+		return false
+	}
+	return msg.GetOptions().GetMapEntry()
 }
 
 func GoTypeToName(goTyp string) string {
@@ -184,6 +217,7 @@ func (g *Generator) GeneratePlugin(p Plugin) {
 }
 
 func (g *Generator) generatePlugin(file *FileDescriptor, p Plugin) {
+	g.writtenImports = make(map[string]bool)
 	g.file = g.FileOf(file.FileDescriptorProto)
 	g.usedPackages = make(map[string]bool)
 
@@ -195,13 +229,15 @@ func (g *Generator) generatePlugin(file *FileDescriptor, p Plugin) {
 	g.Buffer = new(bytes.Buffer)
 	g.generateHeader()
 	p.GenerateImports(g.file)
+	g.generateImports()
 	g.Write(rem.Bytes())
 
 	// Reformat generated code.
+	contents := string(g.Buffer.Bytes())
 	fset := token.NewFileSet()
 	ast, err := parser.ParseFile(fset, "", g, parser.ParseComments)
 	if err != nil {
-		g.Fail("bad Go source code was generated:", err.Error())
+		g.Fail("bad Go source code was generated:", contents, err.Error())
 		return
 	}
 	g.Reset()
@@ -220,16 +256,32 @@ func getCustomType(field *descriptor.FieldDescriptorProto) (packageName string, 
 		v, err := proto.GetExtension(field.Options, gogoproto.E_Customtype)
 		if err == nil && v.(*string) != nil {
 			ctype := *(v.(*string))
-			ss := strings.Split(ctype, ".")
-			if len(ss) == 1 {
-				return "", ctype, nil
-			} else {
-				packageName := strings.Join(ss[0:len(ss)-1], ".")
-				typeName := ss[len(ss)-1]
-				importStr := strings.Map(badToUnderscore, packageName)
-				typ = importStr + "." + typeName
-				return packageName, typ, nil
-			}
+			packageName, typ = splitCPackageType(ctype)
+			return packageName, typ, nil
+		}
+	}
+	return "", "", err
+}
+
+func splitCPackageType(ctype string) (packageName string, typ string) {
+	ss := strings.Split(ctype, ".")
+	if len(ss) == 1 {
+		return "", ctype
+	}
+	packageName = strings.Join(ss[0:len(ss)-1], ".")
+	typeName := ss[len(ss)-1]
+	importStr := strings.Map(badToUnderscore, packageName)
+	typ = importStr + "." + typeName
+	return packageName, typ
+}
+
+func getCastType(field *descriptor.FieldDescriptorProto) (packageName string, typ string, err error) {
+	if field.Options != nil {
+		v, err := proto.GetExtension(field.Options, gogoproto.E_Casttype)
+		if err == nil && v.(*string) != nil {
+			ctype := *(v.(*string))
+			packageName, typ = splitCPackageType(ctype)
+			return packageName, typ, nil
 		}
 	}
 	return "", "", err

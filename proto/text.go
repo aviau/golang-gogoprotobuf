@@ -1,12 +1,12 @@
 // Extensions for Protocol Buffers to create more go like structures.
 //
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2010 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -41,11 +41,11 @@ package proto
 import (
 	"bufio"
 	"bytes"
+	"encoding"
 	"fmt"
 	"io"
 	"log"
 	"math"
-	"os"
 	"reflect"
 	"sort"
 	"strings"
@@ -77,13 +77,6 @@ type textWriter struct {
 	complete bool // if the current position is a complete line
 	compact  bool // whether to write out as a one-liner
 	w        writer
-}
-
-// textMarshaler is implemented by Messages that can marshal themsleves.
-// It is identical to encoding.TextMarshaler, introduced in go 1.2,
-// which will eventually replace it.
-type textMarshaler interface {
-	MarshalText() (text []byte, err error)
 }
 
 func (w *textWriter) WriteString(s string) (n int, err error) {
@@ -259,6 +252,84 @@ func writeStruct(w *textWriter, sv reflect.Value) error {
 			}
 			continue
 		}
+		if fv.Kind() == reflect.Map {
+			// Map fields are rendered as a repeated struct with key/value fields.
+			keys := fv.MapKeys() // TODO: should we sort these for deterministic output?
+			sort.Sort(mapKeys(keys))
+			for _, key := range keys {
+				val := fv.MapIndex(key)
+				if err := writeName(w, props); err != nil {
+					return err
+				}
+				if !w.compact {
+					if err := w.WriteByte(' '); err != nil {
+						return err
+					}
+				}
+				// open struct
+				if err := w.WriteByte('<'); err != nil {
+					return err
+				}
+				if !w.compact {
+					if err := w.WriteByte('\n'); err != nil {
+						return err
+					}
+				}
+				w.indent()
+				// key
+				if _, err := w.WriteString("key:"); err != nil {
+					return err
+				}
+				if !w.compact {
+					if err := w.WriteByte(' '); err != nil {
+						return err
+					}
+				}
+				if err := writeAny(w, key, props.mkeyprop); err != nil {
+					return err
+				}
+				if err := w.WriteByte('\n'); err != nil {
+					return err
+				}
+				// nil values aren't legal, but we can avoid panicking because of them.
+				if val.Kind() != reflect.Ptr || !val.IsNil() {
+					// value
+					if _, err := w.WriteString("value:"); err != nil {
+						return err
+					}
+					if !w.compact {
+						if err := w.WriteByte(' '); err != nil {
+							return err
+						}
+					}
+					if err := writeAny(w, val, props.mvalprop); err != nil {
+						return err
+					}
+					if err := w.WriteByte('\n'); err != nil {
+						return err
+					}
+				}
+				// close struct
+				w.unindent()
+				if err := w.WriteByte('>'); err != nil {
+					return err
+				}
+				if err := w.WriteByte('\n'); err != nil {
+					return err
+				}
+			}
+			continue
+		}
+		if props.proto3 && fv.Kind() == reflect.Slice && fv.Len() == 0 {
+			// empty bytes field
+			continue
+		}
+		if props.proto3 && fv.Kind() != reflect.Ptr && fv.Kind() != reflect.Slice {
+			// proto3 non-repeated scalar field; skip if zero value
+			if isProto3Zero(fv) {
+				continue
+			}
+		}
 
 		if err := writeName(w, props); err != nil {
 			return err
@@ -360,7 +431,7 @@ func writeAny(w *textWriter, v reflect.Value, props *Properties) error {
 	switch v.Kind() {
 	case reflect.Slice:
 		// Should only be a []byte; repeated fields are handled in writeStruct.
-		if err := writeString(w, string(v.Interface().([]byte))); err != nil {
+		if err := writeString(w, string(v.Bytes())); err != nil {
 			return err
 		}
 	case reflect.String:
@@ -382,7 +453,7 @@ func writeAny(w *textWriter, v reflect.Value, props *Properties) error {
 			}
 		}
 		w.indent()
-		if tm, ok := v.Interface().(textMarshaler); ok {
+		if tm, ok := v.Interface().(encoding.TextMarshaler); ok {
 			text, err := tm.MarshalText()
 			if err != nil {
 				return err
@@ -613,10 +684,7 @@ func writeExtensions(w *textWriter, pv reflect.Value) error {
 
 		pb, err := GetExtension(ep, desc)
 		if err != nil {
-			if _, err := fmt.Fprintln(os.Stderr, "proto: failed getting extension: ", err); err != nil {
-				return err
-			}
-			continue
+			return fmt.Errorf("failed getting extension: %v", err)
 		}
 
 		// Repeated extensions will appear as a slice.
@@ -688,7 +756,7 @@ func marshalText(w io.Writer, pb Message, compact bool) error {
 		compact:  compact,
 	}
 
-	if tm, ok := pb.(textMarshaler); ok {
+	if tm, ok := pb.(encoding.TextMarshaler); ok {
 		text, err := tm.MarshalText()
 		if err != nil {
 			return err

@@ -13,11 +13,11 @@
 */
 package enumprefix
 
-import proto "code.google.com/p/gogoprotobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
 import math "math"
-import test "code.google.com/p/gogoprotobuf/test"
+import test "github.com/gogo/protobuf/test"
 
-// discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -37,7 +37,4 @@ func (m *MyMessage) GetTheField() test.TheTestEnum {
 		return m.TheField
 	}
 	return test.A
-}
-
-func init() {
 }

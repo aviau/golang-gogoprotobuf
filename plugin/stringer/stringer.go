@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -39,11 +39,11 @@ The stringer plugin also generates a test given it is enabled using one of the f
 
 Let us look at:
 
-  code.google.com/p/gogoprotobuf/test/example/example.proto
+  github.com/gogo/protobuf/test/example/example.proto
 
 Btw all the output can be seen at:
 
-  code.google.com/p/gogoprotobuf/test/example/*
+  github.com/gogo/protobuf/test/example/*
 
 The following message:
 
@@ -53,7 +53,7 @@ The following message:
   message A {
 	optional string Description = 1 [(gogoproto.nullable) = false];
 	optional int64 Number = 2 [(gogoproto.nullable) = false];
-	optional bytes Id = 3 [(gogoproto.customtype) = "code.google.com/p/gogoprotobuf/test/custom.Uuid", (gogoproto.nullable) = false];
+	optional bytes Id = 3 [(gogoproto.customtype) = "github.com/gogo/protobuf/test/custom.Uuid", (gogoproto.nullable) = false];
   }
 
 given to the stringer stringer, will generate the following code:
@@ -91,8 +91,8 @@ not print their values, while the generated String method will always print all 
 package stringer
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 	"strings"
 )
 
@@ -116,6 +116,7 @@ func (p *stringer) Init(g *generator.Generator) {
 }
 
 func (p *stringer) Generate(file *generator.FileDescriptor) {
+	proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 	p.atleastOne = false
 
@@ -124,12 +125,16 @@ func (p *stringer) Generate(file *generator.FileDescriptor) {
 	fmtPkg := p.NewImport("fmt")
 	stringsPkg := p.NewImport("strings")
 	reflectPkg := p.NewImport("reflect")
+	sortKeysPkg := p.NewImport("github.com/gogo/protobuf/sortkeys")
 	for _, message := range file.Messages() {
 		if !gogoproto.IsStringer(file.FileDescriptorProto, message.DescriptorProto) {
 			continue
 		}
 		if gogoproto.EnabledGoStringer(file.FileDescriptorProto, message.DescriptorProto) {
 			panic("old string method needs to be disabled, please use gogoproto.goproto_stringer or gogoproto.goproto_stringer_all and set it to false")
+		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
+			continue
 		}
 		p.atleastOne = true
 		ccTypeName := generator.CamelCaseSlice(message.TypeName())
@@ -140,12 +145,43 @@ func (p *stringer) Generate(file *generator.FileDescriptor) {
 		p.P(`return "nil"`)
 		p.Out()
 		p.P(`}`)
+		for _, field := range message.Field {
+			if !generator.IsMap(file.FileDescriptorProto, field) {
+				continue
+			}
+			fieldname := p.GetFieldName(message, field)
+			mapMsg := generator.GetMap(file.FileDescriptorProto, field)
+			keyField, valueField := mapMsg.GetMapFields()
+			keysName := `keysFor` + fieldname
+			keygoTyp, _ := p.GoType(nil, keyField)
+			keygoTyp = strings.Replace(keygoTyp, "*", "", 1)
+			keyCapTyp := generator.CamelCase(keygoTyp)
+			valuegoTyp, _ := p.GoType(nil, valueField)
+			p.P(keysName, ` := make([]`, keygoTyp, `, 0, len(this.`, fieldname, `))`)
+			p.P(`for k, _ := range this.`, fieldname, ` {`)
+			p.In()
+			p.P(keysName, ` = append(`, keysName, `, k)`)
+			p.Out()
+			p.P(`}`)
+			p.P(sortKeysPkg.Use(), `.`, keyCapTyp, `s(`, keysName, `)`)
+			mapName := `mapStringFor` + fieldname
+			p.P(mapName, ` := "map[`, keygoTyp, `]`, valuegoTyp, `{"`)
+			p.P(`for _, k := range `, keysName, ` {`)
+			p.In()
+			p.P(mapName, ` += fmt.Sprintf("%v: %v,", k, this.`, fieldname, `[k])`)
+			p.Out()
+			p.P(`}`)
+			p.P(mapName, ` += "}"`)
+		}
 		p.P("s := ", stringsPkg.Use(), ".Join([]string{`&", ccTypeName, "{`,")
 		for _, field := range message.Field {
 			nullable := gogoproto.IsNullable(field)
 			repeated := field.IsRepeated()
 			fieldname := p.GetFieldName(message, field)
-			if field.IsMessage() || p.IsGroup(field) {
+			if generator.IsMap(file.FileDescriptorProto, field) {
+				mapName := `mapStringFor` + fieldname
+				p.P("`", fieldname, ":`", ` + `, mapName, " + `,", "`,")
+			} else if field.IsMessage() || p.IsGroup(field) {
 				desc := p.ObjectNamed(field.GetTypeName())
 				msgname := p.TypeName(desc)
 				msgnames := strings.Split(msgname, ".")
@@ -158,7 +194,7 @@ func (p *stringer) Generate(file *generator.FileDescriptor) {
 					p.P("`", fieldname, ":`", ` + `, stringsPkg.Use(), `.Replace(`, stringsPkg.Use(), `.Replace(this.`, fieldname, `.String(), "`, typeName, `","`, msgname, `"`, ", 1),`&`,``,1) + `,", "`,")
 				}
 			} else {
-				if nullable && !repeated {
+				if nullable && !repeated && !proto3 {
 					p.P("`", fieldname, ":`", ` + valueToString`, p.localName, `(this.`, fieldname, ") + `,", "`,")
 				} else {
 					p.P("`", fieldname, ":`", ` + `, fmtPkg.Use(), `.Sprintf("%v", this.`, fieldname, ") + `,", "`,")
@@ -172,7 +208,9 @@ func (p *stringer) Generate(file *generator.FileDescriptor) {
 				p.P("`XXX_extensions:` + proto.StringFromExtensionsBytes(this.XXX_extensions) + `,`,")
 			}
 		}
-		p.P("`XXX_unrecognized:` + ", fmtPkg.Use(), `.Sprintf("%v", this.XXX_unrecognized) + `, "`,`,")
+		if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
+			p.P("`XXX_unrecognized:` + ", fmtPkg.Use(), `.Sprintf("%v", this.XXX_unrecognized) + `, "`,`,")
+		}
 		p.P("`}`,")
 		p.P(`}`, `,""`, ")")
 		p.P(`return s`)

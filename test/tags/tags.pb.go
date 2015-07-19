@@ -14,10 +14,10 @@ It has these top-level messages:
 */
 package tags
 
-import proto "code.google.com/p/gogoprotobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
 import math "math"
 
-// discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -56,8 +56,6 @@ func (m *Inside) GetField1() string {
 	return ""
 }
 
-func init() {
-}
 func NewPopulatedOutside(r randyTags, easy bool) *Outside {
 	this := &Outside{}
 	if r.Intn(10) != 0 {
@@ -95,11 +93,13 @@ type randyTags interface {
 }
 
 func randUTF8RuneTags(r randyTags) rune {
-	res := rune(r.Uint32() % 1112064)
-	if 55296 <= res {
-		res += 2047
+	ru := r.Intn(62)
+	if ru < 10 {
+		return rune(ru + 48)
+	} else if ru < 36 {
+		return rune(ru + 55)
 	}
-	return res
+	return rune(ru + 61)
 }
 func randStringTags(r randyTags) string {
 	v3 := r.Intn(100)

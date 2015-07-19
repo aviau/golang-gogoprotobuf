@@ -1,7 +1,7 @@
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2011 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -34,9 +34,10 @@ package proto_test
 import (
 	"testing"
 
-	"code.google.com/p/gogoprotobuf/proto"
+	"github.com/gogo/protobuf/proto"
 
-	pb "./testdata"
+	proto3pb "github.com/gogo/protobuf/proto/proto3_proto"
+	pb "github.com/gogo/protobuf/proto/testdata"
 )
 
 var cloneTestMessage = &pb.MyMessage{
@@ -78,6 +79,22 @@ func TestClone(t *testing.T) {
 	*m.Inner.Port++
 	if proto.Equal(m, cloneTestMessage) {
 		t.Error("Mutating clone changed the original")
+	}
+	// Byte fields and repeated fields should be copied.
+	if &m.Pet[0] == &cloneTestMessage.Pet[0] {
+		t.Error("Pet: repeated field not copied")
+	}
+	if &m.Others[0] == &cloneTestMessage.Others[0] {
+		t.Error("Others: repeated field not copied")
+	}
+	if &m.Others[0].Value[0] == &cloneTestMessage.Others[0].Value[0] {
+		t.Error("Others[0].Value: bytes field not copied")
+	}
+	if &m.RepBytes[0] == &cloneTestMessage.RepBytes[0] {
+		t.Error("RepBytes: repeated field not copied")
+	}
+	if &m.RepBytes[0][0] == &cloneTestMessage.RepBytes[0][0] {
+		t.Error("RepBytes[0]: bytes field not copied")
 	}
 }
 
@@ -172,6 +189,48 @@ var mergeTests = []struct {
 		src:  &pb.OtherMessage{Value: []byte("foo")},
 		dst:  &pb.OtherMessage{Value: []byte("bar")},
 		want: &pb.OtherMessage{Value: []byte("foo")},
+	},
+	{
+		src: &pb.MessageWithMap{
+			NameMapping: map[int32]string{6: "Nigel"},
+			MsgMapping: map[int64]*pb.FloatingPoint{
+				0x4001: {F: proto.Float64(2.0)},
+			},
+			ByteMapping: map[bool][]byte{true: []byte("wowsa")},
+		},
+		dst: &pb.MessageWithMap{
+			NameMapping: map[int32]string{
+				6: "Bruce", // should be overwritten
+				7: "Andrew",
+			},
+		},
+		want: &pb.MessageWithMap{
+			NameMapping: map[int32]string{
+				6: "Nigel",
+				7: "Andrew",
+			},
+			MsgMapping: map[int64]*pb.FloatingPoint{
+				0x4001: {F: proto.Float64(2.0)},
+			},
+			ByteMapping: map[bool][]byte{true: []byte("wowsa")},
+		},
+	},
+	// proto3 shouldn't merge zero values,
+	// in the same way that proto2 shouldn't merge nils.
+	{
+		src: &proto3pb.Message{
+			Name: "Aaron",
+			Data: []byte(""), // zero value, but not nil
+		},
+		dst: &proto3pb.Message{
+			HeightInCm: 176,
+			Data:       []byte("texas!"),
+		},
+		want: &proto3pb.Message{
+			Name:       "Aaron",
+			HeightInCm: 176,
+			Data:       []byte("texas!"),
+		},
 	},
 }
 

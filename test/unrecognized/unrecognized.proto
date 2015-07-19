@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -24,9 +24,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+syntax = "proto2";
+
 package unrecognized;
 
-import "code.google.com/p/gogoprotobuf/gogoproto/gogo.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.goproto_enum_prefix_all) = false;
@@ -46,6 +48,7 @@ option (gogoproto.marshaler_all) = true;
 option (gogoproto.sizer_all) = true;
 
 message A {
+	option (gogoproto.goproto_unrecognized) = false;
 	optional int64 Field1 = 2;
 	repeated B B = 1;
 }
@@ -69,7 +72,29 @@ message C {
 	repeated float Field7 = 7;
 }
 
+message U {
+	// unserializing U as OldU must leave Field1 unset
+	option (gogoproto.goproto_unrecognized) = false;
+	repeated double Field2 = 2;
+	optional uint32 Field3 = 3;
+}
+
+message UnoM {
+	// disable marshal/unmarshal generation here
+	// to check that reflection based code handles missing XXX_unrecognized field coorectly
+	option (gogoproto.sizer) = false;
+	option (gogoproto.marshaler) = false;
+	option (gogoproto.unmarshaler) = false;
+	// unserializing U as OldU must leave Field1 unset
+	option (gogoproto.goproto_unrecognized) = false;
+
+	repeated double Field2 = 2;
+	optional uint32 Field3 = 3;
+}
+
 message OldA {
+	// OldA == A, so removing unrecognized should not affect anything, tests must pass
+	option (gogoproto.goproto_unrecognized) = false;
 	optional int64 Field1 = 2;
 	repeated OldB B = 1;
 }
@@ -85,4 +110,20 @@ message OldC {
 	optional string Field3 = 3;
 	optional int64 Field6 = 6;
 	repeated float Field7 = 7;
+}
+
+message OldU {
+	optional string Field1 = 1;
+	repeated double Field2 = 2;
+}
+
+message OldUnoM {
+	// disable marshal/unmarshal generation here
+	// to check that reflection based code handles missing XXX_unrecognized field coorectly
+	option (gogoproto.sizer) = false;
+	option (gogoproto.marshaler) = false;
+	option (gogoproto.unmarshaler) = false;
+
+	optional string Field1 = 1;
+	repeated double Field2 = 2;
 }

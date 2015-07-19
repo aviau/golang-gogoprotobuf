@@ -1,7 +1,7 @@
 # Go support for Protocol Buffers - Google's data interchange format
 #
 # Copyright 2010 The Go Authors.  All rights reserved.
-# http://code.google.com/p/goprotobuf/
+# https://github.com/golang/protobuf
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -32,16 +32,6 @@
 all:	regenerate
 
 regenerate:
-	rm -f test.pb.go
-	protoc --gogo_out=. test.proto
+	go install github.com/gogo/protobuf/protoc-gen-gogo/version/protoc-min-version
+	protoc-min-version --version="3.0.0" --gogo_out=. test.proto
 	
-# The following rules are just aids to development. Not needed for typical testing.
-
-diff:	regenerate
-	hg diff test.pb.go
-
-restore:
-	cp test.pb.go.golden test.pb.go
-
-preserve:
-	cp test.pb.go test.pb.go.golden

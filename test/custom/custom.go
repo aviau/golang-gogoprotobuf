@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -39,8 +39,8 @@ type Uint128 [2]uint64
 
 func (u Uint128) Marshal() ([]byte, error) {
 	buffer := make([]byte, 16)
-	u.MarshalTo(buffer)
-	return buffer, nil
+	_, err := u.MarshalTo(buffer)
+	return buffer, err
 }
 
 func (u Uint128) MarshalTo(data []byte) (n int, err error) {

@@ -1,7 +1,7 @@
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2011 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -34,8 +34,8 @@ package proto_test
 import (
 	"testing"
 
-	pb "./testdata"
-	. "code.google.com/p/gogoprotobuf/proto"
+	. "github.com/gogo/protobuf/proto"
+	pb "github.com/gogo/protobuf/proto/testdata"
 )
 
 // Four identical base messages.
@@ -154,6 +154,31 @@ var EqualTests = []struct {
 			},
 		},
 		true,
+	},
+
+	{
+		"map same",
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Ken"}},
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Ken"}},
+		true,
+	},
+	{
+		"map different entry",
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Ken"}},
+		&pb.MessageWithMap{NameMapping: map[int32]string{2: "Rob"}},
+		false,
+	},
+	{
+		"map different key only",
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Ken"}},
+		&pb.MessageWithMap{NameMapping: map[int32]string{2: "Ken"}},
+		false,
+	},
+	{
+		"map different value only",
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Ken"}},
+		&pb.MessageWithMap{NameMapping: map[int32]string{1: "Rob"}},
+		false,
 	},
 }
 

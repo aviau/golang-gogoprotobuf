@@ -16,10 +16,10 @@ It has these top-level messages:
 */
 package enumstringer
 
-import proto "code.google.com/p/gogoprotobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
 import math "math"
 
-// discarding unused import gogoproto "code.google.com/p/gogoprotobuf/gogoproto/gogo.pb"
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
 
 import fmt "fmt"
 import bytes "bytes"
@@ -192,11 +192,13 @@ type randyEnumstringer interface {
 }
 
 func randUTF8RuneEnumstringer(r randyEnumstringer) rune {
-	res := rune(r.Uint32() % 1112064)
-	if 55296 <= res {
-		res += 2047
+	ru := r.Intn(62)
+	if ru < 10 {
+		return rune(ru + 48)
+	} else if ru < 36 {
+		return rune(ru + 55)
 	}
-	return res
+	return rune(ru + 61)
 }
 func randStringEnumstringer(r randyEnumstringer) string {
 	v4 := r.Intn(100)

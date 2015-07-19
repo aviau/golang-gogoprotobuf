@@ -1,7 +1,7 @@
 // Go support for Protocol Buffers - Google's data interchange format
 //
 // Copyright 2010 The Go Authors.  All rights reserved.
-// http://code.google.com/p/goprotobuf/
+// https://github.com/golang/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -44,8 +44,8 @@ import (
 	"testing"
 	"time"
 
-	. "./testdata"
-	. "code.google.com/p/gogoprotobuf/proto"
+	. "github.com/gogo/protobuf/proto"
+	. "github.com/gogo/protobuf/proto/testdata"
 )
 
 var globalO *Buffer
@@ -1047,6 +1047,35 @@ func TestSubmessageUnrecognizedFields(t *testing.T) {
 	}
 }
 
+// Check that an int32 field can be upgraded to an int64 field.
+func TestNegativeInt32(t *testing.T) {
+	om := &OldMessage{
+		Num: Int32(-1),
+	}
+	b, err := Marshal(om)
+	if err != nil {
+		t.Fatalf("Marshal of OldMessage: %v", err)
+	}
+
+	// Check the size. It should be 11 bytes;
+	// 1 for the field/wire type, and 10 for the negative number.
+	if len(b) != 11 {
+		t.Errorf("%v marshaled as %q, wanted 11 bytes", om, b)
+	}
+
+	// Unmarshal into a NewMessage.
+	nm := new(NewMessage)
+	if err := Unmarshal(b, nm); err != nil {
+		t.Fatalf("Unmarshal to NewMessage: %v", err)
+	}
+	want := &NewMessage{
+		Num: Int64(-1),
+	}
+	if !Equal(nm, want) {
+		t.Errorf("nm = %v, want %v", nm, want)
+	}
+}
+
 // Check that we can grow an array (repeated field) to have many elements.
 // This test doesn't depend only on our encoding; for variety, it makes sure
 // we create, encode, and decode the correct contents explicitly.  It's therefore
@@ -1223,7 +1252,8 @@ func TestProto1RepeatedGroup(t *testing.T) {
 	}
 
 	o := old()
-	if err := o.Marshal(pb); err != ErrRepeatedHasNil {
+	err := o.Marshal(pb)
+	if err == nil || !strings.Contains(err.Error(), "repeated field Message has nil") {
 		t.Fatalf("unexpected or no error when marshaling: %v", err)
 	}
 }
@@ -1358,10 +1388,11 @@ func TestAllSetDefaults(t *testing.T) {
 		F_Pinf:    Float32(float32(math.Inf(1))),
 		F_Ninf:    Float32(float32(math.Inf(-1))),
 		F_Nan:     Float32(1.7),
+		StrZero:   String(""),
 	}
 	SetDefaults(m)
 	if !Equal(m, expected) {
-		t.Errorf(" got %v\nwant %v", m, expected)
+		t.Errorf("SetDefaults failed\n got %v\nwant %v", m, expected)
 	}
 }
 
@@ -1405,6 +1436,17 @@ func TestSetDefaultsWithRepeatedSubMessage(t *testing.T) {
 			Port: Int32(4000),
 		}},
 	}
+	SetDefaults(m)
+	if !Equal(m, expected) {
+		t.Errorf("\n got %v\nwant %v", m, expected)
+	}
+}
+
+func TestSetDefaultWithRepeatedNonMessage(t *testing.T) {
+	m := &MyMessage{
+		Pet: []string{"turtle", "wombat"},
+	}
+	expected := Clone(m)
 	SetDefaults(m)
 	if !Equal(m, expected) {
 		t.Errorf("\n got %v\nwant %v", m, expected)
@@ -1710,7 +1752,8 @@ func TestEncodingSizes(t *testing.T) {
 		n int
 	}{
 		{&Defaults{F_Int32: Int32(math.MaxInt32)}, 6},
-		{&Defaults{F_Int32: Int32(math.MinInt32)}, 6},
+		{&Defaults{F_Int32: Int32(math.MinInt32)}, 11},
+		{&Defaults{F_Uint32: Uint32(uint32(math.MaxInt32) + 1)}, 6},
 		{&Defaults{F_Uint32: Uint32(math.MaxUint32)}, 6},
 	}
 	for _, test := range tests {
@@ -1800,6 +1843,98 @@ func fuzzUnmarshal(t *testing.T, data []byte) {
 
 	pb := new(MyMessage)
 	Unmarshal(data, pb)
+}
+
+func TestMapFieldMarshal(t *testing.T) {
+	m := &MessageWithMap{
+		NameMapping: map[int32]string{
+			1: "Rob",
+			4: "Ian",
+			8: "Dave",
+		},
+	}
+	b, err := Marshal(m)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+
+	// b should be the concatenation of these three byte sequences in some order.
+	parts := []string{
+		"\n\a\b\x01\x12\x03Rob",
+		"\n\a\b\x04\x12\x03Ian",
+		"\n\b\b\x08\x12\x04Dave",
+	}
+	ok := false
+	for i := range parts {
+		for j := range parts {
+			if j == i {
+				continue
+			}
+			for k := range parts {
+				if k == i || k == j {
+					continue
+				}
+				try := parts[i] + parts[j] + parts[k]
+				if bytes.Equal(b, []byte(try)) {
+					ok = true
+					break
+				}
+			}
+		}
+	}
+	if !ok {
+		t.Fatalf("Incorrect Marshal output.\n got %q\nwant %q (or a permutation of that)", b, parts[0]+parts[1]+parts[2])
+	}
+	t.Logf("FYI b: %q", b)
+
+	(new(Buffer)).DebugPrint("Dump of b", b)
+}
+
+func TestMapFieldRoundTrips(t *testing.T) {
+	m := &MessageWithMap{
+		NameMapping: map[int32]string{
+			1: "Rob",
+			4: "Ian",
+			8: "Dave",
+		},
+		MsgMapping: map[int64]*FloatingPoint{
+			0x7001: {F: Float64(2.0)},
+		},
+		ByteMapping: map[bool][]byte{
+			false: []byte("that's not right!"),
+			true:  []byte("aye, 'tis true!"),
+		},
+	}
+	b, err := Marshal(m)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	t.Logf("FYI b: %q", b)
+	m2 := new(MessageWithMap)
+	if err := Unmarshal(b, m2); err != nil {
+		t.Fatalf("Unmarshal: %v", err)
+	}
+	for _, pair := range [][2]interface{}{
+		{m.NameMapping, m2.NameMapping},
+		{m.MsgMapping, m2.MsgMapping},
+		{m.ByteMapping, m2.ByteMapping},
+	} {
+		if !reflect.DeepEqual(pair[0], pair[1]) {
+			t.Errorf("Map did not survive a round trip.\ninitial: %v\n  final: %v", pair[0], pair[1])
+		}
+	}
+}
+
+func TestMapFieldWithNil(t *testing.T) {
+	m := &MessageWithMap{
+		MsgMapping: map[int64]*FloatingPoint{
+			1: nil,
+		},
+	}
+	b, err := Marshal(m)
+	if err == nil {
+		t.Fatalf("Marshal of bad map should have failed, got these bytes: %v", b)
+	}
 }
 
 // Benchmarks

@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -29,6 +29,13 @@ package google_protobuf
 import (
 	"strings"
 )
+
+func (msg *DescriptorProto) GetMapFields() (*FieldDescriptorProto, *FieldDescriptorProto) {
+	if !msg.GetOptions().GetMapEntry() {
+		return nil, nil
+	}
+	return msg.GetField()[0], msg.GetField()[1]
+}
 
 func dotToUnderscore(r rune) rune {
 	if r == '.' {
@@ -120,6 +127,14 @@ func (file *FileDescriptorProto) GetMessage(typeName string) *DescriptorProto {
 		if msg.GetName() == typeName {
 			return msg
 		}
+		for _, nes := range msg.GetNestedType() {
+			if nes.GetName() == typeName {
+				return nes
+			}
+			if msg.GetName()+"."+nes.GetName() == typeName {
+				return nes
+			}
+		}
 	}
 	return nil
 }
@@ -146,6 +161,30 @@ func (desc *FileDescriptorSet) GetMessage(packageName string, typeName string) *
 		}
 	}
 	return nil
+}
+
+func (desc *FileDescriptorSet) IsProto3(packageName string, typeName string) bool {
+	for _, file := range desc.GetFile() {
+		if strings.Map(dotToUnderscore, file.GetPackage()) != strings.Map(dotToUnderscore, packageName) {
+			continue
+		}
+		for _, msg := range file.GetMessageType() {
+			if msg.GetName() == typeName {
+				return file.GetSyntax() == "proto3"
+			}
+		}
+		for _, msg := range file.GetMessageType() {
+			for _, nes := range msg.GetNestedType() {
+				if nes.GetName() == typeName {
+					return file.GetSyntax() == "proto3"
+				}
+				if msg.GetName()+"."+nes.GetName() == typeName {
+					return file.GetSyntax() == "proto3"
+				}
+			}
+		}
+	}
+	return false
 }
 
 func (msg *DescriptorProto) IsExtendable() bool {

@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf/gogoproto
+// http://github.com/gogo/protobuf/gogoproto
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -27,7 +27,7 @@
 package test
 
 import (
-	"code.google.com/p/gogoprotobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	"math"
 	math_rand "math/rand"
 	"testing"
@@ -124,4 +124,39 @@ func TestUnsafeExtension(t *testing.T) {
 		panic(err)
 	}
 	check(t, m, fieldA, E_FieldA)
+}
+
+//See another version of this test in proto/extensions_test.go
+func TestGetExtensionStability(t *testing.T) {
+	check := func(m *NoExtensionsMap) bool {
+		ext1, err := proto.GetExtension(m, E_FieldB1)
+		if err != nil {
+			t.Fatalf("GetExtension() failed: %s", err)
+		}
+		ext2, err := proto.GetExtension(m, E_FieldB1)
+		if err != nil {
+			t.Fatalf("GetExtension() failed: %s", err)
+		}
+		return ext1.(*NinOptNative).Equal(ext2)
+	}
+	msg := &NoExtensionsMap{Field1: proto.Int64(2)}
+	ext0 := &NinOptNative{Field1: proto.Float64(1)}
+	if err := proto.SetExtension(msg, E_FieldB1, ext0); err != nil {
+		t.Fatalf("Could not set ext1: %s", ext0)
+	}
+	if !check(msg) {
+		t.Errorf("GetExtension() not stable before marshaling")
+	}
+	bb, err := proto.Marshal(msg)
+	if err != nil {
+		t.Fatalf("Marshal() failed: %s", err)
+	}
+	msg1 := &NoExtensionsMap{}
+	err = proto.Unmarshal(bb, msg1)
+	if err != nil {
+		t.Fatalf("Unmarshal() failed: %s", err)
+	}
+	if !check(msg1) {
+		t.Errorf("GetExtension() not stable after unmarshaling")
+	}
 }

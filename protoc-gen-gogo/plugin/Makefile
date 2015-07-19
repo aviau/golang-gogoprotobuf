@@ -1,7 +1,7 @@
 # Go support for Protocol Buffers - Google's data interchange format
 #
 # Copyright 2010 The Go Authors.  All rights reserved.
-# http://code.google.com/p/goprotobuf/
+# https://github.com/golang/protobuf
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -29,14 +29,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Not stored here, but plugin.proto is in http://code.google.com/p/protobuf
-# at protobuf-2.3.0/src/google/protobuf/compiler/plugin.proto
+# Not stored here, but plugin.proto is in https://github.com/google/protobuf/
+# at src/google/protobuf/compiler/plugin.proto
 # Also we need to fix an import.
 regenerate:
-	protoc --gogo_out=. -I=../../protobuf/google/protobuf/compiler/:../../protobuf/ ../../protobuf/google/protobuf/compiler/plugin.proto
+	protoc --gogo_out=Mgoogle/protobuf/descriptor.proto=github.com/gogo/protobuf/protoc-gen-gogo/descriptor:. -I=../../protobuf/google/protobuf/compiler/:../../protobuf/ ../../protobuf/google/protobuf/compiler/plugin.proto
 
-restore:
-	cp plugin.pb.golden plugin.pb.go
-
-preserve:
-	cp plugin.pb.go plugin.pb.golden

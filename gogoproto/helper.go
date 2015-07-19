@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -26,8 +26,8 @@
 
 package gogoproto
 
-import google_protobuf "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
-import proto "code.google.com/p/gogoprotobuf/proto"
+import google_protobuf "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+import proto "github.com/gogo/protobuf/proto"
 
 func IsEmbed(field *google_protobuf.FieldDescriptorProto) bool {
 	return proto.GetBoolExtension(field.Options, E_Embed, false)
@@ -45,9 +45,27 @@ func IsCustomType(field *google_protobuf.FieldDescriptorProto) bool {
 	return false
 }
 
+func IsCastType(field *google_protobuf.FieldDescriptorProto) bool {
+	typ := GetCastType(field)
+	if len(typ) > 0 {
+		return true
+	}
+	return false
+}
+
 func GetCustomType(field *google_protobuf.FieldDescriptorProto) string {
 	if field.Options != nil {
 		v, err := proto.GetExtension(field.Options, E_Customtype)
+		if err == nil && v.(*string) != nil {
+			return *(v.(*string))
+		}
+	}
+	return ""
+}
+
+func GetCastType(field *google_protobuf.FieldDescriptorProto) string {
+	if field.Options != nil {
+		v, err := proto.GetExtension(field.Options, E_Casttype)
 		if err == nil && v.(*string) != nil {
 			return *(v.(*string))
 		}
@@ -155,10 +173,6 @@ func IsUnmarshaler(file *google_protobuf.FileDescriptorProto, message *google_pr
 	return proto.GetBoolExtension(message.Options, E_Unmarshaler, proto.GetBoolExtension(file.Options, E_UnmarshalerAll, false))
 }
 
-func HasBufferTo(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
-	return proto.GetBoolExtension(message.Options, E_Bufferto, proto.GetBoolExtension(file.Options, E_BuffertoAll, false))
-}
-
 func IsSizer(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
 	return proto.GetBoolExtension(message.Options, E_Sizer, proto.GetBoolExtension(file.Options, E_SizerAll, false))
 }
@@ -181,4 +195,19 @@ func IsUnsafeUnmarshaler(file *google_protobuf.FileDescriptorProto, message *goo
 
 func HasExtensionsMap(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
 	return proto.GetBoolExtension(message.Options, E_GoprotoExtensionsMap, proto.GetBoolExtension(file.Options, E_GoprotoExtensionsMapAll, true))
+}
+
+func HasUnrecognized(file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto) bool {
+	if IsProto3(file) {
+		return false
+	}
+	return proto.GetBoolExtension(message.Options, E_GoprotoUnrecognized, proto.GetBoolExtension(file.Options, E_GoprotoUnrecognizedAll, true))
+}
+
+func IsProto3(file *google_protobuf.FileDescriptorProto) bool {
+	return file.GetSyntax() == "proto3"
+}
+
+func ImportsGoGoProto(file *google_protobuf.FileDescriptorProto) bool {
+	return proto.GetBoolExtension(file.Options, E_GogoprotoImport, true)
 }

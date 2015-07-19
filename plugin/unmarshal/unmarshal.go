@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -55,11 +55,11 @@ And benchmarks given it is enabled using one of the following extensions:
 
 Let us look at:
 
-  code.google.com/p/gogoprotobuf/test/example/example.proto
+  github.com/gogo/protobuf/test/example/example.proto
 
 Btw all the output can be seen at:
 
-  code.google.com/p/gogoprotobuf/test/example/*
+  github.com/gogo/protobuf/test/example/*
 
 The following message:
 
@@ -68,22 +68,22 @@ The following message:
   message B {
 	option (gogoproto.description) = true;
 	optional A A = 1 [(gogoproto.nullable) = false, (gogoproto.embed) = true];
-	repeated bytes G = 2 [(gogoproto.customtype) = "code.google.com/p/gogoprotobuf/test/custom.Uint128", (gogoproto.nullable) = false];
+	repeated bytes G = 2 [(gogoproto.customtype) = "github.com/gogo/protobuf/test/custom.Uint128", (gogoproto.nullable) = false];
   }
 
 given to the unmarshal plugin, will generate the following code:
 
   func (m *B) Unmarshal(data []byte) error {
 	l := len(data)
-	index := 0
-	for index < l {
+	iNdEx := 0
+	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
-			if index >= l {
+			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
-			b := data[index]
-			index++
+			b := data[iNdEx]
+			iNdEx++
 			wire |= (uint64(b) & 0x7F) << shift
 			if b < 0x80 {
 				break
@@ -98,47 +98,49 @@ given to the unmarshal plugin, will generate the following code:
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
-				if index >= l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := data[index]
-				index++
+				b := data[iNdEx]
+				iNdEx++
 				msglen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			postIndex := index + msglen
+			postIndex := iNdEx + msglen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if err := m.A.Unmarshal(data[index:postIndex]); err != nil {
+			if err := m.A.Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			index = postIndex
+			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return proto.ErrWrongType
 			}
 			var byteLen int
 			for shift := uint(0); ; shift += 7 {
-				if index >= l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				b := data[index]
-				index++
+				b := data[iNdEx]
+				iNdEx++
 				byteLen |= (int(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			postIndex := index + byteLen
+			postIndex := iNdEx + byteLen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.G = append(m.G, code_google_com_p_gogoprotobuf_test_custom.Uint128{})
-			m.G[len(m.G)-1].Unmarshal(data[index:postIndex])
-			index = postIndex
+			m.G = append(m.G, github_com_gogo_protobuf_test_custom.Uint128{})
+			if err := m.G[len(m.G)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			var sizeOfWire int
 			for {
@@ -148,16 +150,16 @@ given to the unmarshal plugin, will generate the following code:
 					break
 				}
 			}
-			index -= sizeOfWire
-			skippy, err := code_google_com_p_gogoprotobuf_proto.Skip(data[index:])
+			iNdEx -= sizeOfWire
+			skippy, err := skip(data[iNdEx:])
 			if err != nil {
 				return err
 			}
-			if (index + skippy) > l {
+			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+skippy]...)
-			index += skippy
+			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
 		}
 	}
 	return nil
@@ -171,13 +173,14 @@ If you call m.Unmarshal without m.Reset you could be merging protocol buffers.
 package unmarshal
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/proto"
-	descriptor "code.google.com/p/gogoprotobuf/protoc-gen-gogo/descriptor"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/proto"
+	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
 
 type unmarshal struct {
@@ -213,13 +216,13 @@ func (p *unmarshal) Init(g *generator.Generator) {
 func (p *unmarshal) decodeVarint(varName string, typName string) {
 	p.P(`for shift := uint(0); ; shift += 7 {`)
 	p.In()
-	p.P(`if index >= l {`)
+	p.P(`if iNdEx >= l {`)
 	p.In()
 	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 	p.Out()
 	p.P(`}`)
-	p.P(`b := data[index]`)
-	p.P(`index++`)
+	p.P(`b := data[iNdEx]`)
+	p.P(`iNdEx++`)
 	p.P(varName, ` |= (`, typName, `(b) & 0x7F) << shift`)
 	p.P(`if b < 0x80 {`)
 	p.In()
@@ -231,242 +234,341 @@ func (p *unmarshal) decodeVarint(varName string, typName string) {
 }
 
 func (p *unmarshal) decodeFixed32(varName string, typeName string) {
-	p.P(`i := index + 4`)
-	p.P(`if i > l {`)
+	p.P(`if (iNdEx+4) > l {`)
 	p.In()
 	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 	p.Out()
 	p.P(`}`)
-	p.P(`index = i`)
-	p.P(varName, ` = `, typeName, `(data[i-4])`)
-	p.P(varName, ` |= `, typeName, `(data[i-3]) << 8`)
-	p.P(varName, ` |= `, typeName, `(data[i-2]) << 16`)
-	p.P(varName, ` |= `, typeName, `(data[i-1]) << 24`)
+	p.P(`iNdEx += 4`)
+	p.P(varName, ` = `, typeName, `(data[iNdEx-4])`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-3]) << 8`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-2]) << 16`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-1]) << 24`)
 }
 
 func (p *unmarshal) unsafeFixed32(varName string, typeName string) {
-	p.P(`if index + 4 > l {`)
+	p.P(`if iNdEx + 4 > l {`)
 	p.In()
 	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 	p.Out()
 	p.P(`}`)
-	p.P(varName, ` = *(*`, typeName, `)(`, p.unsafePkg.Use(), `.Pointer(&data[index]))`)
-	p.P(`index += 4`)
+	p.P(varName, ` = *(*`, typeName, `)(`, p.unsafePkg.Use(), `.Pointer(&data[iNdEx]))`)
+	p.P(`iNdEx += 4`)
 }
 
 func (p *unmarshal) decodeFixed64(varName string, typeName string) {
-	p.P(`i := index + 8`)
-	p.P(`if i > l {`)
+	p.P(`if (iNdEx+8) > l {`)
 	p.In()
 	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 	p.Out()
 	p.P(`}`)
-	p.P(`index = i`)
-	p.P(varName, ` = `, typeName, `(data[i-8])`)
-	p.P(varName, ` |= `, typeName, `(data[i-7]) << 8`)
-	p.P(varName, ` |= `, typeName, `(data[i-6]) << 16`)
-	p.P(varName, ` |= `, typeName, `(data[i-5]) << 24`)
-	p.P(varName, ` |= `, typeName, `(data[i-4]) << 32`)
-	p.P(varName, ` |= `, typeName, `(data[i-3]) << 40`)
-	p.P(varName, ` |= `, typeName, `(data[i-2]) << 48`)
-	p.P(varName, ` |= `, typeName, `(data[i-1]) << 56`)
+	p.P(`iNdEx += 8`)
+	p.P(varName, ` = `, typeName, `(data[iNdEx-8])`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-7]) << 8`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-6]) << 16`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-5]) << 24`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-4]) << 32`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-3]) << 40`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-2]) << 48`)
+	p.P(varName, ` |= `, typeName, `(data[iNdEx-1]) << 56`)
 }
 
 func (p *unmarshal) unsafeFixed64(varName string, typeName string) {
-	p.P(`if index + 8 > l {`)
+	p.P(`if iNdEx + 8 > l {`)
 	p.In()
 	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 	p.Out()
 	p.P(`}`)
-	p.P(varName, ` = *(*`, typeName, `)(`, p.unsafePkg.Use(), `.Pointer(&data[index]))`)
-	p.P(`index += 8`)
+	p.P(varName, ` = *(*`, typeName, `)(`, p.unsafePkg.Use(), `.Pointer(&data[iNdEx]))`)
+	p.P(`iNdEx += 8`)
 }
 
-func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname string) {
+func (p *unmarshal) mapField(varName string, field *descriptor.FieldDescriptorProto) {
+	switch field.GetType() {
+	case descriptor.FieldDescriptorProto_TYPE_DOUBLE:
+		p.P(`var `, varName, `temp uint64`)
+		p.decodeFixed64(varName+"temp", "uint64")
+		p.P(varName, ` := `, p.mathPkg.Use(), `.Float64frombits(`, varName, `temp)`)
+	case descriptor.FieldDescriptorProto_TYPE_FLOAT:
+		p.P(`var `, varName, `temp uint32`)
+		p.decodeFixed32(varName+"temp", "uint32")
+		p.P(varName, ` := `, p.mathPkg.Use(), `.Float32frombits(`, varName, `temp)`)
+	case descriptor.FieldDescriptorProto_TYPE_INT64:
+		p.P(`var `, varName, ` int64`)
+		p.decodeVarint(varName, "int64")
+	case descriptor.FieldDescriptorProto_TYPE_UINT64:
+		p.P(`var `, varName, ` uint64`)
+		p.decodeVarint(varName, "uint64")
+	case descriptor.FieldDescriptorProto_TYPE_INT32:
+		p.P(`var `, varName, ` int32`)
+		p.decodeVarint(varName, "int32")
+	case descriptor.FieldDescriptorProto_TYPE_FIXED64:
+		p.P(`var `, varName, ` uint64`)
+		p.decodeFixed64(varName, "uint64")
+	case descriptor.FieldDescriptorProto_TYPE_FIXED32:
+		p.P(`var `, varName, ` uint32`)
+		p.decodeFixed32(varName, "uint32")
+	case descriptor.FieldDescriptorProto_TYPE_BOOL:
+		p.P(`var `, varName, `temp int`)
+		p.decodeVarint(varName+"temp", "int")
+		p.P(varName, ` := bool(`, varName, `temp != 0)`)
+	case descriptor.FieldDescriptorProto_TYPE_STRING:
+		p.P(`var stringLen`, varName, ` uint64`)
+		p.decodeVarint("stringLen"+varName, "uint64")
+		p.P(`postStringIndex`, varName, ` := iNdEx + int(stringLen`, varName, `)`)
+		p.P(`if postStringIndex`, varName, ` > l {`)
+		p.In()
+		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
+		p.Out()
+		p.P(`}`)
+		p.P(varName, ` := string(data[iNdEx:postStringIndex`, varName, `])`)
+		p.P(`iNdEx = postStringIndex`, varName)
+	case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
+		p.P(`var mapmsglen int`)
+		p.decodeVarint("mapmsglen", "int")
+		p.P(`postmsgIndex := iNdEx + mapmsglen`)
+		p.P(`if postmsgIndex > l {`)
+		p.In()
+		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
+		p.Out()
+		p.P(`}`)
+		desc := p.ObjectNamed(field.GetTypeName())
+		msgname := p.TypeName(desc)
+		p.P(varName, ` := &`, msgname, `{}`)
+		p.P(`if err := `, varName, `.Unmarshal(data[iNdEx:postmsgIndex]); err != nil {`)
+		p.In()
+		p.P(`return err`)
+		p.Out()
+		p.P(`}`)
+		p.P(`iNdEx = postmsgIndex`)
+	case descriptor.FieldDescriptorProto_TYPE_BYTES:
+		p.P(`var mapbyteLen uint64`)
+		p.decodeVarint("mapbyteLen", "uint64")
+		p.P(`postbytesIndex := iNdEx + int(mapbyteLen)`)
+		p.P(`if postbytesIndex > l {`)
+		p.In()
+		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
+		p.Out()
+		p.P(`}`)
+		p.P(varName, ` := make([]byte, mapbyteLen)`)
+		p.P(`copy(`, varName, `, data[iNdEx:postbytesIndex])`)
+		p.P(`iNdEx = postbytesIndex`)
+	case descriptor.FieldDescriptorProto_TYPE_UINT32:
+		p.P(`var `, varName, ` uint32`)
+		p.decodeVarint(varName, "uint32")
+	case descriptor.FieldDescriptorProto_TYPE_ENUM:
+		typName := p.TypeName(p.ObjectNamed(field.GetTypeName()))
+		p.P(`var `, varName, ` `, typName)
+		p.decodeVarint(varName, typName)
+	case descriptor.FieldDescriptorProto_TYPE_SFIXED32:
+		p.P(`var `, varName, ` int32`)
+		p.decodeFixed32(varName, "int32")
+	case descriptor.FieldDescriptorProto_TYPE_SFIXED64:
+		p.P(`var `, varName, ` int64`)
+		p.decodeFixed64(varName, "int64")
+	case descriptor.FieldDescriptorProto_TYPE_SINT32:
+		p.P(`var `, varName, `temp int32`)
+		p.decodeVarint(varName+"temp", "int32")
+		p.P(varName, `temp = int32((uint32(`, varName, `temp) >> 1) ^ uint32(((`, varName, `temp&1)<<31)>>31))`)
+		p.P(varName, ` := int32(`, varName, `temp)`)
+	case descriptor.FieldDescriptorProto_TYPE_SINT64:
+		p.P(`var `, varName, `temp uint64`)
+		p.decodeVarint(varName+"temp", "uint64")
+		p.P(varName, `temp = (`, varName, `temp >> 1) ^ uint64((int64(`, varName, `temp&1)<<63)>>63)`)
+		p.P(varName, ` := int64(`, varName, `temp)`)
+	}
+}
+
+func (p *unmarshal) noStarOrSliceType(msg *generator.Descriptor, field *descriptor.FieldDescriptorProto) string {
+	typ, _ := p.GoType(msg, field)
+	if typ[0] == '*' {
+		return typ[1:]
+	}
+	if typ[0] == '[' && typ[1] == ']' {
+		return typ[2:]
+	}
+	return typ
+}
+
+func (p *unmarshal) field(file *descriptor.FileDescriptorProto, msg *generator.Descriptor, field *descriptor.FieldDescriptorProto, fieldname string, proto3 bool) {
 	repeated := field.IsRepeated()
 	nullable := gogoproto.IsNullable(field)
+	typ := p.noStarOrSliceType(msg, field)
 	switch *field.Type {
 	case descriptor.FieldDescriptorProto_TYPE_DOUBLE:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
+			p.P(`var v uint64`)
+			p.decodeFixed64("v", "uint64")
 			if repeated {
-				p.P(`var v uint64`)
-				p.decodeFixed64("v", "uint64")
-				p.P(`v2 := `, p.mathPkg.Use(), `.Float64frombits(v)`)
+				p.P(`v2 := `, typ, "(", p.mathPkg.Use(), `.Float64frombits(v))`)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v2)`)
-			} else if nullable {
-				p.P(`var v uint64`)
-				p.decodeFixed64("v", "uint64")
-				p.P(`v2 := `, p.mathPkg.Use(), `.Float64frombits(v)`)
-				p.P(`m.`, fieldname, ` = &v2`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = `, typ, "(", p.mathPkg.Use(), `.Float64frombits(v))`)
 			} else {
-				p.P(`var v uint64`)
-				p.decodeFixed64("v", "uint64")
-				p.P(`m.`, fieldname, ` = `, p.mathPkg.Use(), `.Float64frombits(v)`)
+				p.P(`v2 := `, typ, "(", p.mathPkg.Use(), `.Float64frombits(v))`)
+				p.P(`m.`, fieldname, ` = &v2`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v float64`)
 				p.unsafeFixed64("v", "float64")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed64(`m.`+fieldname, "float64")
+			} else {
 				p.P(`var v float64`)
 				p.unsafeFixed64("v", "float64")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed64(`m.`+fieldname, "float64")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_FLOAT:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
+			p.P(`var v uint32`)
+			p.decodeFixed32("v", "uint32")
 			if repeated {
-				p.P(`var v uint32`)
-				p.decodeFixed32("v", "uint32")
-				p.P(`v2 := `, p.mathPkg.Use(), `.Float32frombits(v)`)
+				p.P(`v2 := `, typ, "(", p.mathPkg.Use(), `.Float32frombits(v))`)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v2)`)
-			} else if nullable {
-				p.P(`var v uint32`)
-				p.decodeFixed32("v", "uint32")
-				p.P(`v2 := `, p.mathPkg.Use(), `.Float32frombits(v)`)
-				p.P(`m.`, fieldname, ` = &v2`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = `, typ, "(", p.mathPkg.Use(), `.Float32frombits(v))`)
 			} else {
-				p.P(`var v uint32`)
-				p.decodeFixed32("v", "uint32")
-				p.P(`m.`, fieldname, ` = `, p.mathPkg.Use(), `.Float32frombits(v)`)
+				p.P(`v2 := `, typ, "(", p.mathPkg.Use(), `.Float32frombits(v))`)
+				p.P(`m.`, fieldname, ` = &v2`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v float32`)
 				p.unsafeFixed32("v", "float32")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed32("m."+fieldname, "float32")
+			} else {
 				p.P(`var v float32`)
 				p.unsafeFixed32("v", "float32")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed32("m."+fieldname, "float32")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_INT64:
 		if repeated {
-			p.P(`var v int64`)
-			p.decodeVarint("v", "int64")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
-			p.P(`var v int64`)
-			p.decodeVarint("v", "int64")
-			p.P(`m.`, fieldname, ` = &v`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = 0`)
+			p.decodeVarint("m."+fieldname, typ)
 		} else {
-			p.decodeVarint("m."+fieldname, "int64")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
+			p.P(`m.`, fieldname, ` = &v`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_UINT64:
 		if repeated {
-			p.P(`var v uint64`)
-			p.decodeVarint("v", "uint64")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
-			p.P(`var v uint64`)
-			p.decodeVarint("v", "uint64")
-			p.P(`m.`, fieldname, ` = &v`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = 0`)
+			p.decodeVarint("m."+fieldname, typ)
 		} else {
-			p.decodeVarint("m."+fieldname, "uint64")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
+			p.P(`m.`, fieldname, ` = &v`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_INT32:
 		if repeated {
-			p.P(`var v int32`)
-			p.decodeVarint("v", "int32")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
-			p.P(`var v int32`)
-			p.decodeVarint("v", "int32")
-			p.P(`m.`, fieldname, ` = &v`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = 0`)
+			p.decodeVarint("m."+fieldname, typ)
 		} else {
-			p.decodeVarint("m."+fieldname, "int32")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
+			p.P(`m.`, fieldname, ` = &v`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_FIXED64:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
 			if repeated {
-				p.P(`var v uint64`)
-				p.decodeFixed64("v", "uint64")
+				p.P(`var v `, typ)
+				p.decodeFixed64("v", typ)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
-				p.P(`var v uint64`)
-				p.decodeFixed64("v", "uint64")
-				p.P(`m.`, fieldname, ` = &v`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = 0`)
+				p.decodeFixed64("m."+fieldname, typ)
 			} else {
-				p.decodeFixed64("m."+fieldname, "uint64")
+				p.P(`var v `, typ)
+				p.decodeFixed64("v", typ)
+				p.P(`m.`, fieldname, ` = &v`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v uint64`)
 				p.unsafeFixed64("v", "uint64")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed64("m."+fieldname, "uint64")
+			} else {
 				p.P(`var v uint64`)
 				p.unsafeFixed64("v", "uint64")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed64("m."+fieldname, "uint64")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_FIXED32:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
 			if repeated {
-				p.P(`var v uint32`)
-				p.decodeFixed32("v", "uint32")
+				p.P(`var v `, typ)
+				p.decodeFixed32("v", typ)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
-				p.P(`var v uint32`)
-				p.decodeFixed32("v", "uint32")
-				p.P(`m.`, fieldname, ` = &v`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = 0`)
+				p.decodeFixed32("m."+fieldname, typ)
 			} else {
-				p.decodeFixed32("m."+fieldname, "uint32")
+				p.P(`var v `, typ)
+				p.decodeFixed32("v", typ)
+				p.P(`m.`, fieldname, ` = &v`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v uint32`)
 				p.unsafeFixed32("v", "uint32")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed32("m."+fieldname, "uint32")
+			} else {
 				p.P(`var v uint32`)
 				p.unsafeFixed32("v", "uint32")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed32("m."+fieldname, "uint32")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_BOOL:
+		p.P(`var v int`)
+		p.decodeVarint("v", "int")
 		if repeated {
-			p.P(`var v int`)
-			p.decodeVarint("v", "int")
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, bool(v != 0))`)
-		} else if nullable {
-			p.P(`var v int`)
-			p.decodeVarint("v", "int")
-			p.P(`b := bool(v != 0)`)
-			p.P(`m.`, fieldname, ` = &b`)
+			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(v != 0))`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = `, typ, `(v != 0)`)
 		} else {
-			p.P(`var v int`)
-			p.decodeVarint("v", "int")
-			p.P(`m.`, fieldname, ` = bool(v != 0)`)
+			p.P(`b := `, typ, `(v != 0)`)
+			p.P(`m.`, fieldname, ` = &b`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_STRING:
 		p.P(`var stringLen uint64`)
 		p.decodeVarint("stringLen", "uint64")
-		p.P(`postIndex := index + int(stringLen)`)
+		p.P(`postIndex := iNdEx + int(stringLen)`)
 		p.P(`if postIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 		p.Out()
 		p.P(`}`)
 		if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, string(data[index:postIndex]))`)
-		} else if nullable {
-			p.P(`s := string(data[index:postIndex])`)
-			p.P(`m.`, fieldname, ` = &s`)
+			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(data[iNdEx:postIndex]))`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = `, typ, `(data[iNdEx:postIndex])`)
 		} else {
-			p.P(`m.`, fieldname, ` = string(data[index:postIndex])`)
+			p.P(`s := `, typ, `(data[iNdEx:postIndex])`)
+			p.P(`m.`, fieldname, ` = &s`)
 		}
-		p.P(`index = postIndex`)
+		p.P(`iNdEx = postIndex`)
 	case descriptor.FieldDescriptorProto_TYPE_GROUP:
 		panic(fmt.Errorf("unmarshaler does not support group %v", fieldname))
 	case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
@@ -474,42 +576,67 @@ func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname stri
 		msgname := p.TypeName(desc)
 		p.P(`var msglen int`)
 		p.decodeVarint("msglen", "int")
-		p.P(`postIndex := index + msglen`)
+		p.P(`postIndex := iNdEx + msglen`)
 		p.P(`if postIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 		p.Out()
 		p.P(`}`)
-		if repeated {
+		if generator.IsMap(file, field) {
+			mapMsg := generator.GetMap(file, field)
+			keyField, valueField := mapMsg.GetMapFields()
+			keygoTyp, _ := p.GoType(nil, keyField)
+			keygoTyp = strings.Replace(keygoTyp, "*", "", 1)
+			valuegoTyp, _ := p.GoType(nil, valueField)
+			if !valueField.IsMessage() {
+				valuegoTyp = strings.Replace(valuegoTyp, "*", "", 1)
+			}
+			p.P(`var keykey uint64`)
+			p.decodeVarint("keykey", "uint64")
+			p.mapField("mapkey", keyField)
+			p.P(`var valuekey uint64`)
+			p.decodeVarint("valuekey", "uint64")
+			p.mapField("mapvalue", valueField)
+			p.P(`if m.`, fieldname, ` == nil {`)
+			p.In()
+			p.P(`m.`, fieldname, ` = make(map[`, keygoTyp, `]`, valuegoTyp, `)`)
+			p.Out()
+			p.P(`}`)
+			p.P(`m.`, fieldname, `[mapkey] = mapvalue`)
+		} else if repeated {
 			if nullable {
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, &`, msgname, `{})`)
 			} else {
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, msgname, `{})`)
 			}
-			p.P(`m.`, fieldname, `[len(m.`, fieldname, `)-1].Unmarshal(data[index:postIndex])`)
+			p.P(`if err := m.`, fieldname, `[len(m.`, fieldname, `)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {`)
+			p.In()
+			p.P(`return err`)
+			p.Out()
+			p.P(`}`)
 		} else if nullable {
 			p.P(`if m.`, fieldname, ` == nil {`)
 			p.In()
 			p.P(`m.`, fieldname, ` = &`, msgname, `{}`)
 			p.Out()
 			p.P(`}`)
-			p.P(`if err := m.`, fieldname, `.Unmarshal(data[index:postIndex]); err != nil {`)
+			p.P(`if err := m.`, fieldname, `.Unmarshal(data[iNdEx:postIndex]); err != nil {`)
 			p.In()
 			p.P(`return err`)
 			p.Out()
 			p.P(`}`)
 		} else {
-			p.P(`if err := m.`, fieldname, `.Unmarshal(data[index:postIndex]); err != nil {`)
+			p.P(`if err := m.`, fieldname, `.Unmarshal(data[iNdEx:postIndex]); err != nil {`)
 			p.In()
 			p.P(`return err`)
 			p.Out()
 			p.P(`}`)
 		}
-		p.P(`index = postIndex`)
+		p.P(`iNdEx = postIndex`)
 	case descriptor.FieldDescriptorProto_TYPE_BYTES:
 		p.P(`var byteLen int`)
 		p.decodeVarint("byteLen", "int")
-		p.P(`postIndex := index + byteLen`)
+		p.P(`postIndex := iNdEx + byteLen`)
 		p.P(`if postIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -517,12 +644,10 @@ func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname stri
 		p.P(`}`)
 		if !gogoproto.IsCustomType(field) {
 			if repeated {
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, make([]byte, postIndex-index))`)
-				p.P(`copy(m.`, fieldname, `[len(m.`, fieldname, `)-1], data[index:postIndex])`)
-			} else if nullable {
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, data[index:postIndex]...)`)
+				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, make([]byte, postIndex-iNdEx))`)
+				p.P(`copy(m.`, fieldname, `[len(m.`, fieldname, `)-1], data[iNdEx:postIndex])`)
 			} else {
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, data[index:postIndex]...)`)
+				p.P(`m.`, fieldname, ` = append([]byte{}`, `, data[iNdEx:postIndex]...)`)
 			}
 		} else {
 			_, ctyp, err := generator.GetCustomType(field)
@@ -530,35 +655,42 @@ func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname stri
 				panic(err)
 			}
 			if repeated {
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, ctyp, `{})`)
-				p.P(`m.`, fieldname, `[len(m.`, fieldname, `)-1].Unmarshal(data[index:postIndex])`)
+				p.P(`var v `, ctyp)
+				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+				p.P(`if err := m.`, fieldname, `[len(m.`, fieldname, `)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {`)
+				p.In()
+				p.P(`return err`)
+				p.Out()
+				p.P(`}`)
 			} else if nullable {
-				p.P(`m.`, fieldname, ` = &`, ctyp, `{}`)
-				p.P(`if err := m.`, fieldname, `.Unmarshal(data[index:postIndex]); err != nil {`)
+				p.P(`var v `, ctyp)
+				p.P(`m.`, fieldname, ` = &v`)
+				p.P(`if err := m.`, fieldname, `.Unmarshal(data[iNdEx:postIndex]); err != nil {`)
 				p.In()
 				p.P(`return err`)
 				p.Out()
 				p.P(`}`)
 			} else {
-				p.P(`if err := m.`, fieldname, `.Unmarshal(data[index:postIndex]); err != nil {`)
+				p.P(`if err := m.`, fieldname, `.Unmarshal(data[iNdEx:postIndex]); err != nil {`)
 				p.In()
 				p.P(`return err`)
 				p.Out()
 				p.P(`}`)
 			}
 		}
-		p.P(`index = postIndex`)
+		p.P(`iNdEx = postIndex`)
 	case descriptor.FieldDescriptorProto_TYPE_UINT32:
 		if repeated {
-			p.P(`var v uint32`)
-			p.decodeVarint("v", "uint32")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
-			p.P(`var v uint32`)
-			p.decodeVarint("v", "uint32")
-			p.P(`m.`, fieldname, ` = &v`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = 0`)
+			p.decodeVarint("m."+fieldname, typ)
 		} else {
-			p.decodeVarint("m."+fieldname, "uint32")
+			p.P(`var v `, typ)
+			p.decodeVarint("v", typ)
+			p.P(`m.`, fieldname, ` = &v`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_ENUM:
 		typName := p.TypeName(p.ObjectNamed(field.GetTypeName()))
@@ -566,87 +698,90 @@ func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname stri
 			p.P(`var v `, typName)
 			p.decodeVarint("v", typName)
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = 0`)
+			p.decodeVarint("m."+fieldname, typName)
+		} else {
 			p.P(`var v `, typName)
 			p.decodeVarint("v", typName)
 			p.P(`m.`, fieldname, ` = &v`)
-		} else {
-			p.decodeVarint("m."+fieldname, typName)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_SFIXED32:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
 			if repeated {
-				p.P(`var v int32`)
-				p.decodeFixed32("v", "int32")
+				p.P(`var v `, typ)
+				p.decodeFixed32("v", typ)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
-				p.P(`var v int32`)
-				p.decodeFixed32("v", "int32")
-				p.P(`m.`, fieldname, ` = &v`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = 0`)
+				p.decodeFixed32("m."+fieldname, typ)
 			} else {
-				p.decodeFixed32("m."+fieldname, "int32")
+				p.P(`var v `, typ)
+				p.decodeFixed32("v", typ)
+				p.P(`m.`, fieldname, ` = &v`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v int32`)
 				p.unsafeFixed32("v", "int32")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed32("m."+fieldname, "int32")
+			} else {
 				p.P(`var v int32`)
 				p.unsafeFixed32("v", "int32")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed32("m."+fieldname, "int32")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_SFIXED64:
-		if !p.unsafe {
+		if !p.unsafe || gogoproto.IsCastType(field) {
 			if repeated {
-				p.P(`var v int64`)
-				p.decodeFixed64("v", "int64")
+				p.P(`var v `, typ)
+				p.decodeFixed64("v", typ)
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
-				p.P(`var v int64`)
-				p.decodeFixed64("v", "int64")
-				p.P(`m.`, fieldname, ` = &v`)
+			} else if proto3 || !nullable {
+				p.P(`m.`, fieldname, ` = 0`)
+				p.decodeFixed64("m."+fieldname, typ)
 			} else {
-				p.decodeFixed64("m."+fieldname, "int64")
+				p.P(`var v `, typ)
+				p.decodeFixed64("v", typ)
+				p.P(`m.`, fieldname, ` = &v`)
 			}
 		} else {
 			if repeated {
 				p.P(`var v int64`)
 				p.unsafeFixed64("v", "int64")
 				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-			} else if nullable {
+			} else if proto3 || !nullable {
+				p.unsafeFixed64("m."+fieldname, "int64")
+			} else {
 				p.P(`var v int64`)
 				p.unsafeFixed64("v", "int64")
 				p.P(`m.`, fieldname, ` = &v`)
-			} else {
-				p.unsafeFixed64("m."+fieldname, "int64")
 			}
 		}
 	case descriptor.FieldDescriptorProto_TYPE_SINT32:
-		p.P(`var v int32`)
-		p.decodeVarint("v", "int32")
-		p.P(`v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))`)
+		p.P(`var v `, typ)
+		p.decodeVarint("v", typ)
+		p.P(`v = `, typ, `((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))`)
 		if repeated {
 			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
-		} else if nullable {
-			p.P(`m.`, fieldname, ` = &v`)
-		} else {
+		} else if proto3 || !nullable {
 			p.P(`m.`, fieldname, ` = v`)
+		} else {
+			p.P(`m.`, fieldname, ` = &v`)
 		}
 	case descriptor.FieldDescriptorProto_TYPE_SINT64:
 		p.P(`var v uint64`)
 		p.decodeVarint("v", "uint64")
 		p.P(`v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)`)
 		if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, int64(v))`)
-		} else if nullable {
-			p.P(`v2 := int64(v)`)
-			p.P(`m.`, fieldname, ` = &v2`)
+			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(v))`)
+		} else if proto3 || !nullable {
+			p.P(`m.`, fieldname, ` = `, typ, `(v)`)
 		} else {
-			p.P(`m.`, fieldname, ` = int64(v)`)
+			p.P(`v2 := `, typ, `(v)`)
+			p.P(`m.`, fieldname, ` = &v2`)
 		}
 	default:
 		panic("not implemented")
@@ -654,14 +789,22 @@ func (p *unmarshal) field(field *descriptor.FieldDescriptorProto, fieldname stri
 }
 
 func (p *unmarshal) Generate(file *generator.FileDescriptor) {
+	proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 	p.atleastOne = false
+	p.localName = generator.FileName(file)
+	if p.unsafe {
+		p.localName += "Unsafe"
+	}
 
 	p.ioPkg = p.NewImport("io")
 	p.mathPkg = p.NewImport("math")
 	p.unsafePkg = p.NewImport("unsafe")
 	fmtPkg := p.NewImport("fmt")
-	protoPkg := p.NewImport("code.google.com/p/gogoprotobuf/proto")
+	protoPkg := p.NewImport("github.com/gogo/protobuf/proto")
+	if !gogoproto.ImportsGoGoProto(file.FileDescriptorProto) {
+		protoPkg = p.NewImport("github.com/golang/protobuf/proto")
+	}
 
 	for _, message := range file.Messages() {
 		ccTypeName := generator.CamelCaseSlice(message.TypeName())
@@ -681,13 +824,30 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 				panic(fmt.Sprintf("unsafe_unmarshaler and unmarshaler enabled for %v", ccTypeName))
 			}
 		}
+		if message.DescriptorProto.GetOptions().GetMapEntry() {
+			continue
+		}
 		p.atleastOne = true
+
+		// build a map required field_id -> bitmask offset
+		rfMap := make(map[int32]uint)
+		rfNextId := uint(0)
+		for _, field := range message.Field {
+			if field.IsRequired() {
+				rfMap[field.GetNumber()] = rfNextId
+				rfNextId++
+			}
+		}
+		rfCount := len(rfMap)
 
 		p.P(`func (m *`, ccTypeName, `) Unmarshal(data []byte) error {`)
 		p.In()
+		if rfCount > 0 {
+			p.P(`var hasFields [`, strconv.Itoa(1+(rfCount-1)/64), `]uint64`)
+		}
 		p.P(`l := len(data)`)
-		p.P(`index := 0`)
-		p.P(`for index < l {`)
+		p.P(`iNdEx := 0`)
+		p.P(`for iNdEx < l {`)
 		p.In()
 		p.P(`var wire uint64`)
 		p.decodeVarint("wire", "uint64")
@@ -709,21 +869,21 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 				p.In()
 				p.P(`var packedLen int`)
 				p.decodeVarint("packedLen", "int")
-				p.P(`postIndex := index + packedLen`)
+				p.P(`postIndex := iNdEx + packedLen`)
 				p.P(`if postIndex > l {`)
 				p.In()
 				p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 				p.Out()
 				p.P(`}`)
-				p.P(`for index < postIndex {`)
+				p.P(`for iNdEx < postIndex {`)
 				p.In()
-				p.field(field, fieldname)
+				p.field(file.FileDescriptorProto, message, field, fieldname, false)
 				p.Out()
 				p.P(`}`)
 				p.Out()
 				p.P(`} else if wireType == `, strconv.Itoa(wireType), `{`)
 				p.In()
-				p.field(field, fieldname)
+				p.field(file.FileDescriptorProto, message, field, fieldname, false)
 				p.Out()
 				p.P(`} else {`)
 				p.In()
@@ -736,7 +896,15 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 				p.P(`return ` + fmtPkg.Use() + `.Errorf("proto: wrong wireType = %d for field ` + fieldname + `", wireType)`)
 				p.Out()
 				p.P(`}`)
-				p.field(field, fieldname)
+				p.field(file.FileDescriptorProto, message, field, fieldname, proto3)
+			}
+
+			if field.IsRequired() {
+				fieldBit, ok := rfMap[field.GetNumber()]
+				if !ok {
+					panic("field is required, but no bit registered")
+				}
+				p.P(`hasFields[`, strconv.Itoa(int(fieldBit/64)), `] |= uint64(`, fmt.Sprintf("0x%08x", 1<<(fieldBit%64)), `)`)
 			}
 		}
 		p.Out()
@@ -761,14 +929,14 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 			p.P(`}`)
 			p.Out()
 			p.P(`}`)
-			p.P(`index-=sizeOfWire`)
-			p.P(`skippy, err := `, protoPkg.Use(), `.Skip(data[index:])`)
+			p.P(`iNdEx-=sizeOfWire`)
+			p.P(`skippy, err := skip`, p.localName+`(data[iNdEx:])`)
 			p.P(`if err != nil {`)
 			p.In()
 			p.P(`return err`)
 			p.Out()
 			p.P(`}`)
-			p.P(`if (index + skippy) > l {`)
+			p.P(`if (iNdEx + skippy) > l {`)
 			p.In()
 			p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 			p.Out()
@@ -779,11 +947,11 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 				p.P(`m.XXX_extensions = make(map[int32]`, protoPkg.Use(), `.Extension)`)
 				p.Out()
 				p.P(`}`)
-				p.P(`m.XXX_extensions[int32(fieldNum)] = `, protoPkg.Use(), `.NewExtension(data[index:index+skippy])`)
+				p.P(`m.XXX_extensions[int32(fieldNum)] = `, protoPkg.Use(), `.NewExtension(data[iNdEx:iNdEx+skippy])`)
 			} else {
-				p.P(`m.XXX_extensions = append(m.XXX_extensions, data[index:index+skippy]...)`)
+				p.P(`m.XXX_extensions = append(m.XXX_extensions, data[iNdEx:iNdEx+skippy]...)`)
 			}
-			p.P(`index += skippy`)
+			p.P(`iNdEx += skippy`)
 			p.Out()
 			p.P(`} else {`)
 			p.In()
@@ -800,20 +968,22 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 		p.P(`}`)
 		p.Out()
 		p.P(`}`)
-		p.P(`index-=sizeOfWire`)
-		p.P(`skippy, err := `, protoPkg.Use(), `.Skip(data[index:])`)
+		p.P(`iNdEx-=sizeOfWire`)
+		p.P(`skippy, err := skip`, p.localName, `(data[iNdEx:])`)
 		p.P(`if err != nil {`)
 		p.In()
 		p.P(`return err`)
 		p.Out()
 		p.P(`}`)
-		p.P(`if (index + skippy) > l {`)
+		p.P(`if (iNdEx + skippy) > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
 		p.Out()
 		p.P(`}`)
-		p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+skippy]...)`)
-		p.P(`index += skippy`)
+		if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
+			p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)`)
+		}
+		p.P(`iNdEx += skippy`)
 		p.Out()
 		if message.DescriptorProto.HasExtension() {
 			p.Out()
@@ -823,69 +993,116 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 		p.P(`}`)
 		p.Out()
 		p.P(`}`)
+
+		for _, field := range message.Field {
+			if !field.IsRequired() {
+				continue
+			}
+
+			fieldBit, ok := rfMap[field.GetNumber()]
+			if !ok {
+				panic("field is required, but no bit registered")
+			}
+
+			p.P(`if hasFields[`, strconv.Itoa(int(fieldBit/64)), `] & uint64(`, fmt.Sprintf("0x%08x", 1<<(fieldBit%64)), `) == 0 {`)
+			p.In()
+			p.P(`return `, protoPkg.Use(), `.NewRequiredNotSetError("`, field.GetName(), `")`)
+			p.Out()
+			p.P(`}`)
+		}
+		p.P()
 		p.P(`return nil`)
 		p.Out()
 		p.P(`}`)
 	}
-
 	if !p.atleastOne {
 		return
 	}
 
-}
-
-func (p *unmarshal) skipFixed32() {
-	p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+4]...)`)
-	p.P(`index+=4`)
-}
-
-func (p *unmarshal) skipLengthDelimited() {
-	p.P(`var length int`)
-	p.P(`for shift := uint(0); ; shift += 7 {`)
-	p.In()
-	p.P(`if index >= l {`)
-	p.In()
-	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
-	p.Out()
-	p.P(`}`)
-	p.P(`b := data[index]`)
-	p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, b)`)
-	p.P(`index++`)
-	p.P(`length |= (int(b) & 0x7F) << shift`)
-	p.P(`if b < 0x80 {`)
-	p.In()
-	p.P(`break`)
-	p.Out()
-	p.P(`}`)
-	p.Out()
-	p.P(`}`)
-
-	p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+length]...)`)
-	p.P(`index+=length`)
-}
-
-func (p *unmarshal) skipFixed64() {
-	p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[index:index+8]...)`)
-	p.P(`index+=8`)
-}
-
-func (p *unmarshal) skipVarint() {
-	p.P(`for {`)
-	p.In()
-	p.P(`if index >= l {`)
-	p.In()
-	p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
-	p.Out()
-	p.P(`}`)
-	p.P(`m.XXX_unrecognized = append(m.XXX_unrecognized, data[index])`)
-	p.P(`index++`)
-	p.P(`if data[index-1] < 0x80 {`)
-	p.In()
-	p.P(`break`)
-	p.Out()
-	p.P(`}`)
-	p.Out()
-	p.P(`}`)
+	p.P(`func skip` + p.localName + `(data []byte) (n int, err error) {
+		l := len(data)
+		iNdEx := 0
+		for iNdEx < l {
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if iNdEx >= l {
+					return 0, ` + p.ioPkg.Use() + `.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				wire |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			wireType := int(wire & 0x7)
+			switch wireType {
+			case 0:
+				for {
+					if iNdEx >= l {
+						return 0, ` + p.ioPkg.Use() + `.ErrUnexpectedEOF
+					}
+					iNdEx++
+					if data[iNdEx-1] < 0x80 {
+						break
+					}
+				}
+				return iNdEx, nil
+			case 1:
+				iNdEx += 8
+				return iNdEx, nil
+			case 2:
+				var length int
+				for shift := uint(0); ; shift += 7 {
+					if iNdEx >= l {
+						return 0, ` + p.ioPkg.Use() + `.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					length |= (int(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				iNdEx += length
+				return iNdEx, nil
+			case 3:
+				for {
+					var innerWire uint64
+					var start int = iNdEx
+					for shift := uint(0); ; shift += 7 {
+						if iNdEx >= l {
+							return 0, ` + p.ioPkg.Use() + `.ErrUnexpectedEOF
+						}
+						b := data[iNdEx]
+						iNdEx++
+						innerWire |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					innerWireType := int(innerWire & 0x7)
+					if innerWireType == 4 {
+						break
+					}
+					next, err := skip` + p.localName + `(data[start:])
+					if err != nil {
+						return 0, err
+					}
+					iNdEx = start + next
+				}
+				return iNdEx, nil
+			case 4:
+				return iNdEx, nil
+			case 5:
+				iNdEx += 4
+				return iNdEx, nil
+			default:
+				return 0, ` + fmtPkg.Use() + `.Errorf("proto: illegal wireType %d", wireType)
+			}
+		}
+		panic("unreachable")
+	}`)
 }
 
 func init() {

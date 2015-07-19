@@ -1,5 +1,5 @@
 // Copyright (c) 2013, Vastech SA (PTY) LTD. All rights reserved.
-// http://code.google.com/p/gogoprotobuf
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -38,15 +38,15 @@ It is enabled by the following extensions:
 
 For incorrect usage of embed with tests see:
 
-  code.google.com/p/gogoprotobuf/test/embedconflict
+  github.com/gogo/protobuf/test/embedconflict
 
 */
 package embedcheck
 
 import (
-	"code.google.com/p/gogoprotobuf/gogoproto"
-	"code.google.com/p/gogoprotobuf/protoc-gen-gogo/generator"
 	"fmt"
+	"github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 	"os"
 )
 
@@ -127,7 +127,7 @@ func (p *plugin) checkNameSpace(message *generator.Descriptor) map[string]bool {
 	names := make(map[string]bool)
 	for _, field := range message.Field {
 		fieldname := generator.CamelCase(*field.Name)
-		if gogoproto.IsEmbed(field) {
+		if field.IsMessage() && gogoproto.IsEmbed(field) {
 			desc := p.ObjectNamed(field.GetTypeName())
 			moreNames := p.checkNameSpace(desc.(*generator.Descriptor))
 			for another := range moreNames {
@@ -155,7 +155,7 @@ func (p *plugin) checkOverwrite(message *generator.Descriptor, enablers map[stri
 		names = append(names, name)
 	}
 	for _, field := range message.Field {
-		if gogoproto.IsEmbed(field) {
+		if field.IsMessage() && gogoproto.IsEmbed(field) {
 			fieldname := generator.CamelCase(*field.Name)
 			desc := p.ObjectNamed(field.GetTypeName())
 			msg := desc.(*generator.Descriptor)
@@ -174,6 +174,11 @@ func (p *plugin) checkRepeated(message *generator.Descriptor) {
 	for _, field := range message.Field {
 		if !gogoproto.IsEmbed(field) {
 			continue
+		}
+		if field.IsBytes() {
+			fieldname := generator.CamelCase(*field.Name)
+			fmt.Fprintf(os.Stderr, "ERROR: found embedded bytes field %s in message %s\n", fieldname, ccTypeName)
+			os.Exit(1)
 		}
 		if !field.IsRepeated() {
 			continue
