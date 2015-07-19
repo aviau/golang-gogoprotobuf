@@ -1,5 +1,6 @@
-golang-gogoprotobuf (0.0~git20150426-2) unstable; urgency=medium
+golang-gogoprotobuf (0.0~gitgit20150717-1) unstable; urgency=medium
 
+  * New upstream snapshow.
   * Added github.com/gogo/protobuf symlink
 
  -- Alexandre Viau <alexandre@alexandreviau.net>  Sat, 18 Jul 2015 11:20:47 -0400

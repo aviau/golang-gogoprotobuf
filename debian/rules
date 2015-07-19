@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 export DH_VERBOSE=1
-export DH_GOPKG := code.google.com/p/gogoprotobuf
+export DH_GOPKG := github.com/gogo/protobuf
 
 %:
 	dh $@ --buildsystem=golang --with=golang
