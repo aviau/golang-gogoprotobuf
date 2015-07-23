@@ -6,7 +6,7 @@ Uploaders: Jelmer Vernooij <jelmer@debian.org>,
            Alexandre Viau <alexandre@alexandreviau.net>
 Build-Depends: debhelper (>= 9), dh-golang, golang-go (>= 1.0)
 Standards-Version: 3.9.6
-Homepage: https://code.google.com/p/gogoprotobuf
+Homepage: https://github.com/gogo/protobuf
 Vcs-Git: git://anonscm.debian.org/users/jelmer/golang-gogoprotobuf.git -b unstable
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=users/jelmer/golang-gogoprotobuf.git
 
