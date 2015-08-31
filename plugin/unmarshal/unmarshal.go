@@ -315,6 +315,11 @@ func (p *unmarshal) mapField(varName string, field *descriptor.FieldDescriptorPr
 	case descriptor.FieldDescriptorProto_TYPE_STRING:
 		p.P(`var stringLen`, varName, ` uint64`)
 		p.decodeVarint("stringLen"+varName, "uint64")
+		p.P(`if stringLen`, varName, ` < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength` + p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`postStringIndex`, varName, ` := iNdEx + int(stringLen`, varName, `)`)
 		p.P(`if postStringIndex`, varName, ` > l {`)
 		p.In()
@@ -327,6 +332,11 @@ func (p *unmarshal) mapField(varName string, field *descriptor.FieldDescriptorPr
 		p.P(`var mapmsglen int`)
 		p.decodeVarint("mapmsglen", "int")
 		p.P(`postmsgIndex := iNdEx + mapmsglen`)
+		p.P(`if mapmsglen < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength` + p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`if postmsgIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -555,6 +565,11 @@ func (p *unmarshal) field(file *descriptor.FileDescriptorProto, msg *generator.D
 		p.P(`var stringLen uint64`)
 		p.decodeVarint("stringLen", "uint64")
 		p.P(`postIndex := iNdEx + int(stringLen)`)
+		p.P(`if stringLen < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength` + p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -577,6 +592,11 @@ func (p *unmarshal) field(file *descriptor.FileDescriptorProto, msg *generator.D
 		p.P(`var msglen int`)
 		p.decodeVarint("msglen", "int")
 		p.P(`postIndex := iNdEx + msglen`)
+		p.P(`if msglen < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength` + p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -636,6 +656,11 @@ func (p *unmarshal) field(file *descriptor.FileDescriptorProto, msg *generator.D
 	case descriptor.FieldDescriptorProto_TYPE_BYTES:
 		p.P(`var byteLen int`)
 		p.decodeVarint("byteLen", "int")
+		p.P(`if byteLen < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength` + p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`postIndex := iNdEx + byteLen`)
 		p.P(`if postIndex > l {`)
 		p.In()
@@ -936,6 +961,11 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 			p.P(`return err`)
 			p.Out()
 			p.P(`}`)
+			p.P(`if skippy < 0 {`)
+			p.In()
+			p.P(`return ErrInvalidLength`, p.localName)
+			p.Out()
+			p.P(`}`)
 			p.P(`if (iNdEx + skippy) > l {`)
 			p.In()
 			p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -975,6 +1005,11 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 		p.P(`return err`)
 		p.Out()
 		p.P(`}`)
+		p.P(`if skippy < 0 {`)
+		p.In()
+		p.P(`return ErrInvalidLength`, p.localName)
+		p.Out()
+		p.P(`}`)
 		p.P(`if (iNdEx + skippy) > l {`)
 		p.In()
 		p.P(`return `, p.ioPkg.Use(), `.ErrUnexpectedEOF`)
@@ -1006,7 +1041,11 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 
 			p.P(`if hasFields[`, strconv.Itoa(int(fieldBit/64)), `] & uint64(`, fmt.Sprintf("0x%08x", 1<<(fieldBit%64)), `) == 0 {`)
 			p.In()
-			p.P(`return `, protoPkg.Use(), `.NewRequiredNotSetError("`, field.GetName(), `")`)
+			if !gogoproto.ImportsGoGoProto(file.FileDescriptorProto) {
+				p.P(`return new(`, protoPkg.Use(), `.RequiredNotSetError)`)
+			} else {
+				p.P(`return `, protoPkg.Use(), `.NewRequiredNotSetError("`, field.GetName(), `")`)
+			}
 			p.Out()
 			p.P(`}`)
 		}
@@ -1065,6 +1104,9 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 					}
 				}
 				iNdEx += length
+				if length < 0 {
+					return 0, ErrInvalidLength` + p.localName + `
+				}
 				return iNdEx, nil
 			case 3:
 				for {
@@ -1102,7 +1144,12 @@ func (p *unmarshal) Generate(file *generator.FileDescriptor) {
 			}
 		}
 		panic("unreachable")
-	}`)
+	}
+
+	var (
+		ErrInvalidLength` + p.localName + ` = ` + fmtPkg.Use() + `.Errorf("proto: negative length found during unmarshaling")
+	)
+	`)
 }
 
 func init() {

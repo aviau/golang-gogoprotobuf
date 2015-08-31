@@ -33,11 +33,12 @@ import (
 	"go/token"
 	"strings"
 
+	"path"
+
 	"github.com/gogo/protobuf/gogoproto"
 	"github.com/gogo/protobuf/proto"
 	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
 	plugin "github.com/gogo/protobuf/protoc-gen-gogo/plugin"
-	"path"
 )
 
 func (d *FileDescriptor) Messages() []*Descriptor {
@@ -157,16 +158,11 @@ func GetMap(file *descriptor.FileDescriptorProto, field *descriptor.FieldDescrip
 	if !field.IsMessage() {
 		return nil
 	}
-	typeName := field.GetTypeName()
+	typeName := strings.TrimPrefix(field.GetTypeName(), "."+file.GetPackage()+".")
 	if strings.Contains(typeName, "Map") && !strings.HasSuffix(typeName, "Entry") {
 		typeName += "." + CamelCase(field.GetName()) + "Entry"
 	}
-	ts := strings.Split(typeName, ".")
-	if len(ts) == 1 {
-		return file.GetMessage(typeName)
-	}
-	newTypeName := strings.Join(ts[2:], ".")
-	return file.GetMessage(newTypeName)
+	return file.GetMessage(typeName)
 }
 
 func IsMap(file *descriptor.FileDescriptorProto, field *descriptor.FieldDescriptorProto) bool {
@@ -253,7 +249,8 @@ func GetCustomType(field *descriptor.FieldDescriptorProto) (packageName string, 
 
 func getCustomType(field *descriptor.FieldDescriptorProto) (packageName string, typ string, err error) {
 	if field.Options != nil {
-		v, err := proto.GetExtension(field.Options, gogoproto.E_Customtype)
+		var v interface{}
+		v, err = proto.GetExtension(field.Options, gogoproto.E_Customtype)
 		if err == nil && v.(*string) != nil {
 			ctype := *(v.(*string))
 			packageName, typ = splitCPackageType(ctype)
@@ -277,7 +274,8 @@ func splitCPackageType(ctype string) (packageName string, typ string) {
 
 func getCastType(field *descriptor.FieldDescriptorProto) (packageName string, typ string, err error) {
 	if field.Options != nil {
-		v, err := proto.GetExtension(field.Options, gogoproto.E_Casttype)
+		var v interface{}
+		v, err = proto.GetExtension(field.Options, gogoproto.E_Casttype)
 		if err == nil && v.(*string) != nil {
 			ctype := *(v.(*string))
 			packageName, typ = splitCPackageType(ctype)

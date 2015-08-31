@@ -3,18 +3,20 @@
 // DO NOT EDIT!
 
 /*
-Package vanity is a generated protocol buffer package.
+	Package vanity is a generated protocol buffer package.
 
-It is generated from these files:
-	vanity.proto
+	It is generated from these files:
+		vanity.proto
 
-It has these top-level messages:
-	A
+	It has these top-level messages:
+		A
 */
 package vanity
 
 import proto "github.com/gogo/protobuf/proto"
 import math "math"
+
+import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 
 import io "io"
 import fmt "fmt"
@@ -25,6 +27,7 @@ var _ = math.Inf
 
 type A struct {
 	Strings          *string `protobuf:"bytes,1,opt" json:"Strings,omitempty"`
+	Int              *int64  `protobuf:"varint,2,req" json:"Int,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -39,7 +42,105 @@ func (m *A) GetStrings() string {
 	return ""
 }
 
+func (m *A) GetInt() int64 {
+	if m != nil && m.Int != nil {
+		return *m.Int
+	}
+	return 0
+}
+
+func (m *A) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *A) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Strings != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintVanity(data, i, uint64(len(*m.Strings)))
+		i += copy(data[i:], *m.Strings)
+	}
+	if m.Int == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Int")
+	} else {
+		data[i] = 0x10
+		i++
+		i = encodeVarintVanity(data, i, uint64(*m.Int))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func encodeFixed64Vanity(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Vanity(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintVanity(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
+}
+func (m *A) Size() (n int) {
+	var l int
+	_ = l
+	if m.Strings != nil {
+		l = len(*m.Strings)
+		n += 1 + l + sovVanity(uint64(l))
+	}
+	if m.Int != nil {
+		n += 1 + sovVanity(uint64(*m.Int))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func sovVanity(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozVanity(x uint64) (n int) {
+	return sovVanity(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
 func (m *A) Unmarshal(data []byte) error {
+	var hasFields [1]uint64
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
@@ -75,12 +176,33 @@ func (m *A) Unmarshal(data []byte) error {
 				}
 			}
 			postIndex := iNdEx + int(stringLen)
+			if stringLen < 0 {
+				return ErrInvalidLengthVanity
+			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			s := string(data[iNdEx:postIndex])
 			m.Strings = &s
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Int", wireType)
+			}
+			var v int64
+			for shift := uint(0); ; shift += 7 {
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Int = &v
+			hasFields[0] |= uint64(0x00000001)
 		default:
 			var sizeOfWire int
 			for {
@@ -95,12 +217,18 @@ func (m *A) Unmarshal(data []byte) error {
 			if err != nil {
 				return err
 			}
+			if skippy < 0 {
+				return ErrInvalidLengthVanity
+			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
 			m.XXX_unrecognized = append(m.XXX_unrecognized, data[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
+	}
+	if hasFields[0]&uint64(0x00000001) == 0 {
+		return github_com_gogo_protobuf_proto.NewRequiredNotSetError("Int")
 	}
 
 	return nil
@@ -151,6 +279,9 @@ func skipVanity(data []byte) (n int, err error) {
 				}
 			}
 			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthVanity
+			}
 			return iNdEx, nil
 		case 3:
 			for {
@@ -189,83 +320,7 @@ func skipVanity(data []byte) (n int, err error) {
 	}
 	panic("unreachable")
 }
-func (m *A) Size() (n int) {
-	var l int
-	_ = l
-	if m.Strings != nil {
-		l = len(*m.Strings)
-		n += 1 + l + sovVanity(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
 
-func sovVanity(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
-}
-func sozVanity(x uint64) (n int) {
-	return sovVanity(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *A) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *A) MarshalTo(data []byte) (n int, err error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Strings != nil {
-		data[i] = 0xa
-		i++
-		i = encodeVarintVanity(data, i, uint64(len(*m.Strings)))
-		i += copy(data[i:], *m.Strings)
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(data[i:], m.XXX_unrecognized)
-	}
-	return i, nil
-}
-
-func encodeFixed64Vanity(data []byte, offset int, v uint64) int {
-	data[offset] = uint8(v)
-	data[offset+1] = uint8(v >> 8)
-	data[offset+2] = uint8(v >> 16)
-	data[offset+3] = uint8(v >> 24)
-	data[offset+4] = uint8(v >> 32)
-	data[offset+5] = uint8(v >> 40)
-	data[offset+6] = uint8(v >> 48)
-	data[offset+7] = uint8(v >> 56)
-	return offset + 8
-}
-func encodeFixed32Vanity(data []byte, offset int, v uint32) int {
-	data[offset] = uint8(v)
-	data[offset+1] = uint8(v >> 8)
-	data[offset+2] = uint8(v >> 16)
-	data[offset+3] = uint8(v >> 24)
-	return offset + 4
-}
-func encodeVarintVanity(data []byte, offset int, v uint64) int {
-	for v >= 1<<7 {
-		data[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	data[offset] = uint8(v)
-	return offset + 1
-}
+var (
+	ErrInvalidLengthVanity = fmt.Errorf("proto: negative length found during unmarshaling")
+)
