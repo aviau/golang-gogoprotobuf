@@ -1,3 +1,12 @@
+golang-gogoprotobuf (0.0~git20150828.0.6cab0cc-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream version.
+  * Remove myself from uploaders.
+  * Include gogo.proto (Closes: #797493).
+
+ -- Alexandre Viau <alexandre@alexandreviau.net>  Mon, 31 Aug 2015 00:08:18 -0400
+
 golang-gogoprotobuf (0.0~git20150717-1) unstable; urgency=medium
 
   * New upstream snapshot.
