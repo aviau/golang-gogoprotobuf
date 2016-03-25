@@ -4,7 +4,10 @@
 export DH_GOPKG := github.com/gogo/protobuf
 
 %:
-	dh $@ --buildsystem=golang --with=golang
+	dh $@ --buildsystem=golang --with=golang --builddirectory=_build
+
+override_dh_auto_test:
+	PATH="$(CURDIR)/_build/bin:$$PATH" dh_auto_test
 
 override_dh_auto_install:
 	dh_auto_install --destdir=debian/tmp
