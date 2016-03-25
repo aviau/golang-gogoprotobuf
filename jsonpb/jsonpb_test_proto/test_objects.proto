@@ -84,3 +84,27 @@ message Maps {
   map<int64, string> m_int64_str = 1;
   map<bool, Simple> m_bool_simple = 2;
 }
+
+message MsgWithOneof {
+  oneof union {
+    string title = 1;
+    int64 salary = 2;
+  }
+}
+
+message Real {
+  optional double value = 1;
+  extensions 100 to max;
+}
+
+extend Real {
+  optional string name = 124;
+}
+
+message Complex {
+  extend Real {
+    optional Complex real_extension = 123;
+  }
+  optional double imaginary = 1;
+  extensions 100 to max;
+}

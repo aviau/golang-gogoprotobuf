@@ -14,26 +14,31 @@
 package vanity
 
 import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
 import math "math"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/gogoproto"
 
 import io "io"
-import fmt "fmt"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
+
 type B struct {
-	String_ *string `protobuf:"bytes,1,opt" json:"String,omitempty"`
-	Int64   int64   `protobuf:"varint,2,opt" json:"Int64"`
-	Int32   *int32  `protobuf:"varint,3,opt,def=1234" json:"Int32,omitempty"`
+	String_ *string `protobuf:"bytes,1,opt,name=String,json=string" json:"String,omitempty"`
+	Int64   int64   `protobuf:"varint,2,opt,name=Int64,json=int64" json:"Int64"`
+	Int32   *int32  `protobuf:"varint,3,opt,name=Int32,json=int32,def=1234" json:"Int32,omitempty"`
 }
 
-func (m *B) Reset()         { *m = B{} }
-func (m *B) String() string { return proto.CompactTextString(m) }
-func (*B) ProtoMessage()    {}
+func (m *B) Reset()                    { *m = B{} }
+func (m *B) String() string            { return proto.CompactTextString(m) }
+func (*B) ProtoMessage()               {}
+func (*B) Descriptor() ([]byte, []int) { return fileDescriptorGogovanity, []int{0} }
 
 const Default_B_Int32 int32 = 1234
 
@@ -58,6 +63,9 @@ func (m *B) GetInt32() int32 {
 	return Default_B_Int32
 }
 
+func init() {
+	proto.RegisterType((*B)(nil), "vanity.B")
+}
 func (m *B) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
@@ -148,8 +156,12 @@ func (m *B) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
+		preIndex := iNdEx
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGogovanity
+			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
@@ -162,6 +174,12 @@ func (m *B) Unmarshal(data []byte) error {
 		}
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: B: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: B: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
@@ -169,6 +187,9 @@ func (m *B) Unmarshal(data []byte) error {
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGogovanity
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -179,10 +200,11 @@ func (m *B) Unmarshal(data []byte) error {
 					break
 				}
 			}
-			postIndex := iNdEx + int(stringLen)
-			if stringLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthGogovanity
 			}
+			postIndex := iNdEx + intStringLen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -195,6 +217,9 @@ func (m *B) Unmarshal(data []byte) error {
 			}
 			m.Int64 = 0
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGogovanity
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -211,6 +236,9 @@ func (m *B) Unmarshal(data []byte) error {
 			}
 			var v int32
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGogovanity
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -223,15 +251,7 @@ func (m *B) Unmarshal(data []byte) error {
 			}
 			m.Int32 = &v
 		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			iNdEx -= sizeOfWire
+			iNdEx = preIndex
 			skippy, err := skipGogovanity(data[iNdEx:])
 			if err != nil {
 				return err
@@ -246,6 +266,9 @@ func (m *B) Unmarshal(data []byte) error {
 		}
 	}
 
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
 	return nil
 }
 func skipGogovanity(data []byte) (n int, err error) {
@@ -254,6 +277,9 @@ func skipGogovanity(data []byte) (n int, err error) {
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowGogovanity
+			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
 			}
@@ -267,7 +293,10 @@ func skipGogovanity(data []byte) (n int, err error) {
 		wireType := int(wire & 0x7)
 		switch wireType {
 		case 0:
-			for {
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowGogovanity
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -283,6 +312,9 @@ func skipGogovanity(data []byte) (n int, err error) {
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowGogovanity
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -303,6 +335,9 @@ func skipGogovanity(data []byte) (n int, err error) {
 				var innerWire uint64
 				var start int = iNdEx
 				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowGogovanity
+					}
 					if iNdEx >= l {
 						return 0, io.ErrUnexpectedEOF
 					}
@@ -338,4 +373,20 @@ func skipGogovanity(data []byte) (n int, err error) {
 
 var (
 	ErrInvalidLengthGogovanity = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowGogovanity   = fmt.Errorf("proto: integer overflow")
 )
+
+var fileDescriptorGogovanity = []byte{
+	// 162 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x12, 0x48, 0xcf, 0x4f, 0xcf,
+	0x2f, 0x4b, 0xcc, 0xcb, 0x2c, 0xa9, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x83, 0xf0,
+	0xa4, 0x74, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0x41, 0x8a, 0xf4,
+	0xc1, 0xd2, 0x49, 0xa5, 0x69, 0x60, 0x1e, 0x98, 0x03, 0x66, 0x41, 0xb4, 0x29, 0x45, 0x72, 0x31,
+	0x3a, 0x09, 0xc9, 0x70, 0xb1, 0x05, 0x97, 0x14, 0x65, 0xe6, 0xa5, 0x4b, 0x30, 0x2a, 0x30, 0x6a,
+	0x70, 0x3a, 0xb1, 0x9c, 0xb8, 0x27, 0xcf, 0x18, 0xc4, 0x56, 0x0c, 0x16, 0x13, 0x92, 0xe2, 0x62,
+	0xf5, 0xcc, 0x2b, 0x31, 0x33, 0x91, 0x60, 0x02, 0x4a, 0x32, 0x83, 0x25, 0x19, 0x82, 0x58, 0x33,
+	0x41, 0x42, 0x50, 0x39, 0x63, 0x23, 0x09, 0x66, 0xa0, 0x1c, 0xab, 0x15, 0x8b, 0xa1, 0x91, 0xb1,
+	0x09, 0x58, 0xce, 0xd8, 0xc8, 0x49, 0xe0, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x40, 0xfc, 0x00, 0x88,
+	0x27, 0x3c, 0x96, 0x63, 0x00, 0x04, 0x00, 0x00, 0xff, 0xff, 0xb0, 0xdf, 0x35, 0x69, 0xb6, 0x00,
+	0x00, 0x00,
+}

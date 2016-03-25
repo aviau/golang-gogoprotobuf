@@ -134,7 +134,10 @@ func (g *grpc) generateService(file *generator.FileDescriptor, service *pb.Servi
 	path := fmt.Sprintf("6,%d", index) // 6 means service.
 
 	origServName := service.GetName()
-	fullServName := file.GetPackage() + "." + origServName
+	fullServName := origServName
+	if pkg := file.GetPackage(); pkg != "" {
+		fullServName = pkg + "." + fullServName
+	}
 	servName := generator.CamelCase(origServName)
 
 	g.P()
@@ -368,9 +371,9 @@ func (g *grpc) generateServerMethod(servName string, method *pb.MethodDescriptor
 	outType := g.typeName(method.GetOutputType())
 
 	if !method.GetServerStreaming() && !method.GetClientStreaming() {
-		g.P("func ", hname, "(srv interface{}, ctx ", contextPkg, ".Context, codec ", grpcPkg, ".Codec, buf []byte) (interface{}, error) {")
+		g.P("func ", hname, "(srv interface{}, ctx ", contextPkg, ".Context, dec func(interface{}) error) (interface{}, error) {")
 		g.P("in := new(", inType, ")")
-		g.P("if err := codec.Unmarshal(buf, in); err != nil { return nil, err }")
+		g.P("if err := dec(in); err != nil { return nil, err }")
 		g.P("out, err := srv.(", servName, "Server).", methName, "(ctx, in)")
 		g.P("if err != nil { return nil, err }")
 		g.P("return out, nil")

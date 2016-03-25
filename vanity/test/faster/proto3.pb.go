@@ -14,21 +14,32 @@ It has these top-level messages:
 package vanity
 
 import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 import io "io"
-import fmt "fmt"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
 
 type Aproto3 struct {
-	B string `protobuf:"bytes,1,opt,proto3" json:"B,omitempty"`
+	B string `protobuf:"bytes,1,opt,name=B,json=b,proto3" json:"B,omitempty"`
 }
 
-func (m *Aproto3) Reset()         { *m = Aproto3{} }
-func (m *Aproto3) String() string { return proto.CompactTextString(m) }
-func (*Aproto3) ProtoMessage()    {}
+func (m *Aproto3) Reset()                    { *m = Aproto3{} }
+func (m *Aproto3) String() string            { return proto.CompactTextString(m) }
+func (*Aproto3) ProtoMessage()               {}
+func (*Aproto3) Descriptor() ([]byte, []int) { return fileDescriptorProto3, []int{0} }
 
+func init() {
+	proto.RegisterType((*Aproto3)(nil), "vanity.Aproto3")
+}
 func (m *Aproto3) Marshal() (data []byte, err error) {
 	size := m.Size()
 	data = make([]byte, size)
@@ -107,8 +118,12 @@ func (m *Aproto3) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
+		preIndex := iNdEx
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowProto3
+			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
@@ -121,6 +136,12 @@ func (m *Aproto3) Unmarshal(data []byte) error {
 		}
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Aproto3: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Aproto3: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
@@ -128,6 +149,9 @@ func (m *Aproto3) Unmarshal(data []byte) error {
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProto3
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -138,25 +162,18 @@ func (m *Aproto3) Unmarshal(data []byte) error {
 					break
 				}
 			}
-			postIndex := iNdEx + int(stringLen)
-			if stringLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthProto3
 			}
+			postIndex := iNdEx + intStringLen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
 			m.B = string(data[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			iNdEx -= sizeOfWire
+			iNdEx = preIndex
 			skippy, err := skipProto3(data[iNdEx:])
 			if err != nil {
 				return err
@@ -171,6 +188,9 @@ func (m *Aproto3) Unmarshal(data []byte) error {
 		}
 	}
 
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
 	return nil
 }
 func skipProto3(data []byte) (n int, err error) {
@@ -179,6 +199,9 @@ func skipProto3(data []byte) (n int, err error) {
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowProto3
+			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
 			}
@@ -192,7 +215,10 @@ func skipProto3(data []byte) (n int, err error) {
 		wireType := int(wire & 0x7)
 		switch wireType {
 		case 0:
-			for {
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowProto3
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -208,6 +234,9 @@ func skipProto3(data []byte) (n int, err error) {
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowProto3
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -228,6 +257,9 @@ func skipProto3(data []byte) (n int, err error) {
 				var innerWire uint64
 				var start int = iNdEx
 				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowProto3
+					}
 					if iNdEx >= l {
 						return 0, io.ErrUnexpectedEOF
 					}
@@ -263,4 +295,15 @@ func skipProto3(data []byte) (n int, err error) {
 
 var (
 	ErrInvalidLengthProto3 = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowProto3   = fmt.Errorf("proto: integer overflow")
 )
+
+var fileDescriptorProto3 = []byte{
+	// 83 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x28, 0xca, 0x2f,
+	0xc9, 0x37, 0xd6, 0x03, 0x53, 0x42, 0x6c, 0x65, 0x89, 0x79, 0x99, 0x25, 0x95, 0x4a, 0xe2, 0x5c,
+	0xec, 0x8e, 0x10, 0x09, 0x21, 0x1e, 0x2e, 0x46, 0x27, 0x09, 0x46, 0x05, 0x46, 0x0d, 0xce, 0x20,
+	0xc6, 0x24, 0x27, 0x81, 0x13, 0x8f, 0xe4, 0x18, 0x2f, 0x00, 0xf1, 0x03, 0x20, 0x9e, 0xf0, 0x58,
+	0x8e, 0x21, 0x89, 0x0d, 0xa2, 0x0e, 0x10, 0x00, 0x00, 0xff, 0xff, 0xdd, 0x77, 0x4a, 0x7c, 0x49,
+	0x00, 0x00, 0x00,
+}
