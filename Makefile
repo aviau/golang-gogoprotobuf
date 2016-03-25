@@ -26,9 +26,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-.PHONY: nuke regenerate tests clean install gofmt vet
+.PHONY: nuke regenerate tests clean install gofmt vet contributors
 
 all: clean install regenerate install tests errcheck vet
+
+buildserverall: clean install regenerate install tests vet
 
 install:
 	go install ./proto
@@ -39,11 +41,8 @@ install:
 	go install ./protoc-gen-gogofast
 	go install ./protoc-gen-gogofaster
 	go install ./protoc-gen-gogoslick
-	go install ./fieldpath/fieldpath-gen
-	go install ./fieldpath
-	go install ./pbpath
-	go install ./protoc-gen-gogo/version/protoc-min-version
-	go install ./protoc-gen-gogo/protoc-gen-combo
+	go install ./protoc-min-version
+	go install ./protoc-gen-combo
 
 clean:
 	go clean ./...
@@ -57,8 +56,8 @@ gofmt:
 regenerate:
 	make -C protoc-gen-gogo/descriptor regenerate
 	make -C protoc-gen-gogo/plugin regenerate
+	make -C protoc-gen-gogo/testdata regenerate
 	make -C gogoproto regenerate
-	make -C fieldpath/fieldpath-gen regenerate
 	make -C proto/testdata regenerate
 	make -C jsonpb/jsonpb_test_proto regenerate
 	make -C test regenerate
@@ -71,9 +70,12 @@ regenerate:
 	make -C test/moredefaults regenerate
 	make -C test/issue8 regenerate
 	make -C test/enumprefix regenerate
+	make -C test/enumcustomname regenerate
 	make -C test/packed regenerate
+	make -C test/protosize regenerate
 	make -C test/tags regenerate
 	make -C test/oneof regenerate
+	make -C test/oneof3 regenerate
 	make -C test/theproto3 regenerate
 	make -C test/mapsproto2 regenerate
 	make -C test/issue42order regenerate
@@ -82,11 +84,16 @@ regenerate:
 	make -C test/custombytesnonstruct regenerate
 	make -C test/required regenerate
 	make -C test/casttype regenerate
+	make -C test/castvalue regenerate
 	make -C vanity/test regenerate
 	make -C test/sizeunderscore regenerate
 	make -C test/issue34 regenerate
 	make -C test/empty-issue70 regenerate
 	make -C test/indeximport-issue72 regenerate
+	make -C test/fuzztests regenerate
+	make -C test/oneofembed regenerate
+	make -C test/asymetric-issue125 regenerate
+	make -C test/filedotname regenerate
 	make gofmt
 
 tests:
@@ -95,10 +102,7 @@ tests:
 
 vet:
 	go vet ./...
-
-# See https://github.com/golang/go/issues/11843
-vetshadow:
-	! go tool vet --shadow . 2>&1 | grep -vE 'declaration of err shadows declaration at (proto/text.go:535|proto/text.go:570|protoc-gen-gogo/main.go:84)'
+	go tool vet --shadow .
 
 errcheck:
 	go get -u github.com/kisielk/errcheck
@@ -106,7 +110,7 @@ errcheck:
 
 drone:
 	sudo apt-get install protobuf-compiler
-	(cd $(GOPATH)/src/github.com/gogo/protobuf && make all)
+	(cd $(GOPATH)/src/github.com/gogo/protobuf && make buildserverall)
 
 testall:
 	make -C protoc-gen-gogo/testdata test
@@ -116,4 +120,8 @@ testall:
 bench:
 	(cd test/mixbench && go build .)
 	(cd test/mixbench && ./mixbench)
+
+contributors:
+	git log --format='%aN <%aE>' | sort -fu > CONTRIBUTORS
+
 

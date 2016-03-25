@@ -66,22 +66,22 @@
 		Unrecognized
 		UnrecognizedWithInner
 		UnrecognizedWithEmbed
+		Node
 */
 package test
 
 import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
 import math "math"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/gogoproto"
 
 import github_com_gogo_protobuf_test_custom "github.com/gogo/protobuf/test/custom"
 import github_com_gogo_protobuf_test_custom_dash_type "github.com/gogo/protobuf/test/custom-dash-type"
 
-import google_protobuf "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+import "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
 
 import strconv "strconv"
 
-import fmt "fmt"
 import bytes "bytes"
 
 import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
@@ -94,7 +94,12 @@ import unsafe "unsafe"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
 
 type TheTestEnum int32
 
@@ -131,6 +136,7 @@ func (x *TheTestEnum) UnmarshalJSON(data []byte) error {
 	*x = TheTestEnum(value)
 	return nil
 }
+func (TheTestEnum) EnumDescriptor() ([]byte, []int) { return fileDescriptorThetest, []int{0} }
 
 type AnotherTestEnum int32
 
@@ -164,6 +170,79 @@ func (x *AnotherTestEnum) UnmarshalJSON(data []byte) error {
 	*x = AnotherTestEnum(value)
 	return nil
 }
+func (AnotherTestEnum) EnumDescriptor() ([]byte, []int) { return fileDescriptorThetest, []int{1} }
+
+// YetAnotherTestEnum is used to test cross-package import of custom name
+// fields and default resolution.
+type YetAnotherTestEnum int32
+
+const (
+	AA          YetAnotherTestEnum = 0
+	BetterYetBB YetAnotherTestEnum = 1
+)
+
+var YetAnotherTestEnum_name = map[int32]string{
+	0: "AA",
+	1: "BB",
+}
+var YetAnotherTestEnum_value = map[string]int32{
+	"AA": 0,
+	"BB": 1,
+}
+
+func (x YetAnotherTestEnum) Enum() *YetAnotherTestEnum {
+	p := new(YetAnotherTestEnum)
+	*p = x
+	return p
+}
+func (x YetAnotherTestEnum) MarshalJSON() ([]byte, error) {
+	return proto.MarshalJSONEnum(YetAnotherTestEnum_name, int32(x))
+}
+func (x *YetAnotherTestEnum) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(YetAnotherTestEnum_value, data, "YetAnotherTestEnum")
+	if err != nil {
+		return err
+	}
+	*x = YetAnotherTestEnum(value)
+	return nil
+}
+func (YetAnotherTestEnum) EnumDescriptor() ([]byte, []int) { return fileDescriptorThetest, []int{2} }
+
+// YetAnotherTestEnum is used to test cross-package import of custom name
+// fields and default resolution.
+type YetYetAnotherTestEnum int32
+
+const (
+	YetYetAnotherTestEnum_CC          YetYetAnotherTestEnum = 0
+	YetYetAnotherTestEnum_BetterYetDD YetYetAnotherTestEnum = 1
+)
+
+var YetYetAnotherTestEnum_name = map[int32]string{
+	0: "CC",
+	1: "DD",
+}
+var YetYetAnotherTestEnum_value = map[string]int32{
+	"CC": 0,
+	"DD": 1,
+}
+
+func (x YetYetAnotherTestEnum) Enum() *YetYetAnotherTestEnum {
+	p := new(YetYetAnotherTestEnum)
+	*p = x
+	return p
+}
+func (x YetYetAnotherTestEnum) MarshalJSON() ([]byte, error) {
+	return proto.MarshalJSONEnum(YetYetAnotherTestEnum_name, int32(x))
+}
+func (x *YetYetAnotherTestEnum) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(YetYetAnotherTestEnum_value, data, "YetYetAnotherTestEnum")
+	if err != nil {
+		return err
+	}
+	*x = YetYetAnotherTestEnum(value)
+	return nil
+}
+func (YetYetAnotherTestEnum) EnumDescriptor() ([]byte, []int) { return fileDescriptorThetest, []int{3} }
 
 type NestedDefinition_NestedEnum int32
 
@@ -194,457 +273,507 @@ func (x *NestedDefinition_NestedEnum) UnmarshalJSON(data []byte) error {
 	*x = NestedDefinition_NestedEnum(value)
 	return nil
 }
+func (NestedDefinition_NestedEnum) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{42, 0}
+}
 
 type NidOptNative struct {
-	Field1           float64 `protobuf:"fixed64,1,opt" json:"Field1"`
-	Field2           float32 `protobuf:"fixed32,2,opt" json:"Field2"`
-	Field3           int32   `protobuf:"varint,3,opt" json:"Field3"`
-	Field4           int64   `protobuf:"varint,4,opt" json:"Field4"`
-	Field5           uint32  `protobuf:"varint,5,opt" json:"Field5"`
-	Field6           uint64  `protobuf:"varint,6,opt" json:"Field6"`
-	Field7           int32   `protobuf:"zigzag32,7,opt" json:"Field7"`
-	Field8           int64   `protobuf:"zigzag64,8,opt" json:"Field8"`
-	Field9           uint32  `protobuf:"fixed32,9,opt" json:"Field9"`
-	Field10          int32   `protobuf:"fixed32,10,opt" json:"Field10"`
-	Field11          uint64  `protobuf:"fixed64,11,opt" json:"Field11"`
-	Field12          int64   `protobuf:"fixed64,12,opt" json:"Field12"`
-	Field13          bool    `protobuf:"varint,13,opt" json:"Field13"`
-	Field14          string  `protobuf:"bytes,14,opt" json:"Field14"`
-	Field15          []byte  `protobuf:"bytes,15,opt" json:"Field15"`
+	Field1           float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1"`
+	Field2           float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2"`
+	Field3           int32   `protobuf:"varint,3,opt,name=Field3,json=field3" json:"Field3"`
+	Field4           int64   `protobuf:"varint,4,opt,name=Field4,json=field4" json:"Field4"`
+	Field5           uint32  `protobuf:"varint,5,opt,name=Field5,json=field5" json:"Field5"`
+	Field6           uint64  `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6"`
+	Field7           int32   `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7"`
+	Field8           int64   `protobuf:"zigzag64,8,opt,name=Field8,json=field8" json:"Field8"`
+	Field9           uint32  `protobuf:"fixed32,9,opt,name=Field9,json=field9" json:"Field9"`
+	Field10          int32   `protobuf:"fixed32,10,opt,name=Field10,json=field10" json:"Field10"`
+	Field11          uint64  `protobuf:"fixed64,11,opt,name=Field11,json=field11" json:"Field11"`
+	Field12          int64   `protobuf:"fixed64,12,opt,name=Field12,json=field12" json:"Field12"`
+	Field13          bool    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13"`
+	Field14          string  `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14"`
+	Field15          []byte  `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *NidOptNative) Reset()      { *m = NidOptNative{} }
-func (*NidOptNative) ProtoMessage() {}
+func (m *NidOptNative) Reset()                    { *m = NidOptNative{} }
+func (*NidOptNative) ProtoMessage()               {}
+func (*NidOptNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{0} }
 
 type NinOptNative struct {
-	Field1           *float64 `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	Field2           *float32 `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	Field3           *int32   `protobuf:"varint,3,opt" json:"Field3,omitempty"`
-	Field4           *int64   `protobuf:"varint,4,opt" json:"Field4,omitempty"`
-	Field5           *uint32  `protobuf:"varint,5,opt" json:"Field5,omitempty"`
-	Field6           *uint64  `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	Field7           *int32   `protobuf:"zigzag32,7,opt" json:"Field7,omitempty"`
-	Field8           *int64   `protobuf:"zigzag64,8,opt" json:"Field8,omitempty"`
-	Field9           *uint32  `protobuf:"fixed32,9,opt" json:"Field9,omitempty"`
-	Field10          *int32   `protobuf:"fixed32,10,opt" json:"Field10,omitempty"`
-	Field11          *uint64  `protobuf:"fixed64,11,opt" json:"Field11,omitempty"`
-	Field12          *int64   `protobuf:"fixed64,12,opt" json:"Field12,omitempty"`
-	Field13          *bool    `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	Field14          *string  `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	Field15          []byte   `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	Field1           *float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           *float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           *int32   `protobuf:"varint,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           *int64   `protobuf:"varint,4,opt,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           *uint32  `protobuf:"varint,5,opt,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           *uint64  `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           *int32   `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           *int64   `protobuf:"zigzag64,8,opt,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field9           *uint32  `protobuf:"fixed32,9,opt,name=Field9,json=field9" json:"Field9,omitempty"`
+	Field10          *int32   `protobuf:"fixed32,10,opt,name=Field10,json=field10" json:"Field10,omitempty"`
+	Field11          *uint64  `protobuf:"fixed64,11,opt,name=Field11,json=field11" json:"Field11,omitempty"`
+	Field12          *int64   `protobuf:"fixed64,12,opt,name=Field12,json=field12" json:"Field12,omitempty"`
+	Field13          *bool    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          *string  `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          []byte   `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *NinOptNative) Reset()      { *m = NinOptNative{} }
-func (*NinOptNative) ProtoMessage() {}
+func (m *NinOptNative) Reset()                    { *m = NinOptNative{} }
+func (*NinOptNative) ProtoMessage()               {}
+func (*NinOptNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{1} }
 
 type NidRepNative struct {
-	Field1           []float64 `protobuf:"fixed64,1,rep" json:"Field1,omitempty"`
-	Field2           []float32 `protobuf:"fixed32,2,rep" json:"Field2,omitempty"`
-	Field3           []int32   `protobuf:"varint,3,rep" json:"Field3,omitempty"`
-	Field4           []int64   `protobuf:"varint,4,rep" json:"Field4,omitempty"`
-	Field5           []uint32  `protobuf:"varint,5,rep" json:"Field5,omitempty"`
-	Field6           []uint64  `protobuf:"varint,6,rep" json:"Field6,omitempty"`
-	Field7           []int32   `protobuf:"zigzag32,7,rep" json:"Field7,omitempty"`
-	Field8           []int64   `protobuf:"zigzag64,8,rep" json:"Field8,omitempty"`
-	Field9           []uint32  `protobuf:"fixed32,9,rep" json:"Field9,omitempty"`
-	Field10          []int32   `protobuf:"fixed32,10,rep" json:"Field10,omitempty"`
-	Field11          []uint64  `protobuf:"fixed64,11,rep" json:"Field11,omitempty"`
-	Field12          []int64   `protobuf:"fixed64,12,rep" json:"Field12,omitempty"`
-	Field13          []bool    `protobuf:"varint,13,rep" json:"Field13,omitempty"`
-	Field14          []string  `protobuf:"bytes,14,rep" json:"Field14,omitempty"`
-	Field15          [][]byte  `protobuf:"bytes,15,rep" json:"Field15,omitempty"`
+	Field1           []float64 `protobuf:"fixed64,1,rep,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32 `protobuf:"fixed32,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []int32   `protobuf:"varint,3,rep,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           []int64   `protobuf:"varint,4,rep,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           []uint32  `protobuf:"varint,5,rep,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           []uint64  `protobuf:"varint,6,rep,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32   `protobuf:"zigzag32,7,rep,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []int64   `protobuf:"zigzag64,8,rep,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field9           []uint32  `protobuf:"fixed32,9,rep,name=Field9,json=field9" json:"Field9,omitempty"`
+	Field10          []int32   `protobuf:"fixed32,10,rep,name=Field10,json=field10" json:"Field10,omitempty"`
+	Field11          []uint64  `protobuf:"fixed64,11,rep,name=Field11,json=field11" json:"Field11,omitempty"`
+	Field12          []int64   `protobuf:"fixed64,12,rep,name=Field12,json=field12" json:"Field12,omitempty"`
+	Field13          []bool    `protobuf:"varint,13,rep,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          []string  `protobuf:"bytes,14,rep,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          [][]byte  `protobuf:"bytes,15,rep,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *NidRepNative) Reset()      { *m = NidRepNative{} }
-func (*NidRepNative) ProtoMessage() {}
+func (m *NidRepNative) Reset()                    { *m = NidRepNative{} }
+func (*NidRepNative) ProtoMessage()               {}
+func (*NidRepNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{2} }
 
 type NinRepNative struct {
-	Field1           []float64 `protobuf:"fixed64,1,rep" json:"Field1,omitempty"`
-	Field2           []float32 `protobuf:"fixed32,2,rep" json:"Field2,omitempty"`
-	Field3           []int32   `protobuf:"varint,3,rep" json:"Field3,omitempty"`
-	Field4           []int64   `protobuf:"varint,4,rep" json:"Field4,omitempty"`
-	Field5           []uint32  `protobuf:"varint,5,rep" json:"Field5,omitempty"`
-	Field6           []uint64  `protobuf:"varint,6,rep" json:"Field6,omitempty"`
-	Field7           []int32   `protobuf:"zigzag32,7,rep" json:"Field7,omitempty"`
-	Field8           []int64   `protobuf:"zigzag64,8,rep" json:"Field8,omitempty"`
-	Field9           []uint32  `protobuf:"fixed32,9,rep" json:"Field9,omitempty"`
-	Field10          []int32   `protobuf:"fixed32,10,rep" json:"Field10,omitempty"`
-	Field11          []uint64  `protobuf:"fixed64,11,rep" json:"Field11,omitempty"`
-	Field12          []int64   `protobuf:"fixed64,12,rep" json:"Field12,omitempty"`
-	Field13          []bool    `protobuf:"varint,13,rep" json:"Field13,omitempty"`
-	Field14          []string  `protobuf:"bytes,14,rep" json:"Field14,omitempty"`
-	Field15          [][]byte  `protobuf:"bytes,15,rep" json:"Field15,omitempty"`
+	Field1           []float64 `protobuf:"fixed64,1,rep,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32 `protobuf:"fixed32,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []int32   `protobuf:"varint,3,rep,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           []int64   `protobuf:"varint,4,rep,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           []uint32  `protobuf:"varint,5,rep,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           []uint64  `protobuf:"varint,6,rep,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32   `protobuf:"zigzag32,7,rep,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []int64   `protobuf:"zigzag64,8,rep,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field9           []uint32  `protobuf:"fixed32,9,rep,name=Field9,json=field9" json:"Field9,omitempty"`
+	Field10          []int32   `protobuf:"fixed32,10,rep,name=Field10,json=field10" json:"Field10,omitempty"`
+	Field11          []uint64  `protobuf:"fixed64,11,rep,name=Field11,json=field11" json:"Field11,omitempty"`
+	Field12          []int64   `protobuf:"fixed64,12,rep,name=Field12,json=field12" json:"Field12,omitempty"`
+	Field13          []bool    `protobuf:"varint,13,rep,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          []string  `protobuf:"bytes,14,rep,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          [][]byte  `protobuf:"bytes,15,rep,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *NinRepNative) Reset()      { *m = NinRepNative{} }
-func (*NinRepNative) ProtoMessage() {}
+func (m *NinRepNative) Reset()                    { *m = NinRepNative{} }
+func (*NinRepNative) ProtoMessage()               {}
+func (*NinRepNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{3} }
 
 type NidRepPackedNative struct {
-	Field1           []float64 `protobuf:"fixed64,1,rep,packed" json:"Field1,omitempty"`
-	Field2           []float32 `protobuf:"fixed32,2,rep,packed" json:"Field2,omitempty"`
-	Field3           []int32   `protobuf:"varint,3,rep,packed" json:"Field3,omitempty"`
-	Field4           []int64   `protobuf:"varint,4,rep,packed" json:"Field4,omitempty"`
-	Field5           []uint32  `protobuf:"varint,5,rep,packed" json:"Field5,omitempty"`
-	Field6           []uint64  `protobuf:"varint,6,rep,packed" json:"Field6,omitempty"`
-	Field7           []int32   `protobuf:"zigzag32,7,rep,packed" json:"Field7,omitempty"`
-	Field8           []int64   `protobuf:"zigzag64,8,rep,packed" json:"Field8,omitempty"`
-	Field9           []uint32  `protobuf:"fixed32,9,rep,packed" json:"Field9,omitempty"`
-	Field10          []int32   `protobuf:"fixed32,10,rep,packed" json:"Field10,omitempty"`
-	Field11          []uint64  `protobuf:"fixed64,11,rep,packed" json:"Field11,omitempty"`
-	Field12          []int64   `protobuf:"fixed64,12,rep,packed" json:"Field12,omitempty"`
-	Field13          []bool    `protobuf:"varint,13,rep,packed" json:"Field13,omitempty"`
+	Field1           []float64 `protobuf:"fixed64,1,rep,packed,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32 `protobuf:"fixed32,2,rep,packed,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []int32   `protobuf:"varint,3,rep,packed,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           []int64   `protobuf:"varint,4,rep,packed,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           []uint32  `protobuf:"varint,5,rep,packed,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           []uint64  `protobuf:"varint,6,rep,packed,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32   `protobuf:"zigzag32,7,rep,packed,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []int64   `protobuf:"zigzag64,8,rep,packed,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field9           []uint32  `protobuf:"fixed32,9,rep,packed,name=Field9,json=field9" json:"Field9,omitempty"`
+	Field10          []int32   `protobuf:"fixed32,10,rep,packed,name=Field10,json=field10" json:"Field10,omitempty"`
+	Field11          []uint64  `protobuf:"fixed64,11,rep,packed,name=Field11,json=field11" json:"Field11,omitempty"`
+	Field12          []int64   `protobuf:"fixed64,12,rep,packed,name=Field12,json=field12" json:"Field12,omitempty"`
+	Field13          []bool    `protobuf:"varint,13,rep,packed,name=Field13,json=field13" json:"Field13,omitempty"`
 	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *NidRepPackedNative) Reset()      { *m = NidRepPackedNative{} }
-func (*NidRepPackedNative) ProtoMessage() {}
+func (m *NidRepPackedNative) Reset()                    { *m = NidRepPackedNative{} }
+func (*NidRepPackedNative) ProtoMessage()               {}
+func (*NidRepPackedNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{4} }
 
 type NinRepPackedNative struct {
-	Field1           []float64 `protobuf:"fixed64,1,rep,packed" json:"Field1,omitempty"`
-	Field2           []float32 `protobuf:"fixed32,2,rep,packed" json:"Field2,omitempty"`
-	Field3           []int32   `protobuf:"varint,3,rep,packed" json:"Field3,omitempty"`
-	Field4           []int64   `protobuf:"varint,4,rep,packed" json:"Field4,omitempty"`
-	Field5           []uint32  `protobuf:"varint,5,rep,packed" json:"Field5,omitempty"`
-	Field6           []uint64  `protobuf:"varint,6,rep,packed" json:"Field6,omitempty"`
-	Field7           []int32   `protobuf:"zigzag32,7,rep,packed" json:"Field7,omitempty"`
-	Field8           []int64   `protobuf:"zigzag64,8,rep,packed" json:"Field8,omitempty"`
-	Field9           []uint32  `protobuf:"fixed32,9,rep,packed" json:"Field9,omitempty"`
-	Field10          []int32   `protobuf:"fixed32,10,rep,packed" json:"Field10,omitempty"`
-	Field11          []uint64  `protobuf:"fixed64,11,rep,packed" json:"Field11,omitempty"`
-	Field12          []int64   `protobuf:"fixed64,12,rep,packed" json:"Field12,omitempty"`
-	Field13          []bool    `protobuf:"varint,13,rep,packed" json:"Field13,omitempty"`
+	Field1           []float64 `protobuf:"fixed64,1,rep,packed,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32 `protobuf:"fixed32,2,rep,packed,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []int32   `protobuf:"varint,3,rep,packed,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           []int64   `protobuf:"varint,4,rep,packed,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           []uint32  `protobuf:"varint,5,rep,packed,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           []uint64  `protobuf:"varint,6,rep,packed,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32   `protobuf:"zigzag32,7,rep,packed,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []int64   `protobuf:"zigzag64,8,rep,packed,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field9           []uint32  `protobuf:"fixed32,9,rep,packed,name=Field9,json=field9" json:"Field9,omitempty"`
+	Field10          []int32   `protobuf:"fixed32,10,rep,packed,name=Field10,json=field10" json:"Field10,omitempty"`
+	Field11          []uint64  `protobuf:"fixed64,11,rep,packed,name=Field11,json=field11" json:"Field11,omitempty"`
+	Field12          []int64   `protobuf:"fixed64,12,rep,packed,name=Field12,json=field12" json:"Field12,omitempty"`
+	Field13          []bool    `protobuf:"varint,13,rep,packed,name=Field13,json=field13" json:"Field13,omitempty"`
 	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *NinRepPackedNative) Reset()      { *m = NinRepPackedNative{} }
-func (*NinRepPackedNative) ProtoMessage() {}
+func (m *NinRepPackedNative) Reset()                    { *m = NinRepPackedNative{} }
+func (*NinRepPackedNative) ProtoMessage()               {}
+func (*NinRepPackedNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{5} }
 
 type NidOptStruct struct {
-	Field1           float64      `protobuf:"fixed64,1,opt" json:"Field1"`
-	Field2           float32      `protobuf:"fixed32,2,opt" json:"Field2"`
-	Field3           NidOptNative `protobuf:"bytes,3,opt" json:"Field3"`
-	Field4           NinOptNative `protobuf:"bytes,4,opt" json:"Field4"`
-	Field6           uint64       `protobuf:"varint,6,opt" json:"Field6"`
-	Field7           int32        `protobuf:"zigzag32,7,opt" json:"Field7"`
-	Field8           NidOptNative `protobuf:"bytes,8,opt" json:"Field8"`
-	Field13          bool         `protobuf:"varint,13,opt" json:"Field13"`
-	Field14          string       `protobuf:"bytes,14,opt" json:"Field14"`
-	Field15          []byte       `protobuf:"bytes,15,opt" json:"Field15"`
+	Field1           float64      `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1"`
+	Field2           float32      `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2"`
+	Field3           NidOptNative `protobuf:"bytes,3,opt,name=Field3,json=field3" json:"Field3"`
+	Field4           NinOptNative `protobuf:"bytes,4,opt,name=Field4,json=field4" json:"Field4"`
+	Field6           uint64       `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6"`
+	Field7           int32        `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7"`
+	Field8           NidOptNative `protobuf:"bytes,8,opt,name=Field8,json=field8" json:"Field8"`
+	Field13          bool         `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13"`
+	Field14          string       `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14"`
+	Field15          []byte       `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15"`
 	XXX_unrecognized []byte       `json:"-"`
 }
 
-func (m *NidOptStruct) Reset()      { *m = NidOptStruct{} }
-func (*NidOptStruct) ProtoMessage() {}
+func (m *NidOptStruct) Reset()                    { *m = NidOptStruct{} }
+func (*NidOptStruct) ProtoMessage()               {}
+func (*NidOptStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{6} }
 
 type NinOptStruct struct {
-	Field1           *float64      `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	Field2           *float32      `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	Field3           *NidOptNative `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
-	Field4           *NinOptNative `protobuf:"bytes,4,opt" json:"Field4,omitempty"`
-	Field6           *uint64       `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	Field7           *int32        `protobuf:"zigzag32,7,opt" json:"Field7,omitempty"`
-	Field8           *NidOptNative `protobuf:"bytes,8,opt" json:"Field8,omitempty"`
-	Field13          *bool         `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	Field14          *string       `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	Field15          []byte        `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	Field1           *float64      `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           *float32      `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           *NidOptNative `protobuf:"bytes,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           *NinOptNative `protobuf:"bytes,4,opt,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field6           *uint64       `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           *int32        `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           *NidOptNative `protobuf:"bytes,8,opt,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field13          *bool         `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          *string       `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          []byte        `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
-func (m *NinOptStruct) Reset()      { *m = NinOptStruct{} }
-func (*NinOptStruct) ProtoMessage() {}
+func (m *NinOptStruct) Reset()                    { *m = NinOptStruct{} }
+func (*NinOptStruct) ProtoMessage()               {}
+func (*NinOptStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{7} }
 
 type NidRepStruct struct {
-	Field1           []float64      `protobuf:"fixed64,1,rep" json:"Field1,omitempty"`
-	Field2           []float32      `protobuf:"fixed32,2,rep" json:"Field2,omitempty"`
-	Field3           []NidOptNative `protobuf:"bytes,3,rep" json:"Field3"`
-	Field4           []NinOptNative `protobuf:"bytes,4,rep" json:"Field4"`
-	Field6           []uint64       `protobuf:"varint,6,rep" json:"Field6,omitempty"`
-	Field7           []int32        `protobuf:"zigzag32,7,rep" json:"Field7,omitempty"`
-	Field8           []NidOptNative `protobuf:"bytes,8,rep" json:"Field8"`
-	Field13          []bool         `protobuf:"varint,13,rep" json:"Field13,omitempty"`
-	Field14          []string       `protobuf:"bytes,14,rep" json:"Field14,omitempty"`
-	Field15          [][]byte       `protobuf:"bytes,15,rep" json:"Field15,omitempty"`
+	Field1           []float64      `protobuf:"fixed64,1,rep,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32      `protobuf:"fixed32,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []NidOptNative `protobuf:"bytes,3,rep,name=Field3,json=field3" json:"Field3"`
+	Field4           []NinOptNative `protobuf:"bytes,4,rep,name=Field4,json=field4" json:"Field4"`
+	Field6           []uint64       `protobuf:"varint,6,rep,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32        `protobuf:"zigzag32,7,rep,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []NidOptNative `protobuf:"bytes,8,rep,name=Field8,json=field8" json:"Field8"`
+	Field13          []bool         `protobuf:"varint,13,rep,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          []string       `protobuf:"bytes,14,rep,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          [][]byte       `protobuf:"bytes,15,rep,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *NidRepStruct) Reset()      { *m = NidRepStruct{} }
-func (*NidRepStruct) ProtoMessage() {}
+func (m *NidRepStruct) Reset()                    { *m = NidRepStruct{} }
+func (*NidRepStruct) ProtoMessage()               {}
+func (*NidRepStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{8} }
 
 type NinRepStruct struct {
-	Field1           []float64       `protobuf:"fixed64,1,rep" json:"Field1,omitempty"`
-	Field2           []float32       `protobuf:"fixed32,2,rep" json:"Field2,omitempty"`
-	Field3           []*NidOptNative `protobuf:"bytes,3,rep" json:"Field3,omitempty"`
-	Field4           []*NinOptNative `protobuf:"bytes,4,rep" json:"Field4,omitempty"`
-	Field6           []uint64        `protobuf:"varint,6,rep" json:"Field6,omitempty"`
-	Field7           []int32         `protobuf:"zigzag32,7,rep" json:"Field7,omitempty"`
-	Field8           []*NidOptNative `protobuf:"bytes,8,rep" json:"Field8,omitempty"`
-	Field13          []bool          `protobuf:"varint,13,rep" json:"Field13,omitempty"`
-	Field14          []string        `protobuf:"bytes,14,rep" json:"Field14,omitempty"`
-	Field15          [][]byte        `protobuf:"bytes,15,rep" json:"Field15,omitempty"`
+	Field1           []float64       `protobuf:"fixed64,1,rep,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []float32       `protobuf:"fixed32,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           []*NidOptNative `protobuf:"bytes,3,rep,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           []*NinOptNative `protobuf:"bytes,4,rep,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field6           []uint64        `protobuf:"varint,6,rep,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           []int32         `protobuf:"zigzag32,7,rep,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field8           []*NidOptNative `protobuf:"bytes,8,rep,name=Field8,json=field8" json:"Field8,omitempty"`
+	Field13          []bool          `protobuf:"varint,13,rep,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          []string        `protobuf:"bytes,14,rep,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          [][]byte        `protobuf:"bytes,15,rep,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte          `json:"-"`
 }
 
-func (m *NinRepStruct) Reset()      { *m = NinRepStruct{} }
-func (*NinRepStruct) ProtoMessage() {}
+func (m *NinRepStruct) Reset()                    { *m = NinRepStruct{} }
+func (*NinRepStruct) ProtoMessage()               {}
+func (*NinRepStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{9} }
 
 type NidEmbeddedStruct struct {
-	*NidOptNative    `protobuf:"bytes,1,opt,embedded=Field1" json:"Field1,omitempty"`
-	Field200         NidOptNative `protobuf:"bytes,200,opt" json:"Field200"`
-	Field210         bool         `protobuf:"varint,210,opt" json:"Field210"`
+	*NidOptNative    `protobuf:"bytes,1,opt,name=Field1,json=field1,embedded=Field1" json:"Field1,omitempty"`
+	Field200         NidOptNative `protobuf:"bytes,200,opt,name=Field200,json=field200" json:"Field200"`
+	Field210         bool         `protobuf:"varint,210,opt,name=Field210,json=field210" json:"Field210"`
 	XXX_unrecognized []byte       `json:"-"`
 }
 
-func (m *NidEmbeddedStruct) Reset()      { *m = NidEmbeddedStruct{} }
-func (*NidEmbeddedStruct) ProtoMessage() {}
+func (m *NidEmbeddedStruct) Reset()                    { *m = NidEmbeddedStruct{} }
+func (*NidEmbeddedStruct) ProtoMessage()               {}
+func (*NidEmbeddedStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{10} }
 
 type NinEmbeddedStruct struct {
-	*NidOptNative    `protobuf:"bytes,1,opt,embedded=Field1" json:"Field1,omitempty"`
-	Field200         *NidOptNative `protobuf:"bytes,200,opt" json:"Field200,omitempty"`
-	Field210         *bool         `protobuf:"varint,210,opt" json:"Field210,omitempty"`
+	*NidOptNative    `protobuf:"bytes,1,opt,name=Field1,json=field1,embedded=Field1" json:"Field1,omitempty"`
+	Field200         *NidOptNative `protobuf:"bytes,200,opt,name=Field200,json=field200" json:"Field200,omitempty"`
+	Field210         *bool         `protobuf:"varint,210,opt,name=Field210,json=field210" json:"Field210,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
-func (m *NinEmbeddedStruct) Reset()      { *m = NinEmbeddedStruct{} }
-func (*NinEmbeddedStruct) ProtoMessage() {}
+func (m *NinEmbeddedStruct) Reset()                    { *m = NinEmbeddedStruct{} }
+func (*NinEmbeddedStruct) ProtoMessage()               {}
+func (*NinEmbeddedStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{11} }
 
 type NidNestedStruct struct {
-	Field1           NidOptStruct   `protobuf:"bytes,1,opt" json:"Field1"`
-	Field2           []NidRepStruct `protobuf:"bytes,2,rep" json:"Field2"`
+	Field1           NidOptStruct   `protobuf:"bytes,1,opt,name=Field1,json=field1" json:"Field1"`
+	Field2           []NidRepStruct `protobuf:"bytes,2,rep,name=Field2,json=field2" json:"Field2"`
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *NidNestedStruct) Reset()      { *m = NidNestedStruct{} }
-func (*NidNestedStruct) ProtoMessage() {}
+func (m *NidNestedStruct) Reset()                    { *m = NidNestedStruct{} }
+func (*NidNestedStruct) ProtoMessage()               {}
+func (*NidNestedStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{12} }
 
 type NinNestedStruct struct {
-	Field1           *NinOptStruct   `protobuf:"bytes,1,opt" json:"Field1,omitempty"`
-	Field2           []*NinRepStruct `protobuf:"bytes,2,rep" json:"Field2,omitempty"`
+	Field1           *NinOptStruct   `protobuf:"bytes,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           []*NinRepStruct `protobuf:"bytes,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
 	XXX_unrecognized []byte          `json:"-"`
 }
 
-func (m *NinNestedStruct) Reset()      { *m = NinNestedStruct{} }
-func (*NinNestedStruct) ProtoMessage() {}
+func (m *NinNestedStruct) Reset()                    { *m = NinNestedStruct{} }
+func (*NinNestedStruct) ProtoMessage()               {}
+func (*NinNestedStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{13} }
 
 type NidOptCustom struct {
-	Id               Uuid                                         `protobuf:"bytes,1,opt,customtype=Uuid" json:"Id"`
-	Value            github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,opt,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value"`
+	Id               Uuid                                         `protobuf:"bytes,1,opt,name=Id,json=id,customtype=Uuid" json:"Id"`
+	Value            github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,opt,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value"`
 	XXX_unrecognized []byte                                       `json:"-"`
 }
 
-func (m *NidOptCustom) Reset()      { *m = NidOptCustom{} }
-func (*NidOptCustom) ProtoMessage() {}
+func (m *NidOptCustom) Reset()                    { *m = NidOptCustom{} }
+func (*NidOptCustom) ProtoMessage()               {}
+func (*NidOptCustom) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{14} }
 
 type CustomDash struct {
-	Value            *github_com_gogo_protobuf_test_custom_dash_type.Bytes `protobuf:"bytes,1,opt,customtype=github.com/gogo/protobuf/test/custom-dash-type.Bytes" json:"Value,omitempty"`
+	Value            *github_com_gogo_protobuf_test_custom_dash_type.Bytes `protobuf:"bytes,1,opt,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom-dash-type.Bytes" json:"Value,omitempty"`
 	XXX_unrecognized []byte                                                `json:"-"`
 }
 
-func (m *CustomDash) Reset()      { *m = CustomDash{} }
-func (*CustomDash) ProtoMessage() {}
+func (m *CustomDash) Reset()                    { *m = CustomDash{} }
+func (*CustomDash) ProtoMessage()               {}
+func (*CustomDash) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{15} }
 
 type NinOptCustom struct {
-	Id               *Uuid                                         `protobuf:"bytes,1,opt,customtype=Uuid" json:"Id,omitempty"`
-	Value            *github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,opt,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
+	Id               *Uuid                                         `protobuf:"bytes,1,opt,name=Id,json=id,customtype=Uuid" json:"Id,omitempty"`
+	Value            *github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,opt,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
 	XXX_unrecognized []byte                                        `json:"-"`
 }
 
-func (m *NinOptCustom) Reset()      { *m = NinOptCustom{} }
-func (*NinOptCustom) ProtoMessage() {}
+func (m *NinOptCustom) Reset()                    { *m = NinOptCustom{} }
+func (*NinOptCustom) ProtoMessage()               {}
+func (*NinOptCustom) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{16} }
 
 type NidRepCustom struct {
-	Id               []Uuid                                         `protobuf:"bytes,1,rep,customtype=Uuid" json:"Id"`
-	Value            []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,rep,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value"`
+	Id               []Uuid                                         `protobuf:"bytes,1,rep,name=Id,json=id,customtype=Uuid" json:"Id"`
+	Value            []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,rep,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value"`
 	XXX_unrecognized []byte                                         `json:"-"`
 }
 
-func (m *NidRepCustom) Reset()      { *m = NidRepCustom{} }
-func (*NidRepCustom) ProtoMessage() {}
+func (m *NidRepCustom) Reset()                    { *m = NidRepCustom{} }
+func (*NidRepCustom) ProtoMessage()               {}
+func (*NidRepCustom) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{17} }
 
 type NinRepCustom struct {
-	Id               []Uuid                                         `protobuf:"bytes,1,rep,customtype=Uuid" json:"Id,omitempty"`
-	Value            []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,rep,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
+	Id               []Uuid                                         `protobuf:"bytes,1,rep,name=Id,json=id,customtype=Uuid" json:"Id,omitempty"`
+	Value            []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,2,rep,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
 	XXX_unrecognized []byte                                         `json:"-"`
 }
 
-func (m *NinRepCustom) Reset()      { *m = NinRepCustom{} }
-func (*NinRepCustom) ProtoMessage() {}
+func (m *NinRepCustom) Reset()                    { *m = NinRepCustom{} }
+func (*NinRepCustom) ProtoMessage()               {}
+func (*NinRepCustom) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{18} }
 
 type NinOptNativeUnion struct {
-	Field1           *float64 `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	Field2           *float32 `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	Field3           *int32   `protobuf:"varint,3,opt" json:"Field3,omitempty"`
-	Field4           *int64   `protobuf:"varint,4,opt" json:"Field4,omitempty"`
-	Field5           *uint32  `protobuf:"varint,5,opt" json:"Field5,omitempty"`
-	Field6           *uint64  `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	Field13          *bool    `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	Field14          *string  `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	Field15          []byte   `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	Field1           *float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           *float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           *int32   `protobuf:"varint,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           *int64   `protobuf:"varint,4,opt,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field5           *uint32  `protobuf:"varint,5,opt,name=Field5,json=field5" json:"Field5,omitempty"`
+	Field6           *uint64  `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field13          *bool    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          *string  `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          []byte   `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *NinOptNativeUnion) Reset()      { *m = NinOptNativeUnion{} }
-func (*NinOptNativeUnion) ProtoMessage() {}
+func (m *NinOptNativeUnion) Reset()                    { *m = NinOptNativeUnion{} }
+func (*NinOptNativeUnion) ProtoMessage()               {}
+func (*NinOptNativeUnion) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{19} }
 
 type NinOptStructUnion struct {
-	Field1           *float64      `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	Field2           *float32      `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	Field3           *NidOptNative `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
-	Field4           *NinOptNative `protobuf:"bytes,4,opt" json:"Field4,omitempty"`
-	Field6           *uint64       `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	Field7           *int32        `protobuf:"zigzag32,7,opt" json:"Field7,omitempty"`
-	Field13          *bool         `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	Field14          *string       `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	Field15          []byte        `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	Field1           *float64      `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           *float32      `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           *NidOptNative `protobuf:"bytes,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	Field4           *NinOptNative `protobuf:"bytes,4,opt,name=Field4,json=field4" json:"Field4,omitempty"`
+	Field6           *uint64       `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	Field7           *int32        `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7,omitempty"`
+	Field13          *bool         `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	Field14          *string       `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	Field15          []byte        `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
-func (m *NinOptStructUnion) Reset()      { *m = NinOptStructUnion{} }
-func (*NinOptStructUnion) ProtoMessage() {}
+func (m *NinOptStructUnion) Reset()                    { *m = NinOptStructUnion{} }
+func (*NinOptStructUnion) ProtoMessage()               {}
+func (*NinOptStructUnion) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{20} }
 
 type NinEmbeddedStructUnion struct {
-	*NidOptNative    `protobuf:"bytes,1,opt,embedded=Field1" json:"Field1,omitempty"`
-	Field200         *NinOptNative `protobuf:"bytes,200,opt" json:"Field200,omitempty"`
-	Field210         *bool         `protobuf:"varint,210,opt" json:"Field210,omitempty"`
+	*NidOptNative    `protobuf:"bytes,1,opt,name=Field1,json=field1,embedded=Field1" json:"Field1,omitempty"`
+	Field200         *NinOptNative `protobuf:"bytes,200,opt,name=Field200,json=field200" json:"Field200,omitempty"`
+	Field210         *bool         `protobuf:"varint,210,opt,name=Field210,json=field210" json:"Field210,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
-func (m *NinEmbeddedStructUnion) Reset()      { *m = NinEmbeddedStructUnion{} }
-func (*NinEmbeddedStructUnion) ProtoMessage() {}
+func (m *NinEmbeddedStructUnion) Reset()                    { *m = NinEmbeddedStructUnion{} }
+func (*NinEmbeddedStructUnion) ProtoMessage()               {}
+func (*NinEmbeddedStructUnion) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{21} }
 
 type NinNestedStructUnion struct {
-	Field1           *NinOptNativeUnion      `protobuf:"bytes,1,opt" json:"Field1,omitempty"`
-	Field2           *NinOptStructUnion      `protobuf:"bytes,2,opt" json:"Field2,omitempty"`
-	Field3           *NinEmbeddedStructUnion `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
+	Field1           *NinOptNativeUnion      `protobuf:"bytes,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	Field2           *NinOptStructUnion      `protobuf:"bytes,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field3           *NinEmbeddedStructUnion `protobuf:"bytes,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
 	XXX_unrecognized []byte                  `json:"-"`
 }
 
-func (m *NinNestedStructUnion) Reset()      { *m = NinNestedStructUnion{} }
-func (*NinNestedStructUnion) ProtoMessage() {}
+func (m *NinNestedStructUnion) Reset()                    { *m = NinNestedStructUnion{} }
+func (*NinNestedStructUnion) ProtoMessage()               {}
+func (*NinNestedStructUnion) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{22} }
 
 type Tree struct {
-	Or               *OrBranch  `protobuf:"bytes,1,opt" json:"Or,omitempty"`
-	And              *AndBranch `protobuf:"bytes,2,opt" json:"And,omitempty"`
-	Leaf             *Leaf      `protobuf:"bytes,3,opt" json:"Leaf,omitempty"`
+	Or               *OrBranch  `protobuf:"bytes,1,opt,name=Or,json=or" json:"Or,omitempty"`
+	And              *AndBranch `protobuf:"bytes,2,opt,name=And,json=and" json:"And,omitempty"`
+	Leaf             *Leaf      `protobuf:"bytes,3,opt,name=Leaf,json=leaf" json:"Leaf,omitempty"`
 	XXX_unrecognized []byte     `json:"-"`
 }
 
-func (m *Tree) Reset()      { *m = Tree{} }
-func (*Tree) ProtoMessage() {}
+func (m *Tree) Reset()                    { *m = Tree{} }
+func (*Tree) ProtoMessage()               {}
+func (*Tree) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{23} }
 
 type OrBranch struct {
-	Left             Tree   `protobuf:"bytes,1,opt" json:"Left"`
-	Right            Tree   `protobuf:"bytes,2,opt" json:"Right"`
+	Left             Tree   `protobuf:"bytes,1,opt,name=Left,json=left" json:"Left"`
+	Right            Tree   `protobuf:"bytes,2,opt,name=Right,json=right" json:"Right"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *OrBranch) Reset()      { *m = OrBranch{} }
-func (*OrBranch) ProtoMessage() {}
+func (m *OrBranch) Reset()                    { *m = OrBranch{} }
+func (*OrBranch) ProtoMessage()               {}
+func (*OrBranch) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{24} }
 
 type AndBranch struct {
-	Left             Tree   `protobuf:"bytes,1,opt" json:"Left"`
-	Right            Tree   `protobuf:"bytes,2,opt" json:"Right"`
+	Left             Tree   `protobuf:"bytes,1,opt,name=Left,json=left" json:"Left"`
+	Right            Tree   `protobuf:"bytes,2,opt,name=Right,json=right" json:"Right"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *AndBranch) Reset()      { *m = AndBranch{} }
-func (*AndBranch) ProtoMessage() {}
+func (m *AndBranch) Reset()                    { *m = AndBranch{} }
+func (*AndBranch) ProtoMessage()               {}
+func (*AndBranch) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{25} }
 
 type Leaf struct {
-	Value            int64  `protobuf:"varint,1,opt" json:"Value"`
-	StrValue         string `protobuf:"bytes,2,opt" json:"StrValue"`
+	Value            int64  `protobuf:"varint,1,opt,name=Value,json=value" json:"Value"`
+	StrValue         string `protobuf:"bytes,2,opt,name=StrValue,json=strValue" json:"StrValue"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *Leaf) Reset()      { *m = Leaf{} }
-func (*Leaf) ProtoMessage() {}
+func (m *Leaf) Reset()                    { *m = Leaf{} }
+func (*Leaf) ProtoMessage()               {}
+func (*Leaf) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{26} }
 
 type DeepTree struct {
-	Down             *ADeepBranch   `protobuf:"bytes,1,opt" json:"Down,omitempty"`
-	And              *AndDeepBranch `protobuf:"bytes,2,opt" json:"And,omitempty"`
-	Leaf             *DeepLeaf      `protobuf:"bytes,3,opt" json:"Leaf,omitempty"`
+	Down             *ADeepBranch   `protobuf:"bytes,1,opt,name=Down,json=down" json:"Down,omitempty"`
+	And              *AndDeepBranch `protobuf:"bytes,2,opt,name=And,json=and" json:"And,omitempty"`
+	Leaf             *DeepLeaf      `protobuf:"bytes,3,opt,name=Leaf,json=leaf" json:"Leaf,omitempty"`
 	XXX_unrecognized []byte         `json:"-"`
 }
 
-func (m *DeepTree) Reset()      { *m = DeepTree{} }
-func (*DeepTree) ProtoMessage() {}
+func (m *DeepTree) Reset()                    { *m = DeepTree{} }
+func (*DeepTree) ProtoMessage()               {}
+func (*DeepTree) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{27} }
 
 type ADeepBranch struct {
-	Down             DeepTree `protobuf:"bytes,2,opt" json:"Down"`
+	Down             DeepTree `protobuf:"bytes,2,opt,name=Down,json=down" json:"Down"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *ADeepBranch) Reset()      { *m = ADeepBranch{} }
-func (*ADeepBranch) ProtoMessage() {}
+func (m *ADeepBranch) Reset()                    { *m = ADeepBranch{} }
+func (*ADeepBranch) ProtoMessage()               {}
+func (*ADeepBranch) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{28} }
 
 type AndDeepBranch struct {
-	Left             DeepTree `protobuf:"bytes,1,opt" json:"Left"`
-	Right            DeepTree `protobuf:"bytes,2,opt" json:"Right"`
+	Left             DeepTree `protobuf:"bytes,1,opt,name=Left,json=left" json:"Left"`
+	Right            DeepTree `protobuf:"bytes,2,opt,name=Right,json=right" json:"Right"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *AndDeepBranch) Reset()      { *m = AndDeepBranch{} }
-func (*AndDeepBranch) ProtoMessage() {}
+func (m *AndDeepBranch) Reset()                    { *m = AndDeepBranch{} }
+func (*AndDeepBranch) ProtoMessage()               {}
+func (*AndDeepBranch) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{29} }
 
 type DeepLeaf struct {
-	Tree             Tree   `protobuf:"bytes,1,opt" json:"Tree"`
+	Tree             Tree   `protobuf:"bytes,1,opt,name=Tree,json=tree" json:"Tree"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *DeepLeaf) Reset()      { *m = DeepLeaf{} }
-func (*DeepLeaf) ProtoMessage() {}
+func (m *DeepLeaf) Reset()                    { *m = DeepLeaf{} }
+func (*DeepLeaf) ProtoMessage()               {}
+func (*DeepLeaf) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{30} }
 
 type Nil struct {
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *Nil) Reset()      { *m = Nil{} }
-func (*Nil) ProtoMessage() {}
+func (m *Nil) Reset()                    { *m = Nil{} }
+func (*Nil) ProtoMessage()               {}
+func (*Nil) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{31} }
 
 type NidOptEnum struct {
-	Field1           TheTestEnum `protobuf:"varint,1,opt,enum=test.TheTestEnum" json:"Field1"`
+	Field1           TheTestEnum `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.TheTestEnum" json:"Field1"`
 	XXX_unrecognized []byte      `json:"-"`
 }
 
-func (m *NidOptEnum) Reset()      { *m = NidOptEnum{} }
-func (*NidOptEnum) ProtoMessage() {}
+func (m *NidOptEnum) Reset()                    { *m = NidOptEnum{} }
+func (*NidOptEnum) ProtoMessage()               {}
+func (*NidOptEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{32} }
 
 type NinOptEnum struct {
-	Field1           *TheTestEnum `protobuf:"varint,1,opt,enum=test.TheTestEnum" json:"Field1,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	Field1           *TheTestEnum           `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.TheTestEnum" json:"Field1,omitempty"`
+	Field2           *YetAnotherTestEnum    `protobuf:"varint,2,opt,name=Field2,json=field2,enum=test.YetAnotherTestEnum" json:"Field2,omitempty"`
+	Field3           *YetYetAnotherTestEnum `protobuf:"varint,3,opt,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                 `json:"-"`
 }
 
-func (m *NinOptEnum) Reset()      { *m = NinOptEnum{} }
-func (*NinOptEnum) ProtoMessage() {}
+func (m *NinOptEnum) Reset()                    { *m = NinOptEnum{} }
+func (*NinOptEnum) ProtoMessage()               {}
+func (*NinOptEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{33} }
 
 type NidRepEnum struct {
-	Field1           []TheTestEnum `protobuf:"varint,1,rep,enum=test.TheTestEnum" json:"Field1,omitempty"`
-	XXX_unrecognized []byte        `json:"-"`
+	Field1           []TheTestEnum           `protobuf:"varint,1,rep,name=Field1,json=field1,enum=test.TheTestEnum" json:"Field1,omitempty"`
+	Field2           []YetAnotherTestEnum    `protobuf:"varint,2,rep,name=Field2,json=field2,enum=test.YetAnotherTestEnum" json:"Field2,omitempty"`
+	Field3           []YetYetAnotherTestEnum `protobuf:"varint,3,rep,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                  `json:"-"`
 }
 
-func (m *NidRepEnum) Reset()      { *m = NidRepEnum{} }
-func (*NidRepEnum) ProtoMessage() {}
+func (m *NidRepEnum) Reset()                    { *m = NidRepEnum{} }
+func (*NidRepEnum) ProtoMessage()               {}
+func (*NidRepEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{34} }
 
 type NinRepEnum struct {
-	Field1           []TheTestEnum `protobuf:"varint,1,rep,enum=test.TheTestEnum" json:"Field1,omitempty"`
-	XXX_unrecognized []byte        `json:"-"`
+	Field1           []TheTestEnum           `protobuf:"varint,1,rep,name=Field1,json=field1,enum=test.TheTestEnum" json:"Field1,omitempty"`
+	Field2           []YetAnotherTestEnum    `protobuf:"varint,2,rep,name=Field2,json=field2,enum=test.YetAnotherTestEnum" json:"Field2,omitempty"`
+	Field3           []YetYetAnotherTestEnum `protobuf:"varint,3,rep,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                  `json:"-"`
 }
 
-func (m *NinRepEnum) Reset()      { *m = NinRepEnum{} }
-func (*NinRepEnum) ProtoMessage() {}
+func (m *NinRepEnum) Reset()                    { *m = NinRepEnum{} }
+func (*NinRepEnum) ProtoMessage()               {}
+func (*NinRepEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{35} }
 
 type NinOptEnumDefault struct {
-	Field1           *TheTestEnum `protobuf:"varint,1,opt,enum=test.TheTestEnum,def=2" json:"Field1,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	Field1           *TheTestEnum           `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.TheTestEnum,def=2" json:"Field1,omitempty"`
+	Field2           *YetAnotherTestEnum    `protobuf:"varint,2,opt,name=Field2,json=field2,enum=test.YetAnotherTestEnum,def=1" json:"Field2,omitempty"`
+	Field3           *YetYetAnotherTestEnum `protobuf:"varint,3,opt,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum,def=0" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                 `json:"-"`
 }
 
-func (m *NinOptEnumDefault) Reset()      { *m = NinOptEnumDefault{} }
-func (*NinOptEnumDefault) ProtoMessage() {}
+func (m *NinOptEnumDefault) Reset()                    { *m = NinOptEnumDefault{} }
+func (*NinOptEnumDefault) ProtoMessage()               {}
+func (*NinOptEnumDefault) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{36} }
 
 const Default_NinOptEnumDefault_Field1 TheTestEnum = C
+const Default_NinOptEnumDefault_Field2 YetAnotherTestEnum = BetterYetBB
+const Default_NinOptEnumDefault_Field3 YetYetAnotherTestEnum = YetYetAnotherTestEnum_CC
 
 func (m *NinOptEnumDefault) GetField1() TheTestEnum {
 	if m != nil && m.Field1 != nil {
@@ -653,23 +782,45 @@ func (m *NinOptEnumDefault) GetField1() TheTestEnum {
 	return Default_NinOptEnumDefault_Field1
 }
 
-type AnotherNinOptEnum struct {
-	Field1           *AnotherTestEnum `protobuf:"varint,1,opt,enum=test.AnotherTestEnum" json:"Field1,omitempty"`
-	XXX_unrecognized []byte           `json:"-"`
+func (m *NinOptEnumDefault) GetField2() YetAnotherTestEnum {
+	if m != nil && m.Field2 != nil {
+		return *m.Field2
+	}
+	return Default_NinOptEnumDefault_Field2
 }
 
-func (m *AnotherNinOptEnum) Reset()      { *m = AnotherNinOptEnum{} }
-func (*AnotherNinOptEnum) ProtoMessage() {}
+func (m *NinOptEnumDefault) GetField3() YetYetAnotherTestEnum {
+	if m != nil && m.Field3 != nil {
+		return *m.Field3
+	}
+	return Default_NinOptEnumDefault_Field3
+}
+
+type AnotherNinOptEnum struct {
+	Field1           *AnotherTestEnum       `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.AnotherTestEnum" json:"Field1,omitempty"`
+	Field2           *YetAnotherTestEnum    `protobuf:"varint,2,opt,name=Field2,json=field2,enum=test.YetAnotherTestEnum" json:"Field2,omitempty"`
+	Field3           *YetYetAnotherTestEnum `protobuf:"varint,3,opt,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                 `json:"-"`
+}
+
+func (m *AnotherNinOptEnum) Reset()                    { *m = AnotherNinOptEnum{} }
+func (*AnotherNinOptEnum) ProtoMessage()               {}
+func (*AnotherNinOptEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{37} }
 
 type AnotherNinOptEnumDefault struct {
-	Field1           *AnotherTestEnum `protobuf:"varint,1,opt,enum=test.AnotherTestEnum,def=11" json:"Field1,omitempty"`
-	XXX_unrecognized []byte           `json:"-"`
+	Field1           *AnotherTestEnum       `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.AnotherTestEnum,def=11" json:"Field1,omitempty"`
+	Field2           *YetAnotherTestEnum    `protobuf:"varint,2,opt,name=Field2,json=field2,enum=test.YetAnotherTestEnum,def=1" json:"Field2,omitempty"`
+	Field3           *YetYetAnotherTestEnum `protobuf:"varint,3,opt,name=Field3,json=field3,enum=test.YetYetAnotherTestEnum,def=0" json:"Field3,omitempty"`
+	XXX_unrecognized []byte                 `json:"-"`
 }
 
-func (m *AnotherNinOptEnumDefault) Reset()      { *m = AnotherNinOptEnumDefault{} }
-func (*AnotherNinOptEnumDefault) ProtoMessage() {}
+func (m *AnotherNinOptEnumDefault) Reset()                    { *m = AnotherNinOptEnumDefault{} }
+func (*AnotherNinOptEnumDefault) ProtoMessage()               {}
+func (*AnotherNinOptEnumDefault) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{38} }
 
 const Default_AnotherNinOptEnumDefault_Field1 AnotherTestEnum = E
+const Default_AnotherNinOptEnumDefault_Field2 YetAnotherTestEnum = BetterYetBB
+const Default_AnotherNinOptEnumDefault_Field3 YetYetAnotherTestEnum = YetYetAnotherTestEnum_CC
 
 func (m *AnotherNinOptEnumDefault) GetField1() AnotherTestEnum {
 	if m != nil && m.Field1 != nil {
@@ -678,24 +829,40 @@ func (m *AnotherNinOptEnumDefault) GetField1() AnotherTestEnum {
 	return Default_AnotherNinOptEnumDefault_Field1
 }
 
+func (m *AnotherNinOptEnumDefault) GetField2() YetAnotherTestEnum {
+	if m != nil && m.Field2 != nil {
+		return *m.Field2
+	}
+	return Default_AnotherNinOptEnumDefault_Field2
+}
+
+func (m *AnotherNinOptEnumDefault) GetField3() YetYetAnotherTestEnum {
+	if m != nil && m.Field3 != nil {
+		return *m.Field3
+	}
+	return Default_AnotherNinOptEnumDefault_Field3
+}
+
 type Timer struct {
-	Time1            int64  `protobuf:"fixed64,1,opt" json:"Time1"`
-	Time2            int64  `protobuf:"fixed64,2,opt" json:"Time2"`
-	Data             []byte `protobuf:"bytes,3,opt" json:"Data"`
+	Time1            int64  `protobuf:"fixed64,1,opt,name=Time1,json=time1" json:"Time1"`
+	Time2            int64  `protobuf:"fixed64,2,opt,name=Time2,json=time2" json:"Time2"`
+	Data             []byte `protobuf:"bytes,3,opt,name=Data,json=data" json:"Data"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *Timer) Reset()      { *m = Timer{} }
-func (*Timer) ProtoMessage() {}
+func (m *Timer) Reset()                    { *m = Timer{} }
+func (*Timer) ProtoMessage()               {}
+func (*Timer) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{39} }
 
 type MyExtendable struct {
-	Field1           *int64                    `protobuf:"varint,1,opt" json:"Field1,omitempty"`
+	Field1           *int64                    `protobuf:"varint,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
 	XXX_extensions   map[int32]proto.Extension `json:"-"`
 	XXX_unrecognized []byte                    `json:"-"`
 }
 
-func (m *MyExtendable) Reset()      { *m = MyExtendable{} }
-func (*MyExtendable) ProtoMessage() {}
+func (m *MyExtendable) Reset()                    { *m = MyExtendable{} }
+func (*MyExtendable) ProtoMessage()               {}
+func (*MyExtendable) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{40} }
 
 var extRange_MyExtendable = []proto.ExtensionRange{
 	{100, 199},
@@ -712,15 +879,16 @@ func (m *MyExtendable) ExtensionMap() map[int32]proto.Extension {
 }
 
 type OtherExtenable struct {
-	Field2           *int64                    `protobuf:"varint,2,opt" json:"Field2,omitempty"`
-	Field13          *int64                    `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	M                *MyExtendable             `protobuf:"bytes,1,opt" json:"M,omitempty"`
+	Field2           *int64                    `protobuf:"varint,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	Field13          *int64                    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	M                *MyExtendable             `protobuf:"bytes,1,opt,name=M,json=m" json:"M,omitempty"`
 	XXX_extensions   map[int32]proto.Extension `json:"-"`
 	XXX_unrecognized []byte                    `json:"-"`
 }
 
-func (m *OtherExtenable) Reset()      { *m = OtherExtenable{} }
-func (*OtherExtenable) ProtoMessage() {}
+func (m *OtherExtenable) Reset()                    { *m = OtherExtenable{} }
+func (*OtherExtenable) ProtoMessage()               {}
+func (*OtherExtenable) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{41} }
 
 var extRange_OtherExtenable = []proto.ExtensionRange{
 	{14, 16},
@@ -738,27 +906,31 @@ func (m *OtherExtenable) ExtensionMap() map[int32]proto.Extension {
 }
 
 type NestedDefinition struct {
-	Field1           *int64                                          `protobuf:"varint,1,opt" json:"Field1,omitempty"`
-	EnumField        *NestedDefinition_NestedEnum                    `protobuf:"varint,2,opt,enum=test.NestedDefinition_NestedEnum" json:"EnumField,omitempty"`
-	NNM              *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,3,opt" json:"NNM,omitempty"`
-	NM               *NestedDefinition_NestedMessage                 `protobuf:"bytes,4,opt" json:"NM,omitempty"`
+	Field1           *int64                                          `protobuf:"varint,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	EnumField        *NestedDefinition_NestedEnum                    `protobuf:"varint,2,opt,name=EnumField,json=enumField,enum=test.NestedDefinition_NestedEnum" json:"EnumField,omitempty"`
+	NNM              *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,3,opt,name=NNM,json=nNM" json:"NNM,omitempty"`
+	NM               *NestedDefinition_NestedMessage                 `protobuf:"bytes,4,opt,name=NM,json=nM" json:"NM,omitempty"`
 	XXX_unrecognized []byte                                          `json:"-"`
 }
 
-func (m *NestedDefinition) Reset()      { *m = NestedDefinition{} }
-func (*NestedDefinition) ProtoMessage() {}
+func (m *NestedDefinition) Reset()                    { *m = NestedDefinition{} }
+func (*NestedDefinition) ProtoMessage()               {}
+func (*NestedDefinition) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{42} }
 
 type NestedDefinition_NestedMessage struct {
-	NestedField1     *uint64                                         `protobuf:"fixed64,1,opt" json:"NestedField1,omitempty"`
-	NNM              *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,2,opt" json:"NNM,omitempty"`
+	NestedField1     *uint64                                         `protobuf:"fixed64,1,opt,name=NestedField1,json=nestedField1" json:"NestedField1,omitempty"`
+	NNM              *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,2,opt,name=NNM,json=nNM" json:"NNM,omitempty"`
 	XXX_unrecognized []byte                                          `json:"-"`
 }
 
 func (m *NestedDefinition_NestedMessage) Reset()      { *m = NestedDefinition_NestedMessage{} }
 func (*NestedDefinition_NestedMessage) ProtoMessage() {}
+func (*NestedDefinition_NestedMessage) Descriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{42, 0}
+}
 
 type NestedDefinition_NestedMessage_NestedNestedMsg struct {
-	NestedNestedField1 *string `protobuf:"bytes,10,opt" json:"NestedNestedField1,omitempty"`
+	NestedNestedField1 *string `protobuf:"bytes,10,opt,name=NestedNestedField1,json=nestedNestedField1" json:"NestedNestedField1,omitempty"`
 	XXX_unrecognized   []byte  `json:"-"`
 }
 
@@ -766,38 +938,43 @@ func (m *NestedDefinition_NestedMessage_NestedNestedMsg) Reset() {
 	*m = NestedDefinition_NestedMessage_NestedNestedMsg{}
 }
 func (*NestedDefinition_NestedMessage_NestedNestedMsg) ProtoMessage() {}
+func (*NestedDefinition_NestedMessage_NestedNestedMsg) Descriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{42, 0, 0}
+}
 
 type NestedScope struct {
-	A                *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,1,opt" json:"A,omitempty"`
-	B                *NestedDefinition_NestedEnum                    `protobuf:"varint,2,opt,enum=test.NestedDefinition_NestedEnum" json:"B,omitempty"`
-	C                *NestedDefinition_NestedMessage                 `protobuf:"bytes,3,opt" json:"C,omitempty"`
+	A                *NestedDefinition_NestedMessage_NestedNestedMsg `protobuf:"bytes,1,opt,name=A,json=a" json:"A,omitempty"`
+	B                *NestedDefinition_NestedEnum                    `protobuf:"varint,2,opt,name=B,json=b,enum=test.NestedDefinition_NestedEnum" json:"B,omitempty"`
+	C                *NestedDefinition_NestedMessage                 `protobuf:"bytes,3,opt,name=C,json=c" json:"C,omitempty"`
 	XXX_unrecognized []byte                                          `json:"-"`
 }
 
-func (m *NestedScope) Reset()      { *m = NestedScope{} }
-func (*NestedScope) ProtoMessage() {}
+func (m *NestedScope) Reset()                    { *m = NestedScope{} }
+func (*NestedScope) ProtoMessage()               {}
+func (*NestedScope) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{43} }
 
 type NinOptNativeDefault struct {
-	Field1           *float64 `protobuf:"fixed64,1,opt,def=1234.1234" json:"Field1,omitempty"`
-	Field2           *float32 `protobuf:"fixed32,2,opt,def=1234.1234" json:"Field2,omitempty"`
-	Field3           *int32   `protobuf:"varint,3,opt,def=1234" json:"Field3,omitempty"`
-	Field4           *int64   `protobuf:"varint,4,opt,def=1234" json:"Field4,omitempty"`
-	Field5           *uint32  `protobuf:"varint,5,opt,def=1234" json:"Field5,omitempty"`
-	Field6           *uint64  `protobuf:"varint,6,opt,def=1234" json:"Field6,omitempty"`
-	Field7           *int32   `protobuf:"zigzag32,7,opt,def=1234" json:"Field7,omitempty"`
-	Field8           *int64   `protobuf:"zigzag64,8,opt,def=1234" json:"Field8,omitempty"`
-	Field9           *uint32  `protobuf:"fixed32,9,opt,def=1234" json:"Field9,omitempty"`
-	Field10          *int32   `protobuf:"fixed32,10,opt,def=1234" json:"Field10,omitempty"`
-	Field11          *uint64  `protobuf:"fixed64,11,opt,def=1234" json:"Field11,omitempty"`
-	Field12          *int64   `protobuf:"fixed64,12,opt,def=1234" json:"Field12,omitempty"`
-	Field13          *bool    `protobuf:"varint,13,opt,def=1" json:"Field13,omitempty"`
-	Field14          *string  `protobuf:"bytes,14,opt,def=1234" json:"Field14,omitempty"`
-	Field15          []byte   `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	Field1           *float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1,def=1234.1234" json:"Field1,omitempty"`
+	Field2           *float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2,def=1234.1234" json:"Field2,omitempty"`
+	Field3           *int32   `protobuf:"varint,3,opt,name=Field3,json=field3,def=1234" json:"Field3,omitempty"`
+	Field4           *int64   `protobuf:"varint,4,opt,name=Field4,json=field4,def=1234" json:"Field4,omitempty"`
+	Field5           *uint32  `protobuf:"varint,5,opt,name=Field5,json=field5,def=1234" json:"Field5,omitempty"`
+	Field6           *uint64  `protobuf:"varint,6,opt,name=Field6,json=field6,def=1234" json:"Field6,omitempty"`
+	Field7           *int32   `protobuf:"zigzag32,7,opt,name=Field7,json=field7,def=1234" json:"Field7,omitempty"`
+	Field8           *int64   `protobuf:"zigzag64,8,opt,name=Field8,json=field8,def=1234" json:"Field8,omitempty"`
+	Field9           *uint32  `protobuf:"fixed32,9,opt,name=Field9,json=field9,def=1234" json:"Field9,omitempty"`
+	Field10          *int32   `protobuf:"fixed32,10,opt,name=Field10,json=field10,def=1234" json:"Field10,omitempty"`
+	Field11          *uint64  `protobuf:"fixed64,11,opt,name=Field11,json=field11,def=1234" json:"Field11,omitempty"`
+	Field12          *int64   `protobuf:"fixed64,12,opt,name=Field12,json=field12,def=1234" json:"Field12,omitempty"`
+	Field13          *bool    `protobuf:"varint,13,opt,name=Field13,json=field13,def=1" json:"Field13,omitempty"`
+	Field14          *string  `protobuf:"bytes,14,opt,name=Field14,json=field14,def=1234" json:"Field14,omitempty"`
+	Field15          []byte   `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *NinOptNativeDefault) Reset()      { *m = NinOptNativeDefault{} }
-func (*NinOptNativeDefault) ProtoMessage() {}
+func (m *NinOptNativeDefault) Reset()                    { *m = NinOptNativeDefault{} }
+func (*NinOptNativeDefault) ProtoMessage()               {}
+func (*NinOptNativeDefault) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{44} }
 
 const Default_NinOptNativeDefault_Field1 float64 = 1234.1234
 const Default_NinOptNativeDefault_Field2 float32 = 1234.1234
@@ -920,134 +1097,145 @@ func (m *NinOptNativeDefault) GetField15() []byte {
 }
 
 type CustomContainer struct {
-	CustomStruct     NidOptCustom `protobuf:"bytes,1,opt" json:"CustomStruct"`
+	CustomStruct     NidOptCustom `protobuf:"bytes,1,opt,name=CustomStruct,json=customStruct" json:"CustomStruct"`
 	XXX_unrecognized []byte       `json:"-"`
 }
 
-func (m *CustomContainer) Reset()      { *m = CustomContainer{} }
-func (*CustomContainer) ProtoMessage() {}
+func (m *CustomContainer) Reset()                    { *m = CustomContainer{} }
+func (*CustomContainer) ProtoMessage()               {}
+func (*CustomContainer) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{45} }
 
 type CustomNameNidOptNative struct {
-	FieldA           float64 `protobuf:"fixed64,1,opt" json:"Field1"`
-	FieldB           float32 `protobuf:"fixed32,2,opt" json:"Field2"`
-	FieldC           int32   `protobuf:"varint,3,opt" json:"Field3"`
-	FieldD           int64   `protobuf:"varint,4,opt" json:"Field4"`
-	FieldE           uint32  `protobuf:"varint,5,opt" json:"Field5"`
-	FieldF           uint64  `protobuf:"varint,6,opt" json:"Field6"`
-	FieldG           int32   `protobuf:"zigzag32,7,opt" json:"Field7"`
-	FieldH           int64   `protobuf:"zigzag64,8,opt" json:"Field8"`
-	FieldI           uint32  `protobuf:"fixed32,9,opt" json:"Field9"`
-	FieldJ           int32   `protobuf:"fixed32,10,opt" json:"Field10"`
-	FieldK           uint64  `protobuf:"fixed64,11,opt" json:"Field11"`
-	FieldL           int64   `protobuf:"fixed64,12,opt" json:"Field12"`
-	FieldM           bool    `protobuf:"varint,13,opt" json:"Field13"`
-	FieldN           string  `protobuf:"bytes,14,opt" json:"Field14"`
-	FieldO           []byte  `protobuf:"bytes,15,opt" json:"Field15"`
+	FieldA           float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1"`
+	FieldB           float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2"`
+	FieldC           int32   `protobuf:"varint,3,opt,name=Field3,json=field3" json:"Field3"`
+	FieldD           int64   `protobuf:"varint,4,opt,name=Field4,json=field4" json:"Field4"`
+	FieldE           uint32  `protobuf:"varint,5,opt,name=Field5,json=field5" json:"Field5"`
+	FieldF           uint64  `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6"`
+	FieldG           int32   `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7"`
+	FieldH           int64   `protobuf:"zigzag64,8,opt,name=Field8,json=field8" json:"Field8"`
+	FieldI           uint32  `protobuf:"fixed32,9,opt,name=Field9,json=field9" json:"Field9"`
+	FieldJ           int32   `protobuf:"fixed32,10,opt,name=Field10,json=field10" json:"Field10"`
+	FieldK           uint64  `protobuf:"fixed64,11,opt,name=Field11,json=field11" json:"Field11"`
+	FieldL           int64   `protobuf:"fixed64,12,opt,name=Field12,json=field12" json:"Field12"`
+	FieldM           bool    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13"`
+	FieldN           string  `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14"`
+	FieldO           []byte  `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *CustomNameNidOptNative) Reset()      { *m = CustomNameNidOptNative{} }
-func (*CustomNameNidOptNative) ProtoMessage() {}
+func (m *CustomNameNidOptNative) Reset()                    { *m = CustomNameNidOptNative{} }
+func (*CustomNameNidOptNative) ProtoMessage()               {}
+func (*CustomNameNidOptNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{46} }
 
 type CustomNameNinOptNative struct {
-	FieldA           *float64 `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	FieldB           *float32 `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	FieldC           *int32   `protobuf:"varint,3,opt" json:"Field3,omitempty"`
-	FieldD           *int64   `protobuf:"varint,4,opt" json:"Field4,omitempty"`
-	FieldE           *uint32  `protobuf:"varint,5,opt" json:"Field5,omitempty"`
-	FieldF           *uint64  `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	FieldG           *int32   `protobuf:"zigzag32,7,opt" json:"Field7,omitempty"`
-	FieldH           *int64   `protobuf:"zigzag64,8,opt" json:"Field8,omitempty"`
-	FieldI           *uint32  `protobuf:"fixed32,9,opt" json:"Field9,omitempty"`
-	FieldJ           *int32   `protobuf:"fixed32,10,opt" json:"Field10,omitempty"`
-	FieldK           *uint64  `protobuf:"fixed64,11,opt" json:"Field11,omitempty"`
-	FielL            *int64   `protobuf:"fixed64,12,opt" json:"Field12,omitempty"`
-	FieldM           *bool    `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	FieldN           *string  `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	FieldO           []byte   `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	FieldA           *float64 `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	FieldB           *float32 `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	FieldC           *int32   `protobuf:"varint,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	FieldD           *int64   `protobuf:"varint,4,opt,name=Field4,json=field4" json:"Field4,omitempty"`
+	FieldE           *uint32  `protobuf:"varint,5,opt,name=Field5,json=field5" json:"Field5,omitempty"`
+	FieldF           *uint64  `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	FieldG           *int32   `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7,omitempty"`
+	FieldH           *int64   `protobuf:"zigzag64,8,opt,name=Field8,json=field8" json:"Field8,omitempty"`
+	FieldI           *uint32  `protobuf:"fixed32,9,opt,name=Field9,json=field9" json:"Field9,omitempty"`
+	FieldJ           *int32   `protobuf:"fixed32,10,opt,name=Field10,json=field10" json:"Field10,omitempty"`
+	FieldK           *uint64  `protobuf:"fixed64,11,opt,name=Field11,json=field11" json:"Field11,omitempty"`
+	FielL            *int64   `protobuf:"fixed64,12,opt,name=Field12,json=field12" json:"Field12,omitempty"`
+	FieldM           *bool    `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	FieldN           *string  `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	FieldO           []byte   `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *CustomNameNinOptNative) Reset()      { *m = CustomNameNinOptNative{} }
-func (*CustomNameNinOptNative) ProtoMessage() {}
+func (m *CustomNameNinOptNative) Reset()                    { *m = CustomNameNinOptNative{} }
+func (*CustomNameNinOptNative) ProtoMessage()               {}
+func (*CustomNameNinOptNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{47} }
 
 type CustomNameNinRepNative struct {
-	FieldA           []float64 `protobuf:"fixed64,1,rep" json:"Field1,omitempty"`
-	FieldB           []float32 `protobuf:"fixed32,2,rep" json:"Field2,omitempty"`
-	FieldC           []int32   `protobuf:"varint,3,rep" json:"Field3,omitempty"`
-	FieldD           []int64   `protobuf:"varint,4,rep" json:"Field4,omitempty"`
-	FieldE           []uint32  `protobuf:"varint,5,rep" json:"Field5,omitempty"`
-	FieldF           []uint64  `protobuf:"varint,6,rep" json:"Field6,omitempty"`
-	FieldG           []int32   `protobuf:"zigzag32,7,rep" json:"Field7,omitempty"`
-	FieldH           []int64   `protobuf:"zigzag64,8,rep" json:"Field8,omitempty"`
-	FieldI           []uint32  `protobuf:"fixed32,9,rep" json:"Field9,omitempty"`
-	FieldJ           []int32   `protobuf:"fixed32,10,rep" json:"Field10,omitempty"`
-	FieldK           []uint64  `protobuf:"fixed64,11,rep" json:"Field11,omitempty"`
-	FieldL           []int64   `protobuf:"fixed64,12,rep" json:"Field12,omitempty"`
-	FieldM           []bool    `protobuf:"varint,13,rep" json:"Field13,omitempty"`
-	FieldN           []string  `protobuf:"bytes,14,rep" json:"Field14,omitempty"`
-	FieldO           [][]byte  `protobuf:"bytes,15,rep" json:"Field15,omitempty"`
+	FieldA           []float64 `protobuf:"fixed64,1,rep,name=Field1,json=field1" json:"Field1,omitempty"`
+	FieldB           []float32 `protobuf:"fixed32,2,rep,name=Field2,json=field2" json:"Field2,omitempty"`
+	FieldC           []int32   `protobuf:"varint,3,rep,name=Field3,json=field3" json:"Field3,omitempty"`
+	FieldD           []int64   `protobuf:"varint,4,rep,name=Field4,json=field4" json:"Field4,omitempty"`
+	FieldE           []uint32  `protobuf:"varint,5,rep,name=Field5,json=field5" json:"Field5,omitempty"`
+	FieldF           []uint64  `protobuf:"varint,6,rep,name=Field6,json=field6" json:"Field6,omitempty"`
+	FieldG           []int32   `protobuf:"zigzag32,7,rep,name=Field7,json=field7" json:"Field7,omitempty"`
+	FieldH           []int64   `protobuf:"zigzag64,8,rep,name=Field8,json=field8" json:"Field8,omitempty"`
+	FieldI           []uint32  `protobuf:"fixed32,9,rep,name=Field9,json=field9" json:"Field9,omitempty"`
+	FieldJ           []int32   `protobuf:"fixed32,10,rep,name=Field10,json=field10" json:"Field10,omitempty"`
+	FieldK           []uint64  `protobuf:"fixed64,11,rep,name=Field11,json=field11" json:"Field11,omitempty"`
+	FieldL           []int64   `protobuf:"fixed64,12,rep,name=Field12,json=field12" json:"Field12,omitempty"`
+	FieldM           []bool    `protobuf:"varint,13,rep,name=Field13,json=field13" json:"Field13,omitempty"`
+	FieldN           []string  `protobuf:"bytes,14,rep,name=Field14,json=field14" json:"Field14,omitempty"`
+	FieldO           [][]byte  `protobuf:"bytes,15,rep,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte    `json:"-"`
 }
 
-func (m *CustomNameNinRepNative) Reset()      { *m = CustomNameNinRepNative{} }
-func (*CustomNameNinRepNative) ProtoMessage() {}
+func (m *CustomNameNinRepNative) Reset()                    { *m = CustomNameNinRepNative{} }
+func (*CustomNameNinRepNative) ProtoMessage()               {}
+func (*CustomNameNinRepNative) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{48} }
 
 type CustomNameNinStruct struct {
-	FieldA           *float64        `protobuf:"fixed64,1,opt" json:"Field1,omitempty"`
-	FieldB           *float32        `protobuf:"fixed32,2,opt" json:"Field2,omitempty"`
-	FieldC           *NidOptNative   `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
-	FieldD           []*NinOptNative `protobuf:"bytes,4,rep" json:"Field4,omitempty"`
-	FieldE           *uint64         `protobuf:"varint,6,opt" json:"Field6,omitempty"`
-	FieldF           *int32          `protobuf:"zigzag32,7,opt" json:"Field7,omitempty"`
-	FieldG           *NidOptNative   `protobuf:"bytes,8,opt" json:"Field8,omitempty"`
-	FieldH           *bool           `protobuf:"varint,13,opt" json:"Field13,omitempty"`
-	FieldI           *string         `protobuf:"bytes,14,opt" json:"Field14,omitempty"`
-	FieldJ           []byte          `protobuf:"bytes,15,opt" json:"Field15,omitempty"`
+	FieldA           *float64        `protobuf:"fixed64,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
+	FieldB           *float32        `protobuf:"fixed32,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
+	FieldC           *NidOptNative   `protobuf:"bytes,3,opt,name=Field3,json=field3" json:"Field3,omitempty"`
+	FieldD           []*NinOptNative `protobuf:"bytes,4,rep,name=Field4,json=field4" json:"Field4,omitempty"`
+	FieldE           *uint64         `protobuf:"varint,6,opt,name=Field6,json=field6" json:"Field6,omitempty"`
+	FieldF           *int32          `protobuf:"zigzag32,7,opt,name=Field7,json=field7" json:"Field7,omitempty"`
+	FieldG           *NidOptNative   `protobuf:"bytes,8,opt,name=Field8,json=field8" json:"Field8,omitempty"`
+	FieldH           *bool           `protobuf:"varint,13,opt,name=Field13,json=field13" json:"Field13,omitempty"`
+	FieldI           *string         `protobuf:"bytes,14,opt,name=Field14,json=field14" json:"Field14,omitempty"`
+	FieldJ           []byte          `protobuf:"bytes,15,opt,name=Field15,json=field15" json:"Field15,omitempty"`
 	XXX_unrecognized []byte          `json:"-"`
 }
 
-func (m *CustomNameNinStruct) Reset()      { *m = CustomNameNinStruct{} }
-func (*CustomNameNinStruct) ProtoMessage() {}
+func (m *CustomNameNinStruct) Reset()                    { *m = CustomNameNinStruct{} }
+func (*CustomNameNinStruct) ProtoMessage()               {}
+func (*CustomNameNinStruct) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{49} }
 
 type CustomNameCustomType struct {
-	FieldA           *Uuid                                          `protobuf:"bytes,1,opt,customtype=Uuid" json:"Id,omitempty"`
-	FieldB           *github_com_gogo_protobuf_test_custom.Uint128  `protobuf:"bytes,2,opt,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
-	FieldC           []Uuid                                         `protobuf:"bytes,3,rep,customtype=Uuid" json:"Ids,omitempty"`
-	FieldD           []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,4,rep,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Values,omitempty"`
+	FieldA           *Uuid                                          `protobuf:"bytes,1,opt,name=Id,json=id,customtype=Uuid" json:"Id,omitempty"`
+	FieldB           *github_com_gogo_protobuf_test_custom.Uint128  `protobuf:"bytes,2,opt,name=Value,json=value,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Value,omitempty"`
+	FieldC           []Uuid                                         `protobuf:"bytes,3,rep,name=Ids,json=ids,customtype=Uuid" json:"Ids,omitempty"`
+	FieldD           []github_com_gogo_protobuf_test_custom.Uint128 `protobuf:"bytes,4,rep,name=Values,json=values,customtype=github.com/gogo/protobuf/test/custom.Uint128" json:"Values,omitempty"`
 	XXX_unrecognized []byte                                         `json:"-"`
 }
 
-func (m *CustomNameCustomType) Reset()      { *m = CustomNameCustomType{} }
-func (*CustomNameCustomType) ProtoMessage() {}
+func (m *CustomNameCustomType) Reset()                    { *m = CustomNameCustomType{} }
+func (*CustomNameCustomType) ProtoMessage()               {}
+func (*CustomNameCustomType) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{50} }
 
 type CustomNameNinEmbeddedStructUnion struct {
-	*NidOptNative    `protobuf:"bytes,1,opt,embedded=Field1" json:"Field1,omitempty"`
-	FieldA           *NinOptNative `protobuf:"bytes,200,opt" json:"Field200,omitempty"`
-	FieldB           *bool         `protobuf:"varint,210,opt" json:"Field210,omitempty"`
+	*NidOptNative    `protobuf:"bytes,1,opt,name=Field1,json=field1,embedded=Field1" json:"Field1,omitempty"`
+	FieldA           *NinOptNative `protobuf:"bytes,200,opt,name=Field200,json=field200" json:"Field200,omitempty"`
+	FieldB           *bool         `protobuf:"varint,210,opt,name=Field210,json=field210" json:"Field210,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
 func (m *CustomNameNinEmbeddedStructUnion) Reset()      { *m = CustomNameNinEmbeddedStructUnion{} }
 func (*CustomNameNinEmbeddedStructUnion) ProtoMessage() {}
+func (*CustomNameNinEmbeddedStructUnion) Descriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{51}
+}
 
 type CustomNameEnum struct {
-	FieldA           *TheTestEnum  `protobuf:"varint,1,opt,enum=test.TheTestEnum" json:"Field1,omitempty"`
-	FieldB           []TheTestEnum `protobuf:"varint,2,rep,enum=test.TheTestEnum" json:"Field2,omitempty"`
+	FieldA           *TheTestEnum  `protobuf:"varint,1,opt,name=Field1,json=field1,enum=test.TheTestEnum" json:"Field1,omitempty"`
+	FieldB           []TheTestEnum `protobuf:"varint,2,rep,name=Field2,json=field2,enum=test.TheTestEnum" json:"Field2,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
-func (m *CustomNameEnum) Reset()      { *m = CustomNameEnum{} }
-func (*CustomNameEnum) ProtoMessage() {}
+func (m *CustomNameEnum) Reset()                    { *m = CustomNameEnum{} }
+func (*CustomNameEnum) ProtoMessage()               {}
+func (*CustomNameEnum) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{52} }
 
 type NoExtensionsMap struct {
-	Field1           *int64 `protobuf:"varint,1,opt" json:"Field1,omitempty"`
+	Field1           *int64 `protobuf:"varint,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
 	XXX_extensions   []byte `protobuf:"bytes,0,opt" json:"-"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *NoExtensionsMap) Reset()      { *m = NoExtensionsMap{} }
-func (*NoExtensionsMap) ProtoMessage() {}
+func (m *NoExtensionsMap) Reset()                    { *m = NoExtensionsMap{} }
+func (*NoExtensionsMap) ProtoMessage()               {}
+func (*NoExtensionsMap) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{53} }
 
 var extRange_NoExtensionsMap = []proto.ExtensionRange{
 	{100, 199},
@@ -1064,50 +1252,69 @@ func (m *NoExtensionsMap) GetExtensions() *[]byte {
 }
 
 type Unrecognized struct {
-	Field1 *string `protobuf:"bytes,1,opt" json:"Field1,omitempty"`
+	Field1 *string `protobuf:"bytes,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
 }
 
-func (m *Unrecognized) Reset()      { *m = Unrecognized{} }
-func (*Unrecognized) ProtoMessage() {}
+func (m *Unrecognized) Reset()                    { *m = Unrecognized{} }
+func (*Unrecognized) ProtoMessage()               {}
+func (*Unrecognized) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{54} }
 
 type UnrecognizedWithInner struct {
 	Embedded         []*UnrecognizedWithInner_Inner `protobuf:"bytes,1,rep,name=embedded" json:"embedded,omitempty"`
-	Field2           *string                        `protobuf:"bytes,2,opt" json:"Field2,omitempty"`
+	Field2           *string                        `protobuf:"bytes,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
 	XXX_unrecognized []byte                         `json:"-"`
 }
 
-func (m *UnrecognizedWithInner) Reset()      { *m = UnrecognizedWithInner{} }
-func (*UnrecognizedWithInner) ProtoMessage() {}
+func (m *UnrecognizedWithInner) Reset()                    { *m = UnrecognizedWithInner{} }
+func (*UnrecognizedWithInner) ProtoMessage()               {}
+func (*UnrecognizedWithInner) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{55} }
 
 type UnrecognizedWithInner_Inner struct {
-	Field1 *uint32 `protobuf:"varint,1,opt" json:"Field1,omitempty"`
+	Field1 *uint32 `protobuf:"varint,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
 }
 
 func (m *UnrecognizedWithInner_Inner) Reset()      { *m = UnrecognizedWithInner_Inner{} }
 func (*UnrecognizedWithInner_Inner) ProtoMessage() {}
+func (*UnrecognizedWithInner_Inner) Descriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{55, 0}
+}
 
 type UnrecognizedWithEmbed struct {
 	UnrecognizedWithEmbed_Embedded `protobuf:"bytes,1,opt,name=embedded,embedded=embedded" json:"embedded"`
-	Field2                         *string `protobuf:"bytes,2,opt" json:"Field2,omitempty"`
+	Field2                         *string `protobuf:"bytes,2,opt,name=Field2,json=field2" json:"Field2,omitempty"`
 	XXX_unrecognized               []byte  `json:"-"`
 }
 
-func (m *UnrecognizedWithEmbed) Reset()      { *m = UnrecognizedWithEmbed{} }
-func (*UnrecognizedWithEmbed) ProtoMessage() {}
+func (m *UnrecognizedWithEmbed) Reset()                    { *m = UnrecognizedWithEmbed{} }
+func (*UnrecognizedWithEmbed) ProtoMessage()               {}
+func (*UnrecognizedWithEmbed) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{56} }
 
 type UnrecognizedWithEmbed_Embedded struct {
-	Field1 *uint32 `protobuf:"varint,1,opt" json:"Field1,omitempty"`
+	Field1 *uint32 `protobuf:"varint,1,opt,name=Field1,json=field1" json:"Field1,omitempty"`
 }
 
 func (m *UnrecognizedWithEmbed_Embedded) Reset()      { *m = UnrecognizedWithEmbed_Embedded{} }
 func (*UnrecognizedWithEmbed_Embedded) ProtoMessage() {}
+func (*UnrecognizedWithEmbed_Embedded) Descriptor() ([]byte, []int) {
+	return fileDescriptorThetest, []int{56, 0}
+}
+
+type Node struct {
+	Label            *string `protobuf:"bytes,1,opt,name=Label,json=label" json:"Label,omitempty"`
+	Children         []*Node `protobuf:"bytes,2,rep,name=Children,json=children" json:"Children,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *Node) Reset()                    { *m = Node{} }
+func (*Node) ProtoMessage()               {}
+func (*Node) Descriptor() ([]byte, []int) { return fileDescriptorThetest, []int{57} }
 
 var E_FieldA = &proto.ExtensionDesc{
 	ExtendedType:  (*MyExtendable)(nil),
 	ExtensionType: (*float64)(nil),
 	Field:         100,
 	Name:          "test.FieldA",
-	Tag:           "fixed64,100,opt",
+	Tag:           "fixed64,100,opt,name=FieldA,json=fieldA",
 }
 
 var E_FieldB = &proto.ExtensionDesc{
@@ -1115,7 +1322,7 @@ var E_FieldB = &proto.ExtensionDesc{
 	ExtensionType: (*NinOptNative)(nil),
 	Field:         101,
 	Name:          "test.FieldB",
-	Tag:           "bytes,101,opt",
+	Tag:           "bytes,101,opt,name=FieldB,json=fieldB",
 }
 
 var E_FieldC = &proto.ExtensionDesc{
@@ -1123,7 +1330,7 @@ var E_FieldC = &proto.ExtensionDesc{
 	ExtensionType: (*NinEmbeddedStruct)(nil),
 	Field:         102,
 	Name:          "test.FieldC",
-	Tag:           "bytes,102,opt",
+	Tag:           "bytes,102,opt,name=FieldC,json=fieldC",
 }
 
 var E_FieldA1 = &proto.ExtensionDesc{
@@ -1131,7 +1338,7 @@ var E_FieldA1 = &proto.ExtensionDesc{
 	ExtensionType: (*float64)(nil),
 	Field:         100,
 	Name:          "test.FieldA1",
-	Tag:           "fixed64,100,opt",
+	Tag:           "fixed64,100,opt,name=FieldA1,json=fieldA1",
 }
 
 var E_FieldB1 = &proto.ExtensionDesc{
@@ -1139,7 +1346,7 @@ var E_FieldB1 = &proto.ExtensionDesc{
 	ExtensionType: (*NinOptNative)(nil),
 	Field:         101,
 	Name:          "test.FieldB1",
-	Tag:           "bytes,101,opt",
+	Tag:           "bytes,101,opt,name=FieldB1,json=fieldB1",
 }
 
 var E_FieldC1 = &proto.ExtensionDesc{
@@ -1147,12 +1354,76 @@ var E_FieldC1 = &proto.ExtensionDesc{
 	ExtensionType: (*NinEmbeddedStruct)(nil),
 	Field:         102,
 	Name:          "test.FieldC1",
-	Tag:           "bytes,102,opt",
+	Tag:           "bytes,102,opt,name=FieldC1,json=fieldC1",
 }
 
 func init() {
+	proto.RegisterType((*NidOptNative)(nil), "test.NidOptNative")
+	proto.RegisterType((*NinOptNative)(nil), "test.NinOptNative")
+	proto.RegisterType((*NidRepNative)(nil), "test.NidRepNative")
+	proto.RegisterType((*NinRepNative)(nil), "test.NinRepNative")
+	proto.RegisterType((*NidRepPackedNative)(nil), "test.NidRepPackedNative")
+	proto.RegisterType((*NinRepPackedNative)(nil), "test.NinRepPackedNative")
+	proto.RegisterType((*NidOptStruct)(nil), "test.NidOptStruct")
+	proto.RegisterType((*NinOptStruct)(nil), "test.NinOptStruct")
+	proto.RegisterType((*NidRepStruct)(nil), "test.NidRepStruct")
+	proto.RegisterType((*NinRepStruct)(nil), "test.NinRepStruct")
+	proto.RegisterType((*NidEmbeddedStruct)(nil), "test.NidEmbeddedStruct")
+	proto.RegisterType((*NinEmbeddedStruct)(nil), "test.NinEmbeddedStruct")
+	proto.RegisterType((*NidNestedStruct)(nil), "test.NidNestedStruct")
+	proto.RegisterType((*NinNestedStruct)(nil), "test.NinNestedStruct")
+	proto.RegisterType((*NidOptCustom)(nil), "test.NidOptCustom")
+	proto.RegisterType((*CustomDash)(nil), "test.CustomDash")
+	proto.RegisterType((*NinOptCustom)(nil), "test.NinOptCustom")
+	proto.RegisterType((*NidRepCustom)(nil), "test.NidRepCustom")
+	proto.RegisterType((*NinRepCustom)(nil), "test.NinRepCustom")
+	proto.RegisterType((*NinOptNativeUnion)(nil), "test.NinOptNativeUnion")
+	proto.RegisterType((*NinOptStructUnion)(nil), "test.NinOptStructUnion")
+	proto.RegisterType((*NinEmbeddedStructUnion)(nil), "test.NinEmbeddedStructUnion")
+	proto.RegisterType((*NinNestedStructUnion)(nil), "test.NinNestedStructUnion")
+	proto.RegisterType((*Tree)(nil), "test.Tree")
+	proto.RegisterType((*OrBranch)(nil), "test.OrBranch")
+	proto.RegisterType((*AndBranch)(nil), "test.AndBranch")
+	proto.RegisterType((*Leaf)(nil), "test.Leaf")
+	proto.RegisterType((*DeepTree)(nil), "test.DeepTree")
+	proto.RegisterType((*ADeepBranch)(nil), "test.ADeepBranch")
+	proto.RegisterType((*AndDeepBranch)(nil), "test.AndDeepBranch")
+	proto.RegisterType((*DeepLeaf)(nil), "test.DeepLeaf")
+	proto.RegisterType((*Nil)(nil), "test.Nil")
+	proto.RegisterType((*NidOptEnum)(nil), "test.NidOptEnum")
+	proto.RegisterType((*NinOptEnum)(nil), "test.NinOptEnum")
+	proto.RegisterType((*NidRepEnum)(nil), "test.NidRepEnum")
+	proto.RegisterType((*NinRepEnum)(nil), "test.NinRepEnum")
+	proto.RegisterType((*NinOptEnumDefault)(nil), "test.NinOptEnumDefault")
+	proto.RegisterType((*AnotherNinOptEnum)(nil), "test.AnotherNinOptEnum")
+	proto.RegisterType((*AnotherNinOptEnumDefault)(nil), "test.AnotherNinOptEnumDefault")
+	proto.RegisterType((*Timer)(nil), "test.Timer")
+	proto.RegisterType((*MyExtendable)(nil), "test.MyExtendable")
+	proto.RegisterType((*OtherExtenable)(nil), "test.OtherExtenable")
+	proto.RegisterType((*NestedDefinition)(nil), "test.NestedDefinition")
+	proto.RegisterType((*NestedDefinition_NestedMessage)(nil), "test.NestedDefinition.NestedMessage")
+	proto.RegisterType((*NestedDefinition_NestedMessage_NestedNestedMsg)(nil), "test.NestedDefinition.NestedMessage.NestedNestedMsg")
+	proto.RegisterType((*NestedScope)(nil), "test.NestedScope")
+	proto.RegisterType((*NinOptNativeDefault)(nil), "test.NinOptNativeDefault")
+	proto.RegisterType((*CustomContainer)(nil), "test.CustomContainer")
+	proto.RegisterType((*CustomNameNidOptNative)(nil), "test.CustomNameNidOptNative")
+	proto.RegisterType((*CustomNameNinOptNative)(nil), "test.CustomNameNinOptNative")
+	proto.RegisterType((*CustomNameNinRepNative)(nil), "test.CustomNameNinRepNative")
+	proto.RegisterType((*CustomNameNinStruct)(nil), "test.CustomNameNinStruct")
+	proto.RegisterType((*CustomNameCustomType)(nil), "test.CustomNameCustomType")
+	proto.RegisterType((*CustomNameNinEmbeddedStructUnion)(nil), "test.CustomNameNinEmbeddedStructUnion")
+	proto.RegisterType((*CustomNameEnum)(nil), "test.CustomNameEnum")
+	proto.RegisterType((*NoExtensionsMap)(nil), "test.NoExtensionsMap")
+	proto.RegisterType((*Unrecognized)(nil), "test.Unrecognized")
+	proto.RegisterType((*UnrecognizedWithInner)(nil), "test.UnrecognizedWithInner")
+	proto.RegisterType((*UnrecognizedWithInner_Inner)(nil), "test.UnrecognizedWithInner.Inner")
+	proto.RegisterType((*UnrecognizedWithEmbed)(nil), "test.UnrecognizedWithEmbed")
+	proto.RegisterType((*UnrecognizedWithEmbed_Embedded)(nil), "test.UnrecognizedWithEmbed.Embedded")
+	proto.RegisterType((*Node)(nil), "test.Node")
 	proto.RegisterEnum("test.TheTestEnum", TheTestEnum_name, TheTestEnum_value)
 	proto.RegisterEnum("test.AnotherTestEnum", AnotherTestEnum_name, AnotherTestEnum_value)
+	proto.RegisterEnum("test.YetAnotherTestEnum", YetAnotherTestEnum_name, YetAnotherTestEnum_value)
+	proto.RegisterEnum("test.YetYetAnotherTestEnum", YetYetAnotherTestEnum_name, YetYetAnotherTestEnum_value)
 	proto.RegisterEnum("test.NestedDefinition_NestedEnum", NestedDefinition_NestedEnum_name, NestedDefinition_NestedEnum_value)
 	proto.RegisterExtension(E_FieldA)
 	proto.RegisterExtension(E_FieldB)
@@ -1161,1991 +1432,3422 @@ func init() {
 	proto.RegisterExtension(E_FieldB1)
 	proto.RegisterExtension(E_FieldC1)
 }
-func (this *NidOptNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidOptNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidRepNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidRepNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinRepNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinRepNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidRepPackedNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidRepPackedNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinRepPackedNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinRepPackedNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidOptStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidOptStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidRepStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidRepStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinRepStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinRepStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidEmbeddedStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidEmbeddedStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinEmbeddedStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinEmbeddedStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidNestedStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidNestedStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinNestedStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinNestedStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidOptCustom) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidOptCustom) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomDash) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomDash) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptCustom) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptCustom) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidRepCustom) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidRepCustom) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinRepCustom) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinRepCustom) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptNativeUnion) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptNativeUnion) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptStructUnion) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptStructUnion) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinEmbeddedStructUnion) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinEmbeddedStructUnion) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinNestedStructUnion) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinNestedStructUnion) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *Tree) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *Tree) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *OrBranch) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *OrBranch) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *AndBranch) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *AndBranch) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *Leaf) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *Leaf) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *DeepTree) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *DeepTree) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *ADeepBranch) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *ADeepBranch) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *AndDeepBranch) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *AndDeepBranch) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *DeepLeaf) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *DeepLeaf) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *Nil) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *Nil) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidOptEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidOptEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NidRepEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NidRepEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinRepEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinRepEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptEnumDefault) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptEnumDefault) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *AnotherNinOptEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *AnotherNinOptEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *AnotherNinOptEnumDefault) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *AnotherNinOptEnumDefault) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *Timer) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *Timer) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *MyExtendable) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *MyExtendable) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *OtherExtenable) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *OtherExtenable) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NestedDefinition) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NestedDefinition) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NestedDefinition_NestedMessage) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NestedDefinition_NestedMessage) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NestedDefinition_NestedMessage_NestedNestedMsg) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NestedDefinition_NestedMessage_NestedNestedMsg) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NestedScope) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NestedScope) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NinOptNativeDefault) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NinOptNativeDefault) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomContainer) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomContainer) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameNidOptNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameNidOptNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameNinOptNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameNinOptNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameNinRepNative) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameNinRepNative) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameNinStruct) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameNinStruct) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameCustomType) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameCustomType) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameNinEmbeddedStructUnion) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameNinEmbeddedStructUnion) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *CustomNameEnum) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *CustomNameEnum) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *NoExtensionsMap) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *NoExtensionsMap) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *Unrecognized) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *Unrecognized) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *UnrecognizedWithInner) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *UnrecognizedWithInner) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *UnrecognizedWithInner_Inner) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *UnrecognizedWithInner_Inner) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *UnrecognizedWithEmbed) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *UnrecognizedWithEmbed) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func (this *UnrecognizedWithEmbed_Embedded) Description() (desc *google_protobuf.FileDescriptorSet) {
+func (this *UnrecognizedWithEmbed_Embedded) Description() (desc *descriptor.FileDescriptorSet) {
 	return ThetestDescription()
 }
-func ThetestDescription() (desc *google_protobuf.FileDescriptorSet) {
-	return &google_protobuf.FileDescriptorSet{File: []*google_protobuf.FileDescriptorProto{{Name: func(v string) *string { return &v }("google/protobuf/descriptor.proto"), Package: func(v string) *string { return &v }("google.protobuf"), Dependency: []string(nil), PublicDependency: []int32(nil), WeakDependency: []int32(nil), MessageType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("FileDescriptorSet"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("file"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FileDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FileDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("package"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("dependency"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("public_dependency"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("weak_dependency"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("message_type"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("enum_type"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.EnumDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("service"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.ServiceDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("extension"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FileOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("source_code_info"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.SourceCodeInfo"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("syntax"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("DescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("field"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("extension"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("nested_type"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("enum_type"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.EnumDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("extension_range"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto.ExtensionRange"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("oneof_decl"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.OneofDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("ExtensionRange"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("start"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("end"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("number"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("label"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto.Label"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("type"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto.Type"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("type_name"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("extendee"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("default_value"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("oneof_index"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto{{Name: func(v string) *string { return &v }("Type"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("TYPE_DOUBLE"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_FLOAT"), Number: func(v int32) *int32 { return &v }(2), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_INT64"), Number: func(v int32) *int32 { return &v }(3), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_UINT64"), Number: func(v int32) *int32 { return &v }(4), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_INT32"), Number: func(v int32) *int32 { return &v }(5), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_FIXED64"), Number: func(v int32) *int32 { return &v }(6), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_FIXED32"), Number: func(v int32) *int32 { return &v }(7), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_BOOL"), Number: func(v int32) *int32 { return &v }(8), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_STRING"), Number: func(v int32) *int32 { return &v }(9), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_GROUP"), Number: func(v int32) *int32 { return &v }(10), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_MESSAGE"), Number: func(v int32) *int32 { return &v }(11), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_BYTES"), Number: func(v int32) *int32 { return &v }(12), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_UINT32"), Number: func(v int32) *int32 { return &v }(13), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_ENUM"), Number: func(v int32) *int32 { return &v }(14), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_SFIXED32"), Number: func(v int32) *int32 { return &v }(15), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_SFIXED64"), Number: func(v int32) *int32 { return &v }(16), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_SINT32"), Number: func(v int32) *int32 { return &v }(17), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("TYPE_SINT64"), Number: func(v int32) *int32 { return &v }(18), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Label"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("LABEL_OPTIONAL"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("LABEL_REQUIRED"), Number: func(v int32) *int32 { return &v }(2), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("LABEL_REPEATED"), Number: func(v int32) *int32 { return &v }(3), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}}, ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("OneofDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("EnumDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.EnumValueDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.EnumOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("EnumValueDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("number"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.EnumValueOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("ServiceDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("method"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.MethodDescriptorProto"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.ServiceOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("MethodDescriptorProto"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("input_type"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("output_type"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("options"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.MethodOptions"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("client_streaming"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("server_streaming"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FileOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("java_package"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("java_outer_classname"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("java_multiple_files"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("java_generate_equals_and_hash"), Number: func(v int32) *int32 { return &v }(20), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("java_string_check_utf8"), Number: func(v int32) *int32 { return &v }(27), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("optimize_for"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".google.protobuf.FileOptions.OptimizeMode"), Extendee: nil, DefaultValue: func(v string) *string { return &v }("SPEED"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("go_package"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("cc_generic_services"), Number: func(v int32) *int32 { return &v }(16), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("java_generic_services"), Number: func(v int32) *int32 { return &v }(17), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("py_generic_services"), Number: func(v int32) *int32 { return &v }(18), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(23), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("cc_enable_arenas"), Number: func(v int32) *int32 { return &v }(31), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto{{Name: func(v string) *string { return &v }("OptimizeMode"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("SPEED"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CODE_SIZE"), Number: func(v int32) *int32 { return &v }(2), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("LITE_RUNTIME"), Number: func(v int32) *int32 { return &v }(3), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}}, ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("MessageOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("message_set_wire_format"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("no_standard_descriptor_accessor"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("map_entry"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("ctype"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".google.protobuf.FieldOptions.CType"), Extendee: nil, DefaultValue: func(v string) *string { return &v }("STRING"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("packed"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("lazy"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("weak"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto{{Name: func(v string) *string { return &v }("CType"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("STRING"), Number: func(v int32) *int32 { return &v }(0), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CORD"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("STRING_PIECE"), Number: func(v int32) *int32 { return &v }(2), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}}, ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("EnumOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("allow_alias"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("EnumValueOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("ServiceOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(33), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("MethodOptions"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"), Number: func(v int32) *int32 { return &v }(33), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("false"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("uninterpreted_option"), Number: func(v int32) *int32 { return &v }(999), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000), End: func(v int32) *int32 { return &v }(536870912), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("UninterpretedOption"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption.NamePart"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("identifier_value"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("positive_int_value"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("negative_int_value"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("double_value"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("string_value"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("aggregate_value"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("NamePart"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name_part"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(2), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("is_extension"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(2), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("SourceCodeInfo"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("location"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".google.protobuf.SourceCodeInfo.Location"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("Location"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("path"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("span"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("leading_comments"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("trailing_comments"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), Service: []*google_protobuf.ServiceDescriptorProto(nil), Extension: []*google_protobuf.FieldDescriptorProto(nil), Options: &google_protobuf.FileOptions{JavaPackage: func(v string) *string { return &v }("com.google.protobuf"), JavaOuterClassname: func(v string) *string { return &v }("DescriptorProtos"), JavaMultipleFiles: nil, JavaGenerateEqualsAndHash: nil, JavaStringCheckUtf8: nil, OptimizeFor: func(v google_protobuf.FileOptions_OptimizeMode) *google_protobuf.FileOptions_OptimizeMode { return &v }(1), GoPackage: nil, CcGenericServices: nil, JavaGenericServices: nil, PyGenericServices: nil, Deprecated: nil, CcEnableArenas: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, SourceCodeInfo: nil, Syntax: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("github.com/gogo/protobuf/gogoproto/gogo.proto"), Package: func(v string) *string { return &v }("gogoproto"), Dependency: []string{"google/protobuf/descriptor.proto"}, PublicDependency: []int32(nil), WeakDependency: []int32(nil), MessageType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), Service: []*google_protobuf.ServiceDescriptorProto(nil), Extension: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("goproto_enum_prefix"), Number: func(v int32) *int32 { return &v }(62001), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_enum_stringer"), Number: func(v int32) *int32 { return &v }(62021), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("enum_stringer"), Number: func(v int32) *int32 { return &v }(62022), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_getters_all"), Number: func(v int32) *int32 { return &v }(63001), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_enum_prefix_all"), Number: func(v int32) *int32 { return &v }(63002), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_stringer_all"), Number: func(v int32) *int32 { return &v }(63003), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("verbose_equal_all"), Number: func(v int32) *int32 { return &v }(63004), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("face_all"), Number: func(v int32) *int32 { return &v }(63005), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("gostring_all"), Number: func(v int32) *int32 { return &v }(63006), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("populate_all"), Number: func(v int32) *int32 { return &v }(63007), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("stringer_all"), Number: func(v int32) *int32 { return &v }(63008), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("onlyone_all"), Number: func(v int32) *int32 { return &v }(63009), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("equal_all"), Number: func(v int32) *int32 { return &v }(63013), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("description_all"), Number: func(v int32) *int32 { return &v }(63014), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("testgen_all"), Number: func(v int32) *int32 { return &v }(63015), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("benchgen_all"), Number: func(v int32) *int32 { return &v }(63016), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("marshaler_all"), Number: func(v int32) *int32 { return &v }(63017), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unmarshaler_all"), Number: func(v int32) *int32 { return &v }(63018), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("sizer_all"), Number: func(v int32) *int32 { return &v }(63020), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_enum_stringer_all"), Number: func(v int32) *int32 { return &v }(63021), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("enum_stringer_all"), Number: func(v int32) *int32 { return &v }(63022), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unsafe_marshaler_all"), Number: func(v int32) *int32 { return &v }(63023), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unsafe_unmarshaler_all"), Number: func(v int32) *int32 { return &v }(63024), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_extensions_map_all"), Number: func(v int32) *int32 { return &v }(63025), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_unrecognized_all"), Number: func(v int32) *int32 { return &v }(63026), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("gogoproto_import"), Number: func(v int32) *int32 { return &v }(63027), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_getters"), Number: func(v int32) *int32 { return &v }(64001), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_stringer"), Number: func(v int32) *int32 { return &v }(64003), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("verbose_equal"), Number: func(v int32) *int32 { return &v }(64004), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("face"), Number: func(v int32) *int32 { return &v }(64005), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("gostring"), Number: func(v int32) *int32 { return &v }(64006), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("populate"), Number: func(v int32) *int32 { return &v }(64007), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("stringer"), Number: func(v int32) *int32 { return &v }(67008), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("onlyone"), Number: func(v int32) *int32 { return &v }(64009), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("equal"), Number: func(v int32) *int32 { return &v }(64013), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("description"), Number: func(v int32) *int32 { return &v }(64014), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("testgen"), Number: func(v int32) *int32 { return &v }(64015), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("benchgen"), Number: func(v int32) *int32 { return &v }(64016), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("marshaler"), Number: func(v int32) *int32 { return &v }(64017), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unmarshaler"), Number: func(v int32) *int32 { return &v }(64018), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("sizer"), Number: func(v int32) *int32 { return &v }(64020), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unsafe_marshaler"), Number: func(v int32) *int32 { return &v }(64023), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("unsafe_unmarshaler"), Number: func(v int32) *int32 { return &v }(64024), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_extensions_map"), Number: func(v int32) *int32 { return &v }(64025), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("goproto_unrecognized"), Number: func(v int32) *int32 { return &v }(64026), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("nullable"), Number: func(v int32) *int32 { return &v }(65001), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("embed"), Number: func(v int32) *int32 { return &v }(65002), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("customtype"), Number: func(v int32) *int32 { return &v }(65003), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("customname"), Number: func(v int32) *int32 { return &v }(65004), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("jsontag"), Number: func(v int32) *int32 { return &v }(65005), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("moretags"), Number: func(v int32) *int32 { return &v }(65006), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("casttype"), Number: func(v int32) *int32 { return &v }(65007), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Options: &google_protobuf.FileOptions{JavaPackage: func(v string) *string { return &v }("com.google.protobuf"), JavaOuterClassname: func(v string) *string { return &v }("GoGoProtos"), JavaMultipleFiles: nil, JavaGenerateEqualsAndHash: nil, JavaStringCheckUtf8: nil, OptimizeFor: nil, GoPackage: nil, CcGenericServices: nil, JavaGenericServices: nil, PyGenericServices: nil, Deprecated: nil, CcEnableArenas: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, SourceCodeInfo: nil, Syntax: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("combos/unsafemarshaler/thetest.proto"), Package: func(v string) *string { return &v }("test"), Dependency: []string{"github.com/gogo/protobuf/gogoproto/gogo.proto"}, PublicDependency: []int32(nil), WeakDependency: []int32(nil), MessageType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("NidOptNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidRepNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinRepNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidRepPackedNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinRepPackedNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: func(v bool) *bool { return &v }(true), Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidOptStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidRepStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinRepStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidEmbeddedStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field200"), Number: func(v int32) *int32 { return &v }(200), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field210"), Number: func(v int32) *int32 { return &v }(210), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinEmbeddedStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field200"), Number: func(v int32) *int32 { return &v }(200), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field210"), Number: func(v int32) *int32 { return &v }(210), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidNestedStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptStruct"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidRepStruct"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinNestedStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptStruct"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinRepStruct"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidOptCustom"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomDash"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x34, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2d, 0x64, 0x61, 0x73, 0x68, 0x2d, 0x74, 0x79, 0x70, 0x65, 0x2e, 0x42, 0x79, 0x74, 0x65, 0x73})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptCustom"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidRepCustom"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinRepCustom"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptNativeUnion"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptStructUnion"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinEmbeddedStructUnion"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field200"), Number: func(v int32) *int32 { return &v }(200), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field210"), Number: func(v int32) *int32 { return &v }(210), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinNestedStructUnion"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNativeUnion"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptStructUnion"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStructUnion"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Tree"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Or"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.OrBranch"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("And"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.AndBranch"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Leaf"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Leaf"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("OrBranch"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Tree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Right"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Tree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("AndBranch"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Tree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Right"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Tree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Leaf"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("StrValue"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("DeepTree"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Down"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.ADeepBranch"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("And"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.AndDeepBranch"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Leaf"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.DeepLeaf"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("ADeepBranch"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Down"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.DeepTree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("AndDeepBranch"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.DeepTree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Right"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.DeepTree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("DeepLeaf"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Tree"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.Tree"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Nil"), Field: []*google_protobuf.FieldDescriptorProto(nil), Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidOptEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NidRepEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinRepEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptEnumDefault"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: func(v string) *string { return &v }("C"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("AnotherNinOptEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.AnotherTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("AnotherNinOptEnumDefault"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.AnotherTestEnum"), Extendee: nil, DefaultValue: func(v string) *string { return &v }("E"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Timer"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Time1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Time2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Data"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("MyExtendable"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(100), End: func(v int32) *int32 { return &v }(200), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("OtherExtenable"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("M"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.MyExtendable"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(14), End: func(v int32) *int32 { return &v }(17), XXX_unrecognized: []byte(nil)}, {Start: func(v int32) *int32 { return &v }(10), End: func(v int32) *int32 { return &v }(13), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NestedDefinition"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("EnumField"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NNM"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NM"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("NestedMessage"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("NestedField1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NNM"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("NestedNestedMsg"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("NestedNestedField1"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto{{Name: func(v string) *string { return &v }("NestedEnum"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("TYPE_NESTED"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}}, ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NestedScope"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("A"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("B"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("C"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NinOptNativeDefault"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234.1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234.1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("true"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: func(v string) *string { return &v }("1234"), OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomContainer"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("CustomStruct"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptCustom"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameNidOptNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4c})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameNinOptNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x5, 0x46, 0x69, 0x65, 0x6c, 0x4c})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameNinRepNative"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(5), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field5"), Number: func(v int32) *int32 { return &v }(5), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(18), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field9"), Number: func(v int32) *int32 { return &v }(9), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(7), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field10"), Number: func(v int32) *int32 { return &v }(10), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(15), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field11"), Number: func(v int32) *int32 { return &v }(11), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(6), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field12"), Number: func(v int32) *int32 { return &v }(12), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(16), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4c})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameNinStruct"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(2), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field3"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field4"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field6"), Number: func(v int32) *int32 { return &v }(6), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(4), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field7"), Number: func(v int32) *int32 { return &v }(7), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(17), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field8"), Number: func(v int32) *int32 { return &v }(8), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field13"), Number: func(v int32) *int32 { return &v }(13), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field14"), Number: func(v int32) *int32 { return &v }(14), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field15"), Number: func(v int32) *int32 { return &v }(15), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameCustomType"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Value"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Ids"), Number: func(v int32) *int32 { return &v }(3), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Values"), Number: func(v int32) *int32 { return &v }(4), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(12), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameNinEmbeddedStructUnion"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NidOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field200"), Number: func(v int32) *int32 { return &v }(200), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field210"), Number: func(v int32) *int32 { return &v }(210), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(8), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("CustomNameEnum"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(14), TypeName: func(v string) *string { return &v }(".test.TheTestEnum"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("NoExtensionsMap"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(3), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(100), End: func(v int32) *int32 { return &v }(200), XXX_unrecognized: []byte(nil)}}, OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0}), 64025: proto.NewExtension([]byte{0xc8, 0xa1, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Unrecognized"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("UnrecognizedWithInner"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("embedded"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(3), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.UnrecognizedWithInner.Inner"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("Inner"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("UnrecognizedWithEmbed"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("embedded"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.UnrecognizedWithEmbed.Embedded"), Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: &google_protobuf.FieldOptions{Ctype: nil, Packed: nil, Lazy: nil, Deprecated: nil, Weak: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("Field2"), Number: func(v int32) *int32 { return &v }(2), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(9), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto{{Name: func(v string) *string { return &v }("Embedded"), Field: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"), Number: func(v int32) *int32 { return &v }(1), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(13), TypeName: nil, Extendee: nil, DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Extension: []*google_protobuf.FieldDescriptorProto(nil), NestedType: []*google_protobuf.DescriptorProto(nil), EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: &google_protobuf.MessageOptions{MessageSetWireFormat: nil, NoStandardDescriptorAccessor: nil, Deprecated: nil, MapEntry: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto(nil), ExtensionRange: []*google_protobuf.DescriptorProto_ExtensionRange(nil), OneofDecl: []*google_protobuf.OneofDescriptorProto(nil), Options: nil, XXX_unrecognized: []byte(nil)}}, EnumType: []*google_protobuf.EnumDescriptorProto{{Name: func(v string) *string { return &v }("TheTestEnum"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("A"), Number: func(v int32) *int32 { return &v }(0), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("B"), Number: func(v int32) *int32 { return &v }(1), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("C"), Number: func(v int32) *int32 { return &v }(2), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("AnotherTestEnum"), Value: []*google_protobuf.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("D"), Number: func(v int32) *int32 { return &v }(10), Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("E"), Number: func(v int32) *int32 { return &v }(11), Options: nil, XXX_unrecognized: []byte(nil)}}, Options: &google_protobuf.EnumOptions{AllowAlias: nil, Deprecated: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{62001: proto.NewExtension([]byte{0x88, 0xa3, 0x1e, 0x0})}, XXX_unrecognized: []byte(nil)}, XXX_unrecognized: []byte(nil)}}, Service: []*google_protobuf.ServiceDescriptorProto(nil), Extension: []*google_protobuf.FieldDescriptorProto{{Name: func(v string) *string { return &v }("FieldA"), Number: func(v int32) *int32 { return &v }(100), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: func(v string) *string { return &v }(".test.MyExtendable"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldB"), Number: func(v int32) *int32 { return &v }(101), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: func(v string) *string { return &v }(".test.MyExtendable"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldC"), Number: func(v int32) *int32 { return &v }(102), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStruct"), Extendee: func(v string) *string { return &v }(".test.MyExtendable"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldA1"), Number: func(v int32) *int32 { return &v }(100), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(1), TypeName: nil, Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldB1"), Number: func(v int32) *int32 { return &v }(101), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinOptNative"), Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}, {Name: func(v string) *string { return &v }("FieldC1"), Number: func(v int32) *int32 { return &v }(102), Label: func(v google_protobuf.FieldDescriptorProto_Label) *google_protobuf.FieldDescriptorProto_Label {
-		return &v
-	}(1), Type: func(v google_protobuf.FieldDescriptorProto_Type) *google_protobuf.FieldDescriptorProto_Type {
-		return &v
-	}(11), TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStruct"), Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"), DefaultValue: nil, OneofIndex: nil, Options: nil, XXX_unrecognized: []byte(nil)}}, Options: &google_protobuf.FileOptions{JavaPackage: nil, JavaOuterClassname: nil, JavaMultipleFiles: nil, JavaGenerateEqualsAndHash: nil, JavaStringCheckUtf8: nil, OptimizeFor: nil, GoPackage: nil, CcGenericServices: nil, JavaGenericServices: nil, PyGenericServices: nil, Deprecated: nil, CcEnableArenas: nil, UninterpretedOption: []*google_protobuf.UninterpretedOption(nil), XXX_extensions: map[int32]proto.Extension{63001: proto.NewExtension([]byte{0xc8, 0xe1, 0x1e, 0x0}), 63002: proto.NewExtension([]byte{0xd0, 0xe1, 0x1e, 0x0}), 63003: proto.NewExtension([]byte{0xd8, 0xe1, 0x1e, 0x0}), 63004: proto.NewExtension([]byte{0xe0, 0xe1, 0x1e, 0x1}), 63005: proto.NewExtension([]byte{0xe8, 0xe1, 0x1e, 0x1}), 63006: proto.NewExtension([]byte{0xf0, 0xe1, 0x1e, 0x1}), 63007: proto.NewExtension([]byte{0xf8, 0xe1, 0x1e, 0x1}), 63008: proto.NewExtension([]byte{0x80, 0xe2, 0x1e, 0x1}), 63013: proto.NewExtension([]byte{0xa8, 0xe2, 0x1e, 0x1}), 63014: proto.NewExtension([]byte{0xb0, 0xe2, 0x1e, 0x1}), 63015: proto.NewExtension([]byte{0xb8, 0xe2, 0x1e, 0x1}), 63016: proto.NewExtension([]byte{0xc0, 0xe2, 0x1e, 0x1}), 63017: proto.NewExtension([]byte{0xc8, 0xe2, 0x1e, 0x0}), 63018: proto.NewExtension([]byte{0xd0, 0xe2, 0x1e, 0x0}), 63020: proto.NewExtension([]byte{0xe0, 0xe2, 0x1e, 0x1}), 63021: proto.NewExtension([]byte{0xe8, 0xe2, 0x1e, 0x0}), 63022: proto.NewExtension([]byte{0xf0, 0xe2, 0x1e, 0x1}), 63023: proto.NewExtension([]byte{0xf8, 0xe2, 0x1e, 0x1}), 63024: proto.NewExtension([]byte{0x80, 0xe3, 0x1e, 0x0})}, XXX_unrecognized: []byte(nil)}, SourceCodeInfo: nil, Syntax: nil, XXX_unrecognized: []byte(nil)}}, XXX_unrecognized: []byte(nil)}
+func (this *Node) Description() (desc *descriptor.FileDescriptorSet) {
+	return ThetestDescription()
+}
+func ThetestDescription() (desc *descriptor.FileDescriptorSet) {
+	return &descriptor.FileDescriptorSet{File: []*descriptor.FileDescriptorProto{{Name: func(v string) *string { return &v }("google/protobuf/descriptor.proto"),
+		Package: func(v string) *string { return &v }("google.protobuf"),
+		MessageType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("FileDescriptorSet"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("file"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FileDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("file"),
+			}},
+		}, {Name: func(v string) *string { return &v }("FileDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("package"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("package"),
+			}, {Name: func(v string) *string { return &v }("dependency"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("dependency"),
+			}, {Name: func(v string) *string { return &v }("public_dependency"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("publicDependency"),
+			}, {Name: func(v string) *string { return &v }("weak_dependency"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("weakDependency"),
+			}, {Name: func(v string) *string { return &v }("message_type"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto"),
+				JsonName: func(v string) *string { return &v }("messageType"),
+			}, {Name: func(v string) *string { return &v }("enum_type"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.EnumDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("enumType"),
+			}, {Name: func(v string) *string { return &v }("service"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.ServiceDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("service"),
+			}, {Name: func(v string) *string { return &v }("extension"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("extension"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}, {Name: func(v string) *string { return &v }("source_code_info"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.SourceCodeInfo"),
+				JsonName: func(v string) *string { return &v }("sourceCodeInfo"),
+			}, {Name: func(v string) *string { return &v }("syntax"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("syntax"),
+			}},
+		}, {Name: func(v string) *string { return &v }("DescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("field"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("field"),
+			}, {Name: func(v string) *string { return &v }("extension"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("extension"),
+			}, {Name: func(v string) *string { return &v }("nested_type"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto"),
+				JsonName: func(v string) *string { return &v }("nestedType"),
+			}, {Name: func(v string) *string { return &v }("enum_type"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.EnumDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("enumType"),
+			}, {Name: func(v string) *string { return &v }("extension_range"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto.ExtensionRange"),
+				JsonName: func(v string) *string { return &v }("extensionRange"),
+			}, {Name: func(v string) *string { return &v }("oneof_decl"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.OneofDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("oneofDecl"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}, {Name: func(v string) *string { return &v }("reserved_range"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.DescriptorProto.ReservedRange"),
+				JsonName: func(v string) *string { return &v }("reservedRange"),
+			}, {Name: func(v string) *string { return &v }("reserved_name"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("reservedName"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("ExtensionRange"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("start"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("start"),
+				}, {Name: func(v string) *string { return &v }("end"),
+					Number:   func(v int32) *int32 { return &v }(2),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("end"),
+				}},
+			}, {Name: func(v string) *string { return &v }("ReservedRange"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("start"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("start"),
+				}, {Name: func(v string) *string { return &v }("end"),
+					Number:   func(v int32) *int32 { return &v }(2),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("end"),
+				}},
+			}},
+		}, {Name: func(v string) *string { return &v }("FieldDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("number"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("number"),
+			}, {Name: func(v string) *string { return &v }("label"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto.Label"),
+				JsonName: func(v string) *string { return &v }("label"),
+			}, {Name: func(v string) *string { return &v }("type"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldDescriptorProto.Type"),
+				JsonName: func(v string) *string { return &v }("type"),
+			}, {Name: func(v string) *string { return &v }("type_name"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("typeName"),
+			}, {Name: func(v string) *string { return &v }("extendee"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("extendee"),
+			}, {Name: func(v string) *string { return &v }("default_value"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("defaultValue"),
+			}, {Name: func(v string) *string { return &v }("oneof_index"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("oneofIndex"),
+			}, {Name: func(v string) *string { return &v }("json_name"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("jsonName"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}},
+			EnumType: []*descriptor.EnumDescriptorProto{{Name: func(v string) *string { return &v }("Type"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("TYPE_DOUBLE"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}, {Name: func(v string) *string { return &v }("TYPE_FLOAT"),
+					Number: func(v int32) *int32 { return &v }(2),
+				}, {Name: func(v string) *string { return &v }("TYPE_INT64"),
+					Number: func(v int32) *int32 { return &v }(3),
+				}, {Name: func(v string) *string { return &v }("TYPE_UINT64"),
+					Number: func(v int32) *int32 { return &v }(4),
+				}, {Name: func(v string) *string { return &v }("TYPE_INT32"),
+					Number: func(v int32) *int32 { return &v }(5),
+				}, {Name: func(v string) *string { return &v }("TYPE_FIXED64"),
+					Number: func(v int32) *int32 { return &v }(6),
+				}, {Name: func(v string) *string { return &v }("TYPE_FIXED32"),
+					Number: func(v int32) *int32 { return &v }(7),
+				}, {Name: func(v string) *string { return &v }("TYPE_BOOL"),
+					Number: func(v int32) *int32 { return &v }(8),
+				}, {Name: func(v string) *string { return &v }("TYPE_STRING"),
+					Number: func(v int32) *int32 { return &v }(9),
+				}, {Name: func(v string) *string { return &v }("TYPE_GROUP"),
+					Number: func(v int32) *int32 { return &v }(10),
+				}, {Name: func(v string) *string { return &v }("TYPE_MESSAGE"),
+					Number: func(v int32) *int32 { return &v }(11),
+				}, {Name: func(v string) *string { return &v }("TYPE_BYTES"),
+					Number: func(v int32) *int32 { return &v }(12),
+				}, {Name: func(v string) *string { return &v }("TYPE_UINT32"),
+					Number: func(v int32) *int32 { return &v }(13),
+				}, {Name: func(v string) *string { return &v }("TYPE_ENUM"),
+					Number: func(v int32) *int32 { return &v }(14),
+				}, {Name: func(v string) *string { return &v }("TYPE_SFIXED32"),
+					Number: func(v int32) *int32 { return &v }(15),
+				}, {Name: func(v string) *string { return &v }("TYPE_SFIXED64"),
+					Number: func(v int32) *int32 { return &v }(16),
+				}, {Name: func(v string) *string { return &v }("TYPE_SINT32"),
+					Number: func(v int32) *int32 { return &v }(17),
+				}, {Name: func(v string) *string { return &v }("TYPE_SINT64"),
+					Number: func(v int32) *int32 { return &v }(18),
+				}},
+			}, {Name: func(v string) *string { return &v }("Label"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("LABEL_OPTIONAL"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}, {Name: func(v string) *string { return &v }("LABEL_REQUIRED"),
+					Number: func(v int32) *int32 { return &v }(2),
+				}, {Name: func(v string) *string { return &v }("LABEL_REPEATED"),
+					Number: func(v int32) *int32 { return &v }(3),
+				}},
+			}},
+		}, {Name: func(v string) *string { return &v }("OneofDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}},
+		}, {Name: func(v string) *string { return &v }("EnumDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.EnumValueDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("value"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.EnumOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}},
+		}, {Name: func(v string) *string { return &v }("EnumValueDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("number"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("number"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.EnumValueOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}},
+		}, {Name: func(v string) *string { return &v }("ServiceDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("method"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.MethodDescriptorProto"),
+				JsonName: func(v string) *string { return &v }("method"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.ServiceOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}},
+		}, {Name: func(v string) *string { return &v }("MethodDescriptorProto"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("input_type"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("inputType"),
+			}, {Name: func(v string) *string { return &v }("output_type"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("outputType"),
+			}, {Name: func(v string) *string { return &v }("options"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.MethodOptions"),
+				JsonName: func(v string) *string { return &v }("options"),
+			}, {Name: func(v string) *string { return &v }("client_streaming"),
+				Number:       func(v int32) *int32 { return &v }(5),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("clientStreaming"),
+			}, {Name: func(v string) *string { return &v }("server_streaming"),
+				Number:       func(v int32) *int32 { return &v }(6),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("serverStreaming"),
+			}},
+		}, {Name: func(v string) *string { return &v }("FileOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("java_package"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("javaPackage"),
+			}, {Name: func(v string) *string { return &v }("java_outer_classname"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("javaOuterClassname"),
+			}, {Name: func(v string) *string { return &v }("java_multiple_files"),
+				Number:       func(v int32) *int32 { return &v }(10),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("javaMultipleFiles"),
+			}, {Name: func(v string) *string { return &v }("java_generate_equals_and_hash"),
+				Number:       func(v int32) *int32 { return &v }(20),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("javaGenerateEqualsAndHash"),
+			}, {Name: func(v string) *string { return &v }("java_string_check_utf8"),
+				Number:       func(v int32) *int32 { return &v }(27),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("javaStringCheckUtf8"),
+			}, {Name: func(v string) *string { return &v }("optimize_for"),
+				Number:       func(v int32) *int32 { return &v }(9),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".google.protobuf.FileOptions.OptimizeMode"),
+				DefaultValue: func(v string) *string { return &v }("SPEED"),
+				JsonName:     func(v string) *string { return &v }("optimizeFor"),
+			}, {Name: func(v string) *string { return &v }("go_package"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("goPackage"),
+			}, {Name: func(v string) *string { return &v }("cc_generic_services"),
+				Number:       func(v int32) *int32 { return &v }(16),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("ccGenericServices"),
+			}, {Name: func(v string) *string { return &v }("java_generic_services"),
+				Number:       func(v int32) *int32 { return &v }(17),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("javaGenericServices"),
+			}, {Name: func(v string) *string { return &v }("py_generic_services"),
+				Number:       func(v int32) *int32 { return &v }(18),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("pyGenericServices"),
+			}, {Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(23),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("cc_enable_arenas"),
+				Number:       func(v int32) *int32 { return &v }(31),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("ccEnableArenas"),
+			}, {Name: func(v string) *string { return &v }("objc_class_prefix"),
+				Number:   func(v int32) *int32 { return &v }(36),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("objcClassPrefix"),
+			}, {Name: func(v string) *string { return &v }("csharp_namespace"),
+				Number:   func(v int32) *int32 { return &v }(37),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("csharpNamespace"),
+			}, {Name: func(v string) *string { return &v }("javanano_use_deprecated_package"),
+				Number:   func(v int32) *int32 { return &v }(38),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("javananoUseDeprecatedPackage"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			EnumType: []*descriptor.EnumDescriptorProto{{Name: func(v string) *string { return &v }("OptimizeMode"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("SPEED"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}, {Name: func(v string) *string { return &v }("CODE_SIZE"),
+					Number: func(v int32) *int32 { return &v }(2),
+				}, {Name: func(v string) *string { return &v }("LITE_RUNTIME"),
+					Number: func(v int32) *int32 { return &v }(3),
+				}},
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("MessageOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("message_set_wire_format"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("messageSetWireFormat"),
+			}, {Name: func(v string) *string { return &v }("no_standard_descriptor_accessor"),
+				Number:       func(v int32) *int32 { return &v }(2),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("noStandardDescriptorAccessor"),
+			}, {Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("map_entry"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("mapEntry"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("FieldOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("ctype"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".google.protobuf.FieldOptions.CType"),
+				DefaultValue: func(v string) *string { return &v }("STRING"),
+				JsonName:     func(v string) *string { return &v }("ctype"),
+			}, {Name: func(v string) *string { return &v }("packed"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("packed"),
+			}, {Name: func(v string) *string { return &v }("jstype"),
+				Number:       func(v int32) *int32 { return &v }(6),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".google.protobuf.FieldOptions.JSType"),
+				DefaultValue: func(v string) *string { return &v }("JS_NORMAL"),
+				JsonName:     func(v string) *string { return &v }("jstype"),
+			}, {Name: func(v string) *string { return &v }("lazy"),
+				Number:       func(v int32) *int32 { return &v }(5),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("lazy"),
+			}, {Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("weak"),
+				Number:       func(v int32) *int32 { return &v }(10),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("weak"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			EnumType: []*descriptor.EnumDescriptorProto{{Name: func(v string) *string { return &v }("CType"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("STRING"),
+					Number: func(v int32) *int32 { return &v }(0),
+				}, {Name: func(v string) *string { return &v }("CORD"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}, {Name: func(v string) *string { return &v }("STRING_PIECE"),
+					Number: func(v int32) *int32 { return &v }(2),
+				}},
+			}, {Name: func(v string) *string { return &v }("JSType"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("JS_NORMAL"),
+					Number: func(v int32) *int32 { return &v }(0),
+				}, {Name: func(v string) *string { return &v }("JS_STRING"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}, {Name: func(v string) *string { return &v }("JS_NUMBER"),
+					Number: func(v int32) *int32 { return &v }(2),
+				}},
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("EnumOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("allow_alias"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("allowAlias"),
+			}, {Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("EnumValueOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("ServiceOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(33),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("MethodOptions"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("deprecated"),
+				Number:       func(v int32) *int32 { return &v }(33),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("false"),
+				JsonName:     func(v string) *string { return &v }("deprecated"),
+			}, {Name: func(v string) *string { return &v }("uninterpreted_option"),
+				Number:   func(v int32) *int32 { return &v }(999),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption"),
+				JsonName: func(v string) *string { return &v }("uninterpretedOption"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(1000),
+				End: func(v int32) *int32 { return &v }(536870912),
+			}},
+		}, {Name: func(v string) *string { return &v }("UninterpretedOption"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.UninterpretedOption.NamePart"),
+				JsonName: func(v string) *string { return &v }("name"),
+			}, {Name: func(v string) *string { return &v }("identifier_value"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("identifierValue"),
+			}, {Name: func(v string) *string { return &v }("positive_int_value"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("positiveIntValue"),
+			}, {Name: func(v string) *string { return &v }("negative_int_value"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("negativeIntValue"),
+			}, {Name: func(v string) *string { return &v }("double_value"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("doubleValue"),
+			}, {Name: func(v string) *string { return &v }("string_value"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("stringValue"),
+			}, {Name: func(v string) *string { return &v }("aggregate_value"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("aggregateValue"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("NamePart"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("name_part"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(2),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+					JsonName: func(v string) *string { return &v }("namePart"),
+				}, {Name: func(v string) *string { return &v }("is_extension"),
+					Number:   func(v int32) *int32 { return &v }(2),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(2),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+					JsonName: func(v string) *string { return &v }("isExtension"),
+				}},
+			}},
+		}, {Name: func(v string) *string { return &v }("SourceCodeInfo"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("location"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".google.protobuf.SourceCodeInfo.Location"),
+				JsonName: func(v string) *string { return &v }("location"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("Location"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("path"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("path"),
+					Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+						XXX_extensions: map[int32]proto.Extension{},
+					},
+				}, {Name: func(v string) *string { return &v }("span"),
+					Number:   func(v int32) *int32 { return &v }(2),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+					JsonName: func(v string) *string { return &v }("span"),
+					Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+						XXX_extensions: map[int32]proto.Extension{},
+					},
+				}, {Name: func(v string) *string { return &v }("leading_comments"),
+					Number:   func(v int32) *int32 { return &v }(3),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+					JsonName: func(v string) *string { return &v }("leadingComments"),
+				}, {Name: func(v string) *string { return &v }("trailing_comments"),
+					Number:   func(v int32) *int32 { return &v }(4),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+					JsonName: func(v string) *string { return &v }("trailingComments"),
+				}, {Name: func(v string) *string { return &v }("leading_detached_comments"),
+					Number:   func(v int32) *int32 { return &v }(6),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+					JsonName: func(v string) *string { return &v }("leadingDetachedComments"),
+				}},
+			}},
+		}},
+		Options: &descriptor.FileOptions{JavaPackage: func(v string) *string { return &v }("com.google.protobuf"),
+			JavaOuterClassname: func(v string) *string { return &v }("DescriptorProtos"),
+			OptimizeFor:        func(v descriptor.FileOptions_OptimizeMode) *descriptor.FileOptions_OptimizeMode { return &v }(1),
+			GoPackage:          func(v string) *string { return &v }("descriptor"),
+			ObjcClassPrefix:    func(v string) *string { return &v }("GPB"),
+			CsharpNamespace:    func(v string) *string { return &v }("Google.Protobuf.Reflection"),
+			XXX_extensions:     map[int32]proto.Extension{},
+		},
+	}, {Name: func(v string) *string { return &v }("github.com/gogo/protobuf/gogoproto/gogo.proto"),
+		Package:    func(v string) *string { return &v }("gogoproto"),
+		Dependency: []string{"google/protobuf/descriptor.proto"},
+		Extension: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("goproto_enum_prefix"),
+			Number:   func(v int32) *int32 { return &v }(62001),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoEnumPrefix"),
+		}, {Name: func(v string) *string { return &v }("goproto_enum_stringer"),
+			Number:   func(v int32) *int32 { return &v }(62021),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoEnumStringer"),
+		}, {Name: func(v string) *string { return &v }("enum_stringer"),
+			Number:   func(v int32) *int32 { return &v }(62022),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"),
+			JsonName: func(v string) *string { return &v }("enumStringer"),
+		}, {Name: func(v string) *string { return &v }("enum_customname"),
+			Number:   func(v int32) *int32 { return &v }(62023),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.EnumOptions"),
+			JsonName: func(v string) *string { return &v }("enumCustomname"),
+		}, {Name: func(v string) *string { return &v }("enumvalue_customname"),
+			Number:   func(v int32) *int32 { return &v }(66001),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.EnumValueOptions"),
+			JsonName: func(v string) *string { return &v }("enumvalueCustomname"),
+		}, {Name: func(v string) *string { return &v }("goproto_getters_all"),
+			Number:   func(v int32) *int32 { return &v }(63001),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoGettersAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_enum_prefix_all"),
+			Number:   func(v int32) *int32 { return &v }(63002),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoEnumPrefixAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_stringer_all"),
+			Number:   func(v int32) *int32 { return &v }(63003),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoStringerAll"),
+		}, {Name: func(v string) *string { return &v }("verbose_equal_all"),
+			Number:   func(v int32) *int32 { return &v }(63004),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("verboseEqualAll"),
+		}, {Name: func(v string) *string { return &v }("face_all"),
+			Number:   func(v int32) *int32 { return &v }(63005),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("faceAll"),
+		}, {Name: func(v string) *string { return &v }("gostring_all"),
+			Number:   func(v int32) *int32 { return &v }(63006),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("gostringAll"),
+		}, {Name: func(v string) *string { return &v }("populate_all"),
+			Number:   func(v int32) *int32 { return &v }(63007),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("populateAll"),
+		}, {Name: func(v string) *string { return &v }("stringer_all"),
+			Number:   func(v int32) *int32 { return &v }(63008),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("stringerAll"),
+		}, {Name: func(v string) *string { return &v }("onlyone_all"),
+			Number:   func(v int32) *int32 { return &v }(63009),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("onlyoneAll"),
+		}, {Name: func(v string) *string { return &v }("equal_all"),
+			Number:   func(v int32) *int32 { return &v }(63013),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("equalAll"),
+		}, {Name: func(v string) *string { return &v }("description_all"),
+			Number:   func(v int32) *int32 { return &v }(63014),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("descriptionAll"),
+		}, {Name: func(v string) *string { return &v }("testgen_all"),
+			Number:   func(v int32) *int32 { return &v }(63015),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("testgenAll"),
+		}, {Name: func(v string) *string { return &v }("benchgen_all"),
+			Number:   func(v int32) *int32 { return &v }(63016),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("benchgenAll"),
+		}, {Name: func(v string) *string { return &v }("marshaler_all"),
+			Number:   func(v int32) *int32 { return &v }(63017),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("marshalerAll"),
+		}, {Name: func(v string) *string { return &v }("unmarshaler_all"),
+			Number:   func(v int32) *int32 { return &v }(63018),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("unmarshalerAll"),
+		}, {Name: func(v string) *string { return &v }("stable_marshaler_all"),
+			Number:   func(v int32) *int32 { return &v }(63019),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("stableMarshalerAll"),
+		}, {Name: func(v string) *string { return &v }("sizer_all"),
+			Number:   func(v int32) *int32 { return &v }(63020),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("sizerAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_enum_stringer_all"),
+			Number:   func(v int32) *int32 { return &v }(63021),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoEnumStringerAll"),
+		}, {Name: func(v string) *string { return &v }("enum_stringer_all"),
+			Number:   func(v int32) *int32 { return &v }(63022),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("enumStringerAll"),
+		}, {Name: func(v string) *string { return &v }("unsafe_marshaler_all"),
+			Number:   func(v int32) *int32 { return &v }(63023),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("unsafeMarshalerAll"),
+		}, {Name: func(v string) *string { return &v }("unsafe_unmarshaler_all"),
+			Number:   func(v int32) *int32 { return &v }(63024),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("unsafeUnmarshalerAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_extensions_map_all"),
+			Number:   func(v int32) *int32 { return &v }(63025),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoExtensionsMapAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_unrecognized_all"),
+			Number:   func(v int32) *int32 { return &v }(63026),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoUnrecognizedAll"),
+		}, {Name: func(v string) *string { return &v }("gogoproto_import"),
+			Number:   func(v int32) *int32 { return &v }(63027),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("gogoprotoImport"),
+		}, {Name: func(v string) *string { return &v }("protosizer_all"),
+			Number:   func(v int32) *int32 { return &v }(63028),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FileOptions"),
+			JsonName: func(v string) *string { return &v }("protosizerAll"),
+		}, {Name: func(v string) *string { return &v }("goproto_getters"),
+			Number:   func(v int32) *int32 { return &v }(64001),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoGetters"),
+		}, {Name: func(v string) *string { return &v }("goproto_stringer"),
+			Number:   func(v int32) *int32 { return &v }(64003),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoStringer"),
+		}, {Name: func(v string) *string { return &v }("verbose_equal"),
+			Number:   func(v int32) *int32 { return &v }(64004),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("verboseEqual"),
+		}, {Name: func(v string) *string { return &v }("face"),
+			Number:   func(v int32) *int32 { return &v }(64005),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("face"),
+		}, {Name: func(v string) *string { return &v }("gostring"),
+			Number:   func(v int32) *int32 { return &v }(64006),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("gostring"),
+		}, {Name: func(v string) *string { return &v }("populate"),
+			Number:   func(v int32) *int32 { return &v }(64007),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("populate"),
+		}, {Name: func(v string) *string { return &v }("stringer"),
+			Number:   func(v int32) *int32 { return &v }(67008),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("stringer"),
+		}, {Name: func(v string) *string { return &v }("onlyone"),
+			Number:   func(v int32) *int32 { return &v }(64009),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("onlyone"),
+		}, {Name: func(v string) *string { return &v }("equal"),
+			Number:   func(v int32) *int32 { return &v }(64013),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("equal"),
+		}, {Name: func(v string) *string { return &v }("description"),
+			Number:   func(v int32) *int32 { return &v }(64014),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("description"),
+		}, {Name: func(v string) *string { return &v }("testgen"),
+			Number:   func(v int32) *int32 { return &v }(64015),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("testgen"),
+		}, {Name: func(v string) *string { return &v }("benchgen"),
+			Number:   func(v int32) *int32 { return &v }(64016),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("benchgen"),
+		}, {Name: func(v string) *string { return &v }("marshaler"),
+			Number:   func(v int32) *int32 { return &v }(64017),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("marshaler"),
+		}, {Name: func(v string) *string { return &v }("unmarshaler"),
+			Number:   func(v int32) *int32 { return &v }(64018),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("unmarshaler"),
+		}, {Name: func(v string) *string { return &v }("stable_marshaler"),
+			Number:   func(v int32) *int32 { return &v }(64019),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("stableMarshaler"),
+		}, {Name: func(v string) *string { return &v }("sizer"),
+			Number:   func(v int32) *int32 { return &v }(64020),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("sizer"),
+		}, {Name: func(v string) *string { return &v }("unsafe_marshaler"),
+			Number:   func(v int32) *int32 { return &v }(64023),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("unsafeMarshaler"),
+		}, {Name: func(v string) *string { return &v }("unsafe_unmarshaler"),
+			Number:   func(v int32) *int32 { return &v }(64024),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("unsafeUnmarshaler"),
+		}, {Name: func(v string) *string { return &v }("goproto_extensions_map"),
+			Number:   func(v int32) *int32 { return &v }(64025),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoExtensionsMap"),
+		}, {Name: func(v string) *string { return &v }("goproto_unrecognized"),
+			Number:   func(v int32) *int32 { return &v }(64026),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("goprotoUnrecognized"),
+		}, {Name: func(v string) *string { return &v }("protosizer"),
+			Number:   func(v int32) *int32 { return &v }(64028),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.MessageOptions"),
+			JsonName: func(v string) *string { return &v }("protosizer"),
+		}, {Name: func(v string) *string { return &v }("nullable"),
+			Number:   func(v int32) *int32 { return &v }(65001),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("nullable"),
+		}, {Name: func(v string) *string { return &v }("embed"),
+			Number:   func(v int32) *int32 { return &v }(65002),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("embed"),
+		}, {Name: func(v string) *string { return &v }("customtype"),
+			Number:   func(v int32) *int32 { return &v }(65003),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("customtype"),
+		}, {Name: func(v string) *string { return &v }("customname"),
+			Number:   func(v int32) *int32 { return &v }(65004),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("customname"),
+		}, {Name: func(v string) *string { return &v }("jsontag"),
+			Number:   func(v int32) *int32 { return &v }(65005),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("jsontag"),
+		}, {Name: func(v string) *string { return &v }("moretags"),
+			Number:   func(v int32) *int32 { return &v }(65006),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("moretags"),
+		}, {Name: func(v string) *string { return &v }("casttype"),
+			Number:   func(v int32) *int32 { return &v }(65007),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("casttype"),
+		}, {Name: func(v string) *string { return &v }("castkey"),
+			Number:   func(v int32) *int32 { return &v }(65008),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("castkey"),
+		}, {Name: func(v string) *string { return &v }("castvalue"),
+			Number:   func(v int32) *int32 { return &v }(65009),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+			Extendee: func(v string) *string { return &v }(".google.protobuf.FieldOptions"),
+			JsonName: func(v string) *string { return &v }("castvalue"),
+		}},
+		Options: &descriptor.FileOptions{JavaPackage: func(v string) *string { return &v }("com.google.protobuf"),
+			JavaOuterClassname: func(v string) *string { return &v }("GoGoProtos"),
+			XXX_extensions:     map[int32]proto.Extension{},
+		},
+	}, {Name: func(v string) *string { return &v }("combos/unsafemarshaler/thetest.proto"),
+		Package:    func(v string) *string { return &v }("test"),
+		Dependency: []string{"github.com/gogo/protobuf/gogoproto/gogo.proto"},
+		MessageType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("NidOptNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidRepNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinRepNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidRepPackedNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})},
+				},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinRepPackedNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options: &descriptor.FieldOptions{Packed: func(v bool) *bool { return &v }(true),
+					XXX_extensions: map[int32]proto.Extension{},
+				},
+			}},
+		}, {Name: func(v string) *string { return &v }("NidOptStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field8"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidRepStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinRepStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field8"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidEmbeddedStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}},
+			}, {Name: func(v string) *string { return &v }("Field200"),
+				Number:   func(v int32) *int32 { return &v }(200),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field200"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field210"),
+				Number:   func(v int32) *int32 { return &v }(210),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field210"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinEmbeddedStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}},
+			}, {Name: func(v string) *string { return &v }("Field200"),
+				Number:   func(v int32) *int32 { return &v }(200),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field200"),
+			}, {Name: func(v string) *string { return &v }("Field210"),
+				Number:   func(v int32) *int32 { return &v }(210),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field210"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidNestedStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptStruct"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidRepStruct"),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinNestedStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptStruct"),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinRepStruct"),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidOptCustom"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("id"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}},
+			}, {Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomDash"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x34, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2d, 0x64, 0x61, 0x73, 0x68, 0x2d, 0x74, 0x79, 0x70, 0x65, 0x2e, 0x42, 0x79, 0x74, 0x65, 0x73})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptCustom"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("id"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}},
+			}, {Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NidRepCustom"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("id"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}},
+			}, {Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinRepCustom"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("id"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64})}},
+			}, {Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptNativeUnion"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("NinOptStructUnion"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("NinEmbeddedStructUnion"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}},
+			}, {Name: func(v string) *string { return &v }("Field200"),
+				Number:   func(v int32) *int32 { return &v }(200),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field200"),
+			}, {Name: func(v string) *string { return &v }("Field210"),
+				Number:   func(v int32) *int32 { return &v }(210),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field210"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("NinNestedStructUnion"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNativeUnion"),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptStructUnion"),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStructUnion"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("Tree"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Or"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.OrBranch"),
+				JsonName: func(v string) *string { return &v }("or"),
+			}, {Name: func(v string) *string { return &v }("And"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.AndBranch"),
+				JsonName: func(v string) *string { return &v }("and"),
+			}, {Name: func(v string) *string { return &v }("Leaf"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Leaf"),
+				JsonName: func(v string) *string { return &v }("leaf"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("OrBranch"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Tree"),
+				JsonName: func(v string) *string { return &v }("left"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Right"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Tree"),
+				JsonName: func(v string) *string { return &v }("right"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("AndBranch"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Tree"),
+				JsonName: func(v string) *string { return &v }("left"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Right"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Tree"),
+				JsonName: func(v string) *string { return &v }("right"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("Leaf"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("StrValue"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("strValue"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("DeepTree"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Down"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.ADeepBranch"),
+				JsonName: func(v string) *string { return &v }("down"),
+			}, {Name: func(v string) *string { return &v }("And"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.AndDeepBranch"),
+				JsonName: func(v string) *string { return &v }("and"),
+			}, {Name: func(v string) *string { return &v }("Leaf"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.DeepLeaf"),
+				JsonName: func(v string) *string { return &v }("leaf"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("ADeepBranch"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Down"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.DeepTree"),
+				JsonName: func(v string) *string { return &v }("down"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("AndDeepBranch"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Left"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.DeepTree"),
+				JsonName: func(v string) *string { return &v }("left"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Right"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.DeepTree"),
+				JsonName: func(v string) *string { return &v }("right"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("DeepLeaf"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Tree"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Tree"),
+				JsonName: func(v string) *string { return &v }("tree"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("Nil")}, {Name: func(v string) *string { return &v }("NidOptEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NidRepEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NinRepEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptEnumDefault"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.TheTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("C"),
+				JsonName:     func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:       func(v int32) *int32 { return &v }(2),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("BB"),
+				JsonName:     func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("CC"),
+				JsonName:     func(v string) *string { return &v }("field3"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("AnotherNinOptEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.AnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				JsonName: func(v string) *string { return &v }("field3"),
+			}},
+		}, {Name: func(v string) *string { return &v }("AnotherNinOptEnumDefault"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.AnotherTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("E"),
+				JsonName:     func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:       func(v int32) *int32 { return &v }(2),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.YetAnotherTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("BB"),
+				JsonName:     func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName:     func(v string) *string { return &v }(".test.YetYetAnotherTestEnum"),
+				DefaultValue: func(v string) *string { return &v }("CC"),
+				JsonName:     func(v string) *string { return &v }("field3"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("Timer"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Time1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("time1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Time2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("time2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}, {Name: func(v string) *string { return &v }("Data"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("data"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("MyExtendable"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(100),
+				End: func(v int32) *int32 { return &v }(200),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("OtherExtenable"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("M"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.MyExtendable"),
+				JsonName: func(v string) *string { return &v }("m"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(14),
+				End: func(v int32) *int32 { return &v }(17),
+			}, {Start: func(v int32) *int32 { return &v }(10),
+				End: func(v int32) *int32 { return &v }(13),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("NestedDefinition"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("EnumField"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedEnum"),
+				JsonName: func(v string) *string { return &v }("enumField"),
+			}, {Name: func(v string) *string { return &v }("NNM"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"),
+				JsonName: func(v string) *string { return &v }("nNM"),
+			}, {Name: func(v string) *string { return &v }("NM"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage"),
+				JsonName: func(v string) *string { return &v }("nM"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("NestedMessage"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("NestedField1"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+					JsonName: func(v string) *string { return &v }("nestedField1"),
+				}, {Name: func(v string) *string { return &v }("NNM"),
+					Number:   func(v int32) *int32 { return &v }(2),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+					TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"),
+					JsonName: func(v string) *string { return &v }("nNM"),
+				}},
+				NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("NestedNestedMsg"),
+					Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("NestedNestedField1"),
+						Number:   func(v int32) *int32 { return &v }(10),
+						Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+						Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+						JsonName: func(v string) *string { return &v }("nestedNestedField1"),
+					}},
+				}},
+			}},
+			EnumType: []*descriptor.EnumDescriptorProto{{Name: func(v string) *string { return &v }("NestedEnum"),
+				Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("TYPE_NESTED"),
+					Number: func(v int32) *int32 { return &v }(1),
+				}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NestedScope"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("A"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage.NestedNestedMsg"),
+				JsonName: func(v string) *string { return &v }("a"),
+			}, {Name: func(v string) *string { return &v }("B"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedEnum"),
+				JsonName: func(v string) *string { return &v }("b"),
+			}, {Name: func(v string) *string { return &v }("C"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NestedDefinition.NestedMessage"),
+				JsonName: func(v string) *string { return &v }("c"),
+			}},
+		}, {Name: func(v string) *string { return &v }("NinOptNativeDefault"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:       func(v int32) *int32 { return &v }(1),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				DefaultValue: func(v string) *string { return &v }("1234.1234"),
+				JsonName:     func(v string) *string { return &v }("field1"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:       func(v int32) *int32 { return &v }(2),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				DefaultValue: func(v string) *string { return &v }("1234.1234"),
+				JsonName:     func(v string) *string { return &v }("field2"),
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:       func(v int32) *int32 { return &v }(3),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field3"),
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:       func(v int32) *int32 { return &v }(4),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field4"),
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:       func(v int32) *int32 { return &v }(5),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field5"),
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:       func(v int32) *int32 { return &v }(6),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field6"),
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:       func(v int32) *int32 { return &v }(7),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field7"),
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:       func(v int32) *int32 { return &v }(8),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field8"),
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:       func(v int32) *int32 { return &v }(9),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field9"),
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:       func(v int32) *int32 { return &v }(10),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field10"),
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:       func(v int32) *int32 { return &v }(11),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field11"),
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:       func(v int32) *int32 { return &v }(12),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field12"),
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:       func(v int32) *int32 { return &v }(13),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				DefaultValue: func(v string) *string { return &v }("true"),
+				JsonName:     func(v string) *string { return &v }("field13"),
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:       func(v int32) *int32 { return &v }(14),
+				Label:        func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:         func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				DefaultValue: func(v string) *string { return &v }("1234"),
+				JsonName:     func(v string) *string { return &v }("field14"),
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64001: proto.NewExtension([]byte{0x88, 0xa0, 0x1f, 0x1}), 64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("CustomContainer"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("CustomStruct"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptCustom"),
+				JsonName: func(v string) *string { return &v }("customStruct"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameNidOptNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4c})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameNinOptNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x5, 0x46, 0x69, 0x65, 0x6c, 0x4c})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameNinRepNative"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(5),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}},
+			}, {Name: func(v string) *string { return &v }("Field5"),
+				Number:   func(v int32) *int32 { return &v }(5),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+				JsonName: func(v string) *string { return &v }("field5"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(18),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}},
+			}, {Name: func(v string) *string { return &v }("Field9"),
+				Number:   func(v int32) *int32 { return &v }(9),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(7),
+				JsonName: func(v string) *string { return &v }("field9"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}},
+			}, {Name: func(v string) *string { return &v }("Field10"),
+				Number:   func(v int32) *int32 { return &v }(10),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(15),
+				JsonName: func(v string) *string { return &v }("field10"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}},
+			}, {Name: func(v string) *string { return &v }("Field11"),
+				Number:   func(v int32) *int32 { return &v }(11),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(6),
+				JsonName: func(v string) *string { return &v }("field11"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4b})}},
+			}, {Name: func(v string) *string { return &v }("Field12"),
+				Number:   func(v int32) *int32 { return &v }(12),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(16),
+				JsonName: func(v string) *string { return &v }("field12"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4c})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4d})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4e})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4f})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameNinStruct"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(2),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}, {Name: func(v string) *string { return &v }("Field3"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field3"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}},
+			}, {Name: func(v string) *string { return &v }("Field4"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field4"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}},
+			}, {Name: func(v string) *string { return &v }("Field6"),
+				Number:   func(v int32) *int32 { return &v }(6),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(4),
+				JsonName: func(v string) *string { return &v }("field6"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x45})}},
+			}, {Name: func(v string) *string { return &v }("Field7"),
+				Number:   func(v int32) *int32 { return &v }(7),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(17),
+				JsonName: func(v string) *string { return &v }("field7"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x46})}},
+			}, {Name: func(v string) *string { return &v }("Field8"),
+				Number:   func(v int32) *int32 { return &v }(8),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field8"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x47})}},
+			}, {Name: func(v string) *string { return &v }("Field13"),
+				Number:   func(v int32) *int32 { return &v }(13),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field13"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x48})}},
+			}, {Name: func(v string) *string { return &v }("Field14"),
+				Number:   func(v int32) *int32 { return &v }(14),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field14"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x49})}},
+			}, {Name: func(v string) *string { return &v }("Field15"),
+				Number:   func(v int32) *int32 { return &v }(15),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("field15"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x4a})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameCustomType"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Id"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("id"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Value"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("value"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}, {Name: func(v string) *string { return &v }("Ids"),
+				Number:   func(v int32) *int32 { return &v }(3),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("ids"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x4, 0x55, 0x75, 0x69, 0x64}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x43})}},
+			}, {Name: func(v string) *string { return &v }("Values"),
+				Number:   func(v int32) *int32 { return &v }(4),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(12),
+				JsonName: func(v string) *string { return &v }("values"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65003: proto.NewExtension([]byte{0xda, 0xde, 0x1f, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x6f, 0x67, 0x6f, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x2e, 0x55, 0x69, 0x6e, 0x74, 0x31, 0x32, 0x38}), 65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x44})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("CustomNameNinEmbeddedStructUnion"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NidOptNative"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}},
+			}, {Name: func(v string) *string { return &v }("Field200"),
+				Number:   func(v int32) *int32 { return &v }(200),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+				JsonName: func(v string) *string { return &v }("field200"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field210"),
+				Number:   func(v int32) *int32 { return &v }(210),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(8),
+				JsonName: func(v string) *string { return &v }("field210"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64009: proto.NewExtension([]byte{0xc8, 0xa0, 0x1f, 0x1})}},
+		}, {Name: func(v string) *string { return &v }("CustomNameEnum"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field1"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x41})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(14),
+				TypeName: func(v string) *string { return &v }(".test.TheTestEnum"),
+				JsonName: func(v string) *string { return &v }("field2"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65004: proto.NewExtension([]byte{0xe2, 0xde, 0x1f, 0x6, 0x46, 0x69, 0x65, 0x6c, 0x64, 0x42})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("NoExtensionsMap"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(3),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}},
+			ExtensionRange: []*descriptor.DescriptorProto_ExtensionRange{{Start: func(v int32) *int32 { return &v }(100),
+				End: func(v int32) *int32 { return &v }(200),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64005: proto.NewExtension([]byte{0xa8, 0xa0, 0x1f, 0x0}), 64025: proto.NewExtension([]byte{0xc8, 0xa1, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("Unrecognized"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field1"),
+			}},
+			Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("UnrecognizedWithInner"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("embedded"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.UnrecognizedWithInner.Inner"),
+				JsonName: func(v string) *string { return &v }("embedded"),
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("Inner"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+					JsonName: func(v string) *string { return &v }("field1"),
+				}},
+				Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("UnrecognizedWithEmbed"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("embedded"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.UnrecognizedWithEmbed.Embedded"),
+				JsonName: func(v string) *string { return &v }("embedded"),
+				Options:  &descriptor.FieldOptions{XXX_extensions: map[int32]proto.Extension{65001: proto.NewExtension([]byte{0xc8, 0xde, 0x1f, 0x0}), 65002: proto.NewExtension([]byte{0xd0, 0xde, 0x1f, 0x1})}},
+			}, {Name: func(v string) *string { return &v }("Field2"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("field2"),
+			}},
+			NestedType: []*descriptor.DescriptorProto{{Name: func(v string) *string { return &v }("Embedded"),
+				Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Field1"),
+					Number:   func(v int32) *int32 { return &v }(1),
+					Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+					Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(13),
+					JsonName: func(v string) *string { return &v }("field1"),
+				}},
+				Options: &descriptor.MessageOptions{XXX_extensions: map[int32]proto.Extension{64026: proto.NewExtension([]byte{0xd0, 0xa1, 0x1f, 0x0})}},
+			}},
+		}, {Name: func(v string) *string { return &v }("Node"),
+			Field: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("Label"),
+				Number:   func(v int32) *int32 { return &v }(1),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(9),
+				JsonName: func(v string) *string { return &v }("label"),
+			}, {Name: func(v string) *string { return &v }("Children"),
+				Number:   func(v int32) *int32 { return &v }(2),
+				Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(3),
+				Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+				TypeName: func(v string) *string { return &v }(".test.Node"),
+				JsonName: func(v string) *string { return &v }("children"),
+			}},
+		}},
+		EnumType: []*descriptor.EnumDescriptorProto{{Name: func(v string) *string { return &v }("TheTestEnum"),
+			Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("A"),
+				Number: func(v int32) *int32 { return &v }(0),
+			}, {Name: func(v string) *string { return &v }("B"),
+				Number: func(v int32) *int32 { return &v }(1),
+			}, {Name: func(v string) *string { return &v }("C"),
+				Number: func(v int32) *int32 { return &v }(2),
+			}},
+		}, {Name: func(v string) *string { return &v }("AnotherTestEnum"),
+			Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("D"),
+				Number: func(v int32) *int32 { return &v }(10),
+			}, {Name: func(v string) *string { return &v }("E"),
+				Number: func(v int32) *int32 { return &v }(11),
+			}},
+			Options: &descriptor.EnumOptions{XXX_extensions: map[int32]proto.Extension{62001: proto.NewExtension([]byte{0x88, 0xa3, 0x1e, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("YetAnotherTestEnum"),
+			Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("AA"),
+				Number: func(v int32) *int32 { return &v }(0),
+			}, {Name: func(v string) *string { return &v }("BB"),
+				Number:  func(v int32) *int32 { return &v }(1),
+				Options: &descriptor.EnumValueOptions{XXX_extensions: map[int32]proto.Extension{66001: proto.NewExtension([]byte{0x8a, 0x9d, 0x20, 0xb, 0x42, 0x65, 0x74, 0x74, 0x65, 0x72, 0x59, 0x65, 0x74, 0x42, 0x42})}},
+			}},
+			Options: &descriptor.EnumOptions{XXX_extensions: map[int32]proto.Extension{62001: proto.NewExtension([]byte{0x88, 0xa3, 0x1e, 0x0})}},
+		}, {Name: func(v string) *string { return &v }("YetYetAnotherTestEnum"),
+			Value: []*descriptor.EnumValueDescriptorProto{{Name: func(v string) *string { return &v }("CC"),
+				Number: func(v int32) *int32 { return &v }(0),
+			}, {Name: func(v string) *string { return &v }("DD"),
+				Number:  func(v int32) *int32 { return &v }(1),
+				Options: &descriptor.EnumValueOptions{XXX_extensions: map[int32]proto.Extension{66001: proto.NewExtension([]byte{0x8a, 0x9d, 0x20, 0xb, 0x42, 0x65, 0x74, 0x74, 0x65, 0x72, 0x59, 0x65, 0x74, 0x44, 0x44})}},
+			}},
+			Options: &descriptor.EnumOptions{XXX_extensions: map[int32]proto.Extension{62001: proto.NewExtension([]byte{0x88, 0xa3, 0x1e, 0x1})}},
+		}},
+		Extension: []*descriptor.FieldDescriptorProto{{Name: func(v string) *string { return &v }("FieldA"),
+			Number:   func(v int32) *int32 { return &v }(100),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+			Extendee: func(v string) *string { return &v }(".test.MyExtendable"),
+			JsonName: func(v string) *string { return &v }("fieldA"),
+		}, {Name: func(v string) *string { return &v }("FieldB"),
+			Number:   func(v int32) *int32 { return &v }(101),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+			TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+			Extendee: func(v string) *string { return &v }(".test.MyExtendable"),
+			JsonName: func(v string) *string { return &v }("fieldB"),
+		}, {Name: func(v string) *string { return &v }("FieldC"),
+			Number:   func(v int32) *int32 { return &v }(102),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+			TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStruct"),
+			Extendee: func(v string) *string { return &v }(".test.MyExtendable"),
+			JsonName: func(v string) *string { return &v }("fieldC"),
+		}, {Name: func(v string) *string { return &v }("FieldA1"),
+			Number:   func(v int32) *int32 { return &v }(100),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(1),
+			Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"),
+			JsonName: func(v string) *string { return &v }("fieldA1"),
+		}, {Name: func(v string) *string { return &v }("FieldB1"),
+			Number:   func(v int32) *int32 { return &v }(101),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+			TypeName: func(v string) *string { return &v }(".test.NinOptNative"),
+			Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"),
+			JsonName: func(v string) *string { return &v }("fieldB1"),
+		}, {Name: func(v string) *string { return &v }("FieldC1"),
+			Number:   func(v int32) *int32 { return &v }(102),
+			Label:    func(v descriptor.FieldDescriptorProto_Label) *descriptor.FieldDescriptorProto_Label { return &v }(1),
+			Type:     func(v descriptor.FieldDescriptorProto_Type) *descriptor.FieldDescriptorProto_Type { return &v }(11),
+			TypeName: func(v string) *string { return &v }(".test.NinEmbeddedStruct"),
+			Extendee: func(v string) *string { return &v }(".test.NoExtensionsMap"),
+			JsonName: func(v string) *string { return &v }("fieldC1"),
+		}},
+		Options: &descriptor.FileOptions{XXX_extensions: map[int32]proto.Extension{63001: proto.NewExtension([]byte{0xc8, 0xe1, 0x1e, 0x0}), 63002: proto.NewExtension([]byte{0xd0, 0xe1, 0x1e, 0x0}), 63003: proto.NewExtension([]byte{0xd8, 0xe1, 0x1e, 0x0}), 63004: proto.NewExtension([]byte{0xe0, 0xe1, 0x1e, 0x1}), 63005: proto.NewExtension([]byte{0xe8, 0xe1, 0x1e, 0x1}), 63006: proto.NewExtension([]byte{0xf0, 0xe1, 0x1e, 0x1}), 63007: proto.NewExtension([]byte{0xf8, 0xe1, 0x1e, 0x1}), 63008: proto.NewExtension([]byte{0x80, 0xe2, 0x1e, 0x1}), 63013: proto.NewExtension([]byte{0xa8, 0xe2, 0x1e, 0x1}), 63014: proto.NewExtension([]byte{0xb0, 0xe2, 0x1e, 0x1}), 63015: proto.NewExtension([]byte{0xb8, 0xe2, 0x1e, 0x1}), 63016: proto.NewExtension([]byte{0xc0, 0xe2, 0x1e, 0x1}), 63017: proto.NewExtension([]byte{0xc8, 0xe2, 0x1e, 0x0}), 63018: proto.NewExtension([]byte{0xd0, 0xe2, 0x1e, 0x0}), 63020: proto.NewExtension([]byte{0xe0, 0xe2, 0x1e, 0x1}), 63021: proto.NewExtension([]byte{0xe8, 0xe2, 0x1e, 0x0}), 63022: proto.NewExtension([]byte{0xf0, 0xe2, 0x1e, 0x1}), 63023: proto.NewExtension([]byte{0xf8, 0xe2, 0x1e, 0x1}), 63024: proto.NewExtension([]byte{0x80, 0xe3, 0x1e, 0x0}), 63028: proto.NewExtension([]byte{0xa0, 0xe3, 0x1e, 0x0})}},
+	}},
+	}
 }
 func (x TheTestEnum) String() string {
 	s, ok := TheTestEnum_name[int32(x)]
@@ -3156,6 +4858,20 @@ func (x TheTestEnum) String() string {
 }
 func (x AnotherTestEnum) String() string {
 	s, ok := AnotherTestEnum_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x YetAnotherTestEnum) String() string {
+	s, ok := YetAnotherTestEnum_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x YetYetAnotherTestEnum) String() string {
+	s, ok := YetYetAnotherTestEnum_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -3178,7 +4894,12 @@ func (this *NidOptNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidOptNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidOptNative")
+		that2, ok := that.(NidOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidOptNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3186,7 +4907,7 @@ func (this *NidOptNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidOptNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidOptNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidOptNative but is not nil && this == nil")
 	}
 	if this.Field1 != that1.Field1 {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -3248,7 +4969,12 @@ func (this *NidOptNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidOptNative)
 	if !ok {
-		return false
+		that2, ok := that.(NidOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3318,7 +5044,12 @@ func (this *NinOptNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptNative")
+		that2, ok := that.(NinOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3326,7 +5057,7 @@ func (this *NinOptNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptNative but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -3472,7 +5203,12 @@ func (this *NinOptNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptNative)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3626,7 +5362,12 @@ func (this *NidRepNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidRepNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidRepNative")
+		that2, ok := that.(NidRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidRepNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3634,7 +5375,7 @@ func (this *NidRepNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidRepNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidRepNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidRepNative but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -3771,7 +5512,12 @@ func (this *NidRepNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidRepNative)
 	if !ok {
-		return false
+		that2, ok := that.(NidRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3916,7 +5662,12 @@ func (this *NinRepNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinRepNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinRepNative")
+		that2, ok := that.(NinRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinRepNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -3924,7 +5675,7 @@ func (this *NinRepNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinRepNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinRepNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinRepNative but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -4061,7 +5812,12 @@ func (this *NinRepNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinRepNative)
 	if !ok {
-		return false
+		that2, ok := that.(NinRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4206,7 +5962,12 @@ func (this *NidRepPackedNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidRepPackedNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidRepPackedNative")
+		that2, ok := that.(NidRepPackedNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidRepPackedNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4214,7 +5975,7 @@ func (this *NidRepPackedNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidRepPackedNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidRepPackedNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidRepPackedNative but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -4335,7 +6096,12 @@ func (this *NidRepPackedNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidRepPackedNative)
 	if !ok {
-		return false
+		that2, ok := that.(NidRepPackedNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4464,7 +6230,12 @@ func (this *NinRepPackedNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinRepPackedNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinRepPackedNative")
+		that2, ok := that.(NinRepPackedNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinRepPackedNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4472,7 +6243,7 @@ func (this *NinRepPackedNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinRepPackedNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinRepPackedNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinRepPackedNative but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -4593,7 +6364,12 @@ func (this *NinRepPackedNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinRepPackedNative)
 	if !ok {
-		return false
+		that2, ok := that.(NinRepPackedNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4722,7 +6498,12 @@ func (this *NidOptStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidOptStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidOptStruct")
+		that2, ok := that.(NidOptStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidOptStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4730,7 +6511,7 @@ func (this *NidOptStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidOptStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidOptStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidOptStruct but is not nil && this == nil")
 	}
 	if this.Field1 != that1.Field1 {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -4777,7 +6558,12 @@ func (this *NidOptStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidOptStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NidOptStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4832,7 +6618,12 @@ func (this *NinOptStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptStruct")
+		that2, ok := that.(NinOptStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -4840,7 +6631,7 @@ func (this *NinOptStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptStruct but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -4923,7 +6714,12 @@ func (this *NinOptStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5014,7 +6810,12 @@ func (this *NidRepStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidRepStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidRepStruct")
+		that2, ok := that.(NidRepStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidRepStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5022,7 +6823,7 @@ func (this *NidRepStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidRepStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidRepStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidRepStruct but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -5119,7 +6920,12 @@ func (this *NidRepStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidRepStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NidRepStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5224,7 +7030,12 @@ func (this *NinRepStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinRepStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinRepStruct")
+		that2, ok := that.(NinRepStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinRepStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5232,7 +7043,7 @@ func (this *NinRepStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinRepStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinRepStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinRepStruct but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -5329,7 +7140,12 @@ func (this *NinRepStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinRepStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NinRepStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5434,7 +7250,12 @@ func (this *NidEmbeddedStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidEmbeddedStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidEmbeddedStruct")
+		that2, ok := that.(NidEmbeddedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidEmbeddedStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5442,7 +7263,7 @@ func (this *NidEmbeddedStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidEmbeddedStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidEmbeddedStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidEmbeddedStruct but is not nil && this == nil")
 	}
 	if !this.NidOptNative.Equal(that1.NidOptNative) {
 		return fmt.Errorf("NidOptNative this(%v) Not Equal that(%v)", this.NidOptNative, that1.NidOptNative)
@@ -5468,7 +7289,12 @@ func (this *NidEmbeddedStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidEmbeddedStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NidEmbeddedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5502,7 +7328,12 @@ func (this *NinEmbeddedStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinEmbeddedStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinEmbeddedStruct")
+		that2, ok := that.(NinEmbeddedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinEmbeddedStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5510,7 +7341,7 @@ func (this *NinEmbeddedStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinEmbeddedStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinEmbeddedStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinEmbeddedStruct but is not nil && this == nil")
 	}
 	if !this.NidOptNative.Equal(that1.NidOptNative) {
 		return fmt.Errorf("NidOptNative this(%v) Not Equal that(%v)", this.NidOptNative, that1.NidOptNative)
@@ -5542,7 +7373,12 @@ func (this *NinEmbeddedStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinEmbeddedStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NinEmbeddedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5582,7 +7418,12 @@ func (this *NidNestedStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidNestedStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidNestedStruct")
+		that2, ok := that.(NidNestedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidNestedStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5590,7 +7431,7 @@ func (this *NidNestedStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidNestedStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidNestedStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidNestedStruct but is not nil && this == nil")
 	}
 	if !this.Field1.Equal(&that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -5618,7 +7459,12 @@ func (this *NidNestedStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidNestedStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NidNestedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5654,7 +7500,12 @@ func (this *NinNestedStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinNestedStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinNestedStruct")
+		that2, ok := that.(NinNestedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinNestedStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5662,7 +7513,7 @@ func (this *NinNestedStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinNestedStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinNestedStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinNestedStruct but is not nil && this == nil")
 	}
 	if !this.Field1.Equal(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -5690,7 +7541,12 @@ func (this *NinNestedStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinNestedStruct)
 	if !ok {
-		return false
+		that2, ok := that.(NinNestedStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5726,7 +7582,12 @@ func (this *NidOptCustom) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidOptCustom)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidOptCustom")
+		that2, ok := that.(NidOptCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidOptCustom")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5734,7 +7595,7 @@ func (this *NidOptCustom) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidOptCustom but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidOptCustombut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidOptCustom but is not nil && this == nil")
 	}
 	if !this.Id.Equal(that1.Id) {
 		return fmt.Errorf("Id this(%v) Not Equal that(%v)", this.Id, that1.Id)
@@ -5757,7 +7618,12 @@ func (this *NidOptCustom) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidOptCustom)
 	if !ok {
-		return false
+		that2, ok := that.(NidOptCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5788,7 +7654,12 @@ func (this *CustomDash) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomDash)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomDash")
+		that2, ok := that.(CustomDash)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomDash")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5796,7 +7667,7 @@ func (this *CustomDash) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomDash but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomDashbut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomDash but is not nil && this == nil")
 	}
 	if that1.Value == nil {
 		if this.Value != nil {
@@ -5820,7 +7691,12 @@ func (this *CustomDash) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomDash)
 	if !ok {
-		return false
+		that2, ok := that.(CustomDash)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5852,7 +7728,12 @@ func (this *NinOptCustom) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptCustom)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptCustom")
+		that2, ok := that.(NinOptCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptCustom")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5860,7 +7741,7 @@ func (this *NinOptCustom) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptCustom but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptCustombut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptCustom but is not nil && this == nil")
 	}
 	if that1.Id == nil {
 		if this.Id != nil {
@@ -5891,7 +7772,12 @@ func (this *NinOptCustom) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptCustom)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5930,7 +7816,12 @@ func (this *NidRepCustom) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidRepCustom)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidRepCustom")
+		that2, ok := that.(NidRepCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidRepCustom")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -5938,7 +7829,7 @@ func (this *NidRepCustom) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidRepCustom but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidRepCustombut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidRepCustom but is not nil && this == nil")
 	}
 	if len(this.Id) != len(that1.Id) {
 		return fmt.Errorf("Id this(%v) Not Equal that(%v)", len(this.Id), len(that1.Id))
@@ -5971,7 +7862,12 @@ func (this *NidRepCustom) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidRepCustom)
 	if !ok {
-		return false
+		that2, ok := that.(NidRepCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6012,7 +7908,12 @@ func (this *NinRepCustom) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinRepCustom)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinRepCustom")
+		that2, ok := that.(NinRepCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinRepCustom")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6020,7 +7921,7 @@ func (this *NinRepCustom) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinRepCustom but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinRepCustombut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinRepCustom but is not nil && this == nil")
 	}
 	if len(this.Id) != len(that1.Id) {
 		return fmt.Errorf("Id this(%v) Not Equal that(%v)", len(this.Id), len(that1.Id))
@@ -6053,7 +7954,12 @@ func (this *NinRepCustom) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinRepCustom)
 	if !ok {
-		return false
+		that2, ok := that.(NinRepCustom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6094,7 +8000,12 @@ func (this *NinOptNativeUnion) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptNativeUnion)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptNativeUnion")
+		that2, ok := that.(NinOptNativeUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptNativeUnion")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6102,7 +8013,7 @@ func (this *NinOptNativeUnion) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptNativeUnion but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptNativeUnionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptNativeUnion but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -6194,7 +8105,12 @@ func (this *NinOptNativeUnion) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptNativeUnion)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptNativeUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6294,7 +8210,12 @@ func (this *NinOptStructUnion) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptStructUnion)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptStructUnion")
+		that2, ok := that.(NinOptStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptStructUnion")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6302,7 +8223,7 @@ func (this *NinOptStructUnion) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptStructUnion but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptStructUnionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptStructUnion but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -6382,7 +8303,12 @@ func (this *NinOptStructUnion) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptStructUnion)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6470,7 +8396,12 @@ func (this *NinEmbeddedStructUnion) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinEmbeddedStructUnion)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinEmbeddedStructUnion")
+		that2, ok := that.(NinEmbeddedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinEmbeddedStructUnion")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6478,7 +8409,7 @@ func (this *NinEmbeddedStructUnion) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinEmbeddedStructUnion but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinEmbeddedStructUnionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinEmbeddedStructUnion but is not nil && this == nil")
 	}
 	if !this.NidOptNative.Equal(that1.NidOptNative) {
 		return fmt.Errorf("NidOptNative this(%v) Not Equal that(%v)", this.NidOptNative, that1.NidOptNative)
@@ -6510,7 +8441,12 @@ func (this *NinEmbeddedStructUnion) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinEmbeddedStructUnion)
 	if !ok {
-		return false
+		that2, ok := that.(NinEmbeddedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6550,7 +8486,12 @@ func (this *NinNestedStructUnion) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinNestedStructUnion)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinNestedStructUnion")
+		that2, ok := that.(NinNestedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinNestedStructUnion")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6558,7 +8499,7 @@ func (this *NinNestedStructUnion) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinNestedStructUnion but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinNestedStructUnionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinNestedStructUnion but is not nil && this == nil")
 	}
 	if !this.Field1.Equal(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -6584,7 +8525,12 @@ func (this *NinNestedStructUnion) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinNestedStructUnion)
 	if !ok {
-		return false
+		that2, ok := that.(NinNestedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6618,7 +8564,12 @@ func (this *Tree) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*Tree)
 	if !ok {
-		return fmt.Errorf("that is not of type *Tree")
+		that2, ok := that.(Tree)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Tree")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6626,7 +8577,7 @@ func (this *Tree) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *Tree but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *Treebut is not nil && this == nil")
+		return fmt.Errorf("that is type *Tree but is not nil && this == nil")
 	}
 	if !this.Or.Equal(that1.Or) {
 		return fmt.Errorf("Or this(%v) Not Equal that(%v)", this.Or, that1.Or)
@@ -6652,7 +8603,12 @@ func (this *Tree) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Tree)
 	if !ok {
-		return false
+		that2, ok := that.(Tree)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6686,7 +8642,12 @@ func (this *OrBranch) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*OrBranch)
 	if !ok {
-		return fmt.Errorf("that is not of type *OrBranch")
+		that2, ok := that.(OrBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *OrBranch")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6694,7 +8655,7 @@ func (this *OrBranch) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *OrBranch but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *OrBranchbut is not nil && this == nil")
+		return fmt.Errorf("that is type *OrBranch but is not nil && this == nil")
 	}
 	if !this.Left.Equal(&that1.Left) {
 		return fmt.Errorf("Left this(%v) Not Equal that(%v)", this.Left, that1.Left)
@@ -6717,7 +8678,12 @@ func (this *OrBranch) Equal(that interface{}) bool {
 
 	that1, ok := that.(*OrBranch)
 	if !ok {
-		return false
+		that2, ok := that.(OrBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6748,7 +8714,12 @@ func (this *AndBranch) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*AndBranch)
 	if !ok {
-		return fmt.Errorf("that is not of type *AndBranch")
+		that2, ok := that.(AndBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *AndBranch")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6756,7 +8727,7 @@ func (this *AndBranch) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *AndBranch but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *AndBranchbut is not nil && this == nil")
+		return fmt.Errorf("that is type *AndBranch but is not nil && this == nil")
 	}
 	if !this.Left.Equal(&that1.Left) {
 		return fmt.Errorf("Left this(%v) Not Equal that(%v)", this.Left, that1.Left)
@@ -6779,7 +8750,12 @@ func (this *AndBranch) Equal(that interface{}) bool {
 
 	that1, ok := that.(*AndBranch)
 	if !ok {
-		return false
+		that2, ok := that.(AndBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6810,7 +8786,12 @@ func (this *Leaf) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*Leaf)
 	if !ok {
-		return fmt.Errorf("that is not of type *Leaf")
+		that2, ok := that.(Leaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Leaf")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6818,7 +8799,7 @@ func (this *Leaf) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *Leaf but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *Leafbut is not nil && this == nil")
+		return fmt.Errorf("that is type *Leaf but is not nil && this == nil")
 	}
 	if this.Value != that1.Value {
 		return fmt.Errorf("Value this(%v) Not Equal that(%v)", this.Value, that1.Value)
@@ -6841,7 +8822,12 @@ func (this *Leaf) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Leaf)
 	if !ok {
-		return false
+		that2, ok := that.(Leaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6872,7 +8858,12 @@ func (this *DeepTree) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*DeepTree)
 	if !ok {
-		return fmt.Errorf("that is not of type *DeepTree")
+		that2, ok := that.(DeepTree)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *DeepTree")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6880,7 +8871,7 @@ func (this *DeepTree) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *DeepTree but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *DeepTreebut is not nil && this == nil")
+		return fmt.Errorf("that is type *DeepTree but is not nil && this == nil")
 	}
 	if !this.Down.Equal(that1.Down) {
 		return fmt.Errorf("Down this(%v) Not Equal that(%v)", this.Down, that1.Down)
@@ -6906,7 +8897,12 @@ func (this *DeepTree) Equal(that interface{}) bool {
 
 	that1, ok := that.(*DeepTree)
 	if !ok {
-		return false
+		that2, ok := that.(DeepTree)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6940,7 +8936,12 @@ func (this *ADeepBranch) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*ADeepBranch)
 	if !ok {
-		return fmt.Errorf("that is not of type *ADeepBranch")
+		that2, ok := that.(ADeepBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *ADeepBranch")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6948,7 +8949,7 @@ func (this *ADeepBranch) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *ADeepBranch but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *ADeepBranchbut is not nil && this == nil")
+		return fmt.Errorf("that is type *ADeepBranch but is not nil && this == nil")
 	}
 	if !this.Down.Equal(&that1.Down) {
 		return fmt.Errorf("Down this(%v) Not Equal that(%v)", this.Down, that1.Down)
@@ -6968,7 +8969,12 @@ func (this *ADeepBranch) Equal(that interface{}) bool {
 
 	that1, ok := that.(*ADeepBranch)
 	if !ok {
-		return false
+		that2, ok := that.(ADeepBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -6996,7 +9002,12 @@ func (this *AndDeepBranch) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*AndDeepBranch)
 	if !ok {
-		return fmt.Errorf("that is not of type *AndDeepBranch")
+		that2, ok := that.(AndDeepBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *AndDeepBranch")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7004,7 +9015,7 @@ func (this *AndDeepBranch) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *AndDeepBranch but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *AndDeepBranchbut is not nil && this == nil")
+		return fmt.Errorf("that is type *AndDeepBranch but is not nil && this == nil")
 	}
 	if !this.Left.Equal(&that1.Left) {
 		return fmt.Errorf("Left this(%v) Not Equal that(%v)", this.Left, that1.Left)
@@ -7027,7 +9038,12 @@ func (this *AndDeepBranch) Equal(that interface{}) bool {
 
 	that1, ok := that.(*AndDeepBranch)
 	if !ok {
-		return false
+		that2, ok := that.(AndDeepBranch)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7058,7 +9074,12 @@ func (this *DeepLeaf) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*DeepLeaf)
 	if !ok {
-		return fmt.Errorf("that is not of type *DeepLeaf")
+		that2, ok := that.(DeepLeaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *DeepLeaf")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7066,7 +9087,7 @@ func (this *DeepLeaf) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *DeepLeaf but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *DeepLeafbut is not nil && this == nil")
+		return fmt.Errorf("that is type *DeepLeaf but is not nil && this == nil")
 	}
 	if !this.Tree.Equal(&that1.Tree) {
 		return fmt.Errorf("Tree this(%v) Not Equal that(%v)", this.Tree, that1.Tree)
@@ -7086,7 +9107,12 @@ func (this *DeepLeaf) Equal(that interface{}) bool {
 
 	that1, ok := that.(*DeepLeaf)
 	if !ok {
-		return false
+		that2, ok := that.(DeepLeaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7114,7 +9140,12 @@ func (this *Nil) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*Nil)
 	if !ok {
-		return fmt.Errorf("that is not of type *Nil")
+		that2, ok := that.(Nil)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Nil")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7122,7 +9153,7 @@ func (this *Nil) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *Nil but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *Nilbut is not nil && this == nil")
+		return fmt.Errorf("that is type *Nil but is not nil && this == nil")
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
@@ -7139,7 +9170,12 @@ func (this *Nil) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Nil)
 	if !ok {
-		return false
+		that2, ok := that.(Nil)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7164,7 +9200,12 @@ func (this *NidOptEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidOptEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidOptEnum")
+		that2, ok := that.(NidOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidOptEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7172,7 +9213,7 @@ func (this *NidOptEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidOptEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidOptEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidOptEnum but is not nil && this == nil")
 	}
 	if this.Field1 != that1.Field1 {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
@@ -7192,7 +9233,12 @@ func (this *NidOptEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidOptEnum)
 	if !ok {
-		return false
+		that2, ok := that.(NidOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7220,7 +9266,12 @@ func (this *NinOptEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptEnum")
+		that2, ok := that.(NinOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7228,7 +9279,7 @@ func (this *NinOptEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptEnum but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7238,6 +9289,24 @@ func (this *NinOptEnum) VerboseEqual(that interface{}) error {
 		return fmt.Errorf("this.Field1 == nil && that.Field1 != nil")
 	} else if that1.Field1 != nil {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", *this.Field2, *that1.Field2)
+		}
+	} else if this.Field2 != nil {
+		return fmt.Errorf("this.Field2 == nil && that.Field2 != nil")
+	} else if that1.Field2 != nil {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", this.Field2, that1.Field2)
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", *this.Field3, *that1.Field3)
+		}
+	} else if this.Field3 != nil {
+		return fmt.Errorf("this.Field3 == nil && that.Field3 != nil")
+	} else if that1.Field3 != nil {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", this.Field3, that1.Field3)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
@@ -7254,7 +9323,12 @@ func (this *NinOptEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptEnum)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7273,6 +9347,24 @@ func (this *NinOptEnum) Equal(that interface{}) bool {
 	} else if that1.Field1 != nil {
 		return false
 	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return false
+		}
+	} else if this.Field2 != nil {
+		return false
+	} else if that1.Field2 != nil {
+		return false
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return false
+		}
+	} else if this.Field3 != nil {
+		return false
+	} else if that1.Field3 != nil {
+		return false
+	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return false
 	}
@@ -7288,7 +9380,12 @@ func (this *NidRepEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NidRepEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *NidRepEnum")
+		that2, ok := that.(NidRepEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NidRepEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7296,7 +9393,7 @@ func (this *NidRepEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NidRepEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NidRepEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NidRepEnum but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -7304,6 +9401,22 @@ func (this *NidRepEnum) VerboseEqual(that interface{}) error {
 	for i := range this.Field1 {
 		if this.Field1[i] != that1.Field1[i] {
 			return fmt.Errorf("Field1 this[%v](%v) Not Equal that[%v](%v)", i, this.Field1[i], i, that1.Field1[i])
+		}
+	}
+	if len(this.Field2) != len(that1.Field2) {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", len(this.Field2), len(that1.Field2))
+	}
+	for i := range this.Field2 {
+		if this.Field2[i] != that1.Field2[i] {
+			return fmt.Errorf("Field2 this[%v](%v) Not Equal that[%v](%v)", i, this.Field2[i], i, that1.Field2[i])
+		}
+	}
+	if len(this.Field3) != len(that1.Field3) {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", len(this.Field3), len(that1.Field3))
+	}
+	for i := range this.Field3 {
+		if this.Field3[i] != that1.Field3[i] {
+			return fmt.Errorf("Field3 this[%v](%v) Not Equal that[%v](%v)", i, this.Field3[i], i, that1.Field3[i])
 		}
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -7321,7 +9434,12 @@ func (this *NidRepEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NidRepEnum)
 	if !ok {
-		return false
+		that2, ok := that.(NidRepEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7336,6 +9454,22 @@ func (this *NidRepEnum) Equal(that interface{}) bool {
 	}
 	for i := range this.Field1 {
 		if this.Field1[i] != that1.Field1[i] {
+			return false
+		}
+	}
+	if len(this.Field2) != len(that1.Field2) {
+		return false
+	}
+	for i := range this.Field2 {
+		if this.Field2[i] != that1.Field2[i] {
+			return false
+		}
+	}
+	if len(this.Field3) != len(that1.Field3) {
+		return false
+	}
+	for i := range this.Field3 {
+		if this.Field3[i] != that1.Field3[i] {
 			return false
 		}
 	}
@@ -7354,7 +9488,12 @@ func (this *NinRepEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinRepEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinRepEnum")
+		that2, ok := that.(NinRepEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinRepEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7362,7 +9501,7 @@ func (this *NinRepEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinRepEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinRepEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinRepEnum but is not nil && this == nil")
 	}
 	if len(this.Field1) != len(that1.Field1) {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", len(this.Field1), len(that1.Field1))
@@ -7370,6 +9509,22 @@ func (this *NinRepEnum) VerboseEqual(that interface{}) error {
 	for i := range this.Field1 {
 		if this.Field1[i] != that1.Field1[i] {
 			return fmt.Errorf("Field1 this[%v](%v) Not Equal that[%v](%v)", i, this.Field1[i], i, that1.Field1[i])
+		}
+	}
+	if len(this.Field2) != len(that1.Field2) {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", len(this.Field2), len(that1.Field2))
+	}
+	for i := range this.Field2 {
+		if this.Field2[i] != that1.Field2[i] {
+			return fmt.Errorf("Field2 this[%v](%v) Not Equal that[%v](%v)", i, this.Field2[i], i, that1.Field2[i])
+		}
+	}
+	if len(this.Field3) != len(that1.Field3) {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", len(this.Field3), len(that1.Field3))
+	}
+	for i := range this.Field3 {
+		if this.Field3[i] != that1.Field3[i] {
+			return fmt.Errorf("Field3 this[%v](%v) Not Equal that[%v](%v)", i, this.Field3[i], i, that1.Field3[i])
 		}
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -7387,7 +9542,12 @@ func (this *NinRepEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinRepEnum)
 	if !ok {
-		return false
+		that2, ok := that.(NinRepEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7402,6 +9562,22 @@ func (this *NinRepEnum) Equal(that interface{}) bool {
 	}
 	for i := range this.Field1 {
 		if this.Field1[i] != that1.Field1[i] {
+			return false
+		}
+	}
+	if len(this.Field2) != len(that1.Field2) {
+		return false
+	}
+	for i := range this.Field2 {
+		if this.Field2[i] != that1.Field2[i] {
+			return false
+		}
+	}
+	if len(this.Field3) != len(that1.Field3) {
+		return false
+	}
+	for i := range this.Field3 {
+		if this.Field3[i] != that1.Field3[i] {
 			return false
 		}
 	}
@@ -7420,7 +9596,12 @@ func (this *NinOptEnumDefault) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptEnumDefault)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptEnumDefault")
+		that2, ok := that.(NinOptEnumDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptEnumDefault")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7428,7 +9609,7 @@ func (this *NinOptEnumDefault) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptEnumDefault but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptEnumDefaultbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptEnumDefault but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7438,6 +9619,24 @@ func (this *NinOptEnumDefault) VerboseEqual(that interface{}) error {
 		return fmt.Errorf("this.Field1 == nil && that.Field1 != nil")
 	} else if that1.Field1 != nil {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", *this.Field2, *that1.Field2)
+		}
+	} else if this.Field2 != nil {
+		return fmt.Errorf("this.Field2 == nil && that.Field2 != nil")
+	} else if that1.Field2 != nil {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", this.Field2, that1.Field2)
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", *this.Field3, *that1.Field3)
+		}
+	} else if this.Field3 != nil {
+		return fmt.Errorf("this.Field3 == nil && that.Field3 != nil")
+	} else if that1.Field3 != nil {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", this.Field3, that1.Field3)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
@@ -7454,7 +9653,12 @@ func (this *NinOptEnumDefault) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptEnumDefault)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptEnumDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7471,6 +9675,24 @@ func (this *NinOptEnumDefault) Equal(that interface{}) bool {
 	} else if this.Field1 != nil {
 		return false
 	} else if that1.Field1 != nil {
+		return false
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return false
+		}
+	} else if this.Field2 != nil {
+		return false
+	} else if that1.Field2 != nil {
+		return false
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return false
+		}
+	} else if this.Field3 != nil {
+		return false
+	} else if that1.Field3 != nil {
 		return false
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -7488,7 +9710,12 @@ func (this *AnotherNinOptEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*AnotherNinOptEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *AnotherNinOptEnum")
+		that2, ok := that.(AnotherNinOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *AnotherNinOptEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7496,7 +9723,7 @@ func (this *AnotherNinOptEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *AnotherNinOptEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *AnotherNinOptEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *AnotherNinOptEnum but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7506,6 +9733,24 @@ func (this *AnotherNinOptEnum) VerboseEqual(that interface{}) error {
 		return fmt.Errorf("this.Field1 == nil && that.Field1 != nil")
 	} else if that1.Field1 != nil {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", *this.Field2, *that1.Field2)
+		}
+	} else if this.Field2 != nil {
+		return fmt.Errorf("this.Field2 == nil && that.Field2 != nil")
+	} else if that1.Field2 != nil {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", this.Field2, that1.Field2)
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", *this.Field3, *that1.Field3)
+		}
+	} else if this.Field3 != nil {
+		return fmt.Errorf("this.Field3 == nil && that.Field3 != nil")
+	} else if that1.Field3 != nil {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", this.Field3, that1.Field3)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
@@ -7522,7 +9767,12 @@ func (this *AnotherNinOptEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*AnotherNinOptEnum)
 	if !ok {
-		return false
+		that2, ok := that.(AnotherNinOptEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7539,6 +9789,24 @@ func (this *AnotherNinOptEnum) Equal(that interface{}) bool {
 	} else if this.Field1 != nil {
 		return false
 	} else if that1.Field1 != nil {
+		return false
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return false
+		}
+	} else if this.Field2 != nil {
+		return false
+	} else if that1.Field2 != nil {
+		return false
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return false
+		}
+	} else if this.Field3 != nil {
+		return false
+	} else if that1.Field3 != nil {
 		return false
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
@@ -7556,7 +9824,12 @@ func (this *AnotherNinOptEnumDefault) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*AnotherNinOptEnumDefault)
 	if !ok {
-		return fmt.Errorf("that is not of type *AnotherNinOptEnumDefault")
+		that2, ok := that.(AnotherNinOptEnumDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *AnotherNinOptEnumDefault")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7564,7 +9837,7 @@ func (this *AnotherNinOptEnumDefault) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *AnotherNinOptEnumDefault but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *AnotherNinOptEnumDefaultbut is not nil && this == nil")
+		return fmt.Errorf("that is type *AnotherNinOptEnumDefault but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7574,6 +9847,24 @@ func (this *AnotherNinOptEnumDefault) VerboseEqual(that interface{}) error {
 		return fmt.Errorf("this.Field1 == nil && that.Field1 != nil")
 	} else if that1.Field1 != nil {
 		return fmt.Errorf("Field1 this(%v) Not Equal that(%v)", this.Field1, that1.Field1)
+	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", *this.Field2, *that1.Field2)
+		}
+	} else if this.Field2 != nil {
+		return fmt.Errorf("this.Field2 == nil && that.Field2 != nil")
+	} else if that1.Field2 != nil {
+		return fmt.Errorf("Field2 this(%v) Not Equal that(%v)", this.Field2, that1.Field2)
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", *this.Field3, *that1.Field3)
+		}
+	} else if this.Field3 != nil {
+		return fmt.Errorf("this.Field3 == nil && that.Field3 != nil")
+	} else if that1.Field3 != nil {
+		return fmt.Errorf("Field3 this(%v) Not Equal that(%v)", this.Field3, that1.Field3)
 	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
@@ -7590,7 +9881,12 @@ func (this *AnotherNinOptEnumDefault) Equal(that interface{}) bool {
 
 	that1, ok := that.(*AnotherNinOptEnumDefault)
 	if !ok {
-		return false
+		that2, ok := that.(AnotherNinOptEnumDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7609,6 +9905,24 @@ func (this *AnotherNinOptEnumDefault) Equal(that interface{}) bool {
 	} else if that1.Field1 != nil {
 		return false
 	}
+	if this.Field2 != nil && that1.Field2 != nil {
+		if *this.Field2 != *that1.Field2 {
+			return false
+		}
+	} else if this.Field2 != nil {
+		return false
+	} else if that1.Field2 != nil {
+		return false
+	}
+	if this.Field3 != nil && that1.Field3 != nil {
+		if *this.Field3 != *that1.Field3 {
+			return false
+		}
+	} else if this.Field3 != nil {
+		return false
+	} else if that1.Field3 != nil {
+		return false
+	}
 	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return false
 	}
@@ -7624,7 +9938,12 @@ func (this *Timer) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*Timer)
 	if !ok {
-		return fmt.Errorf("that is not of type *Timer")
+		that2, ok := that.(Timer)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Timer")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7632,7 +9951,7 @@ func (this *Timer) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *Timer but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *Timerbut is not nil && this == nil")
+		return fmt.Errorf("that is type *Timer but is not nil && this == nil")
 	}
 	if this.Time1 != that1.Time1 {
 		return fmt.Errorf("Time1 this(%v) Not Equal that(%v)", this.Time1, that1.Time1)
@@ -7658,7 +9977,12 @@ func (this *Timer) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Timer)
 	if !ok {
-		return false
+		that2, ok := that.(Timer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7692,7 +10016,12 @@ func (this *MyExtendable) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*MyExtendable)
 	if !ok {
-		return fmt.Errorf("that is not of type *MyExtendable")
+		that2, ok := that.(MyExtendable)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *MyExtendable")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7700,7 +10029,7 @@ func (this *MyExtendable) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *MyExtendable but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *MyExtendablebut is not nil && this == nil")
+		return fmt.Errorf("that is type *MyExtendable but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7740,7 +10069,12 @@ func (this *MyExtendable) Equal(that interface{}) bool {
 
 	that1, ok := that.(*MyExtendable)
 	if !ok {
-		return false
+		that2, ok := that.(MyExtendable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7788,7 +10122,12 @@ func (this *OtherExtenable) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*OtherExtenable)
 	if !ok {
-		return fmt.Errorf("that is not of type *OtherExtenable")
+		that2, ok := that.(OtherExtenable)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *OtherExtenable")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7796,7 +10135,7 @@ func (this *OtherExtenable) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *OtherExtenable but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *OtherExtenablebut is not nil && this == nil")
+		return fmt.Errorf("that is type *OtherExtenable but is not nil && this == nil")
 	}
 	if this.Field2 != nil && that1.Field2 != nil {
 		if *this.Field2 != *that1.Field2 {
@@ -7848,7 +10187,12 @@ func (this *OtherExtenable) Equal(that interface{}) bool {
 
 	that1, ok := that.(*OtherExtenable)
 	if !ok {
-		return false
+		that2, ok := that.(OtherExtenable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7908,7 +10252,12 @@ func (this *NestedDefinition) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NestedDefinition)
 	if !ok {
-		return fmt.Errorf("that is not of type *NestedDefinition")
+		that2, ok := that.(NestedDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NestedDefinition")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -7916,7 +10265,7 @@ func (this *NestedDefinition) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NestedDefinition but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NestedDefinitionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NestedDefinition but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -7957,7 +10306,12 @@ func (this *NestedDefinition) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NestedDefinition)
 	if !ok {
-		return false
+		that2, ok := that.(NestedDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8006,7 +10360,12 @@ func (this *NestedDefinition_NestedMessage) VerboseEqual(that interface{}) error
 
 	that1, ok := that.(*NestedDefinition_NestedMessage)
 	if !ok {
-		return fmt.Errorf("that is not of type *NestedDefinition_NestedMessage")
+		that2, ok := that.(NestedDefinition_NestedMessage)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NestedDefinition_NestedMessage")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8014,7 +10373,7 @@ func (this *NestedDefinition_NestedMessage) VerboseEqual(that interface{}) error
 		}
 		return fmt.Errorf("that is type *NestedDefinition_NestedMessage but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NestedDefinition_NestedMessagebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NestedDefinition_NestedMessage but is not nil && this == nil")
 	}
 	if this.NestedField1 != nil && that1.NestedField1 != nil {
 		if *this.NestedField1 != *that1.NestedField1 {
@@ -8043,7 +10402,12 @@ func (this *NestedDefinition_NestedMessage) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NestedDefinition_NestedMessage)
 	if !ok {
-		return false
+		that2, ok := that.(NestedDefinition_NestedMessage)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8080,7 +10444,12 @@ func (this *NestedDefinition_NestedMessage_NestedNestedMsg) VerboseEqual(that in
 
 	that1, ok := that.(*NestedDefinition_NestedMessage_NestedNestedMsg)
 	if !ok {
-		return fmt.Errorf("that is not of type *NestedDefinition_NestedMessage_NestedNestedMsg")
+		that2, ok := that.(NestedDefinition_NestedMessage_NestedNestedMsg)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NestedDefinition_NestedMessage_NestedNestedMsg")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8088,7 +10457,7 @@ func (this *NestedDefinition_NestedMessage_NestedNestedMsg) VerboseEqual(that in
 		}
 		return fmt.Errorf("that is type *NestedDefinition_NestedMessage_NestedNestedMsg but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NestedDefinition_NestedMessage_NestedNestedMsgbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NestedDefinition_NestedMessage_NestedNestedMsg but is not nil && this == nil")
 	}
 	if this.NestedNestedField1 != nil && that1.NestedNestedField1 != nil {
 		if *this.NestedNestedField1 != *that1.NestedNestedField1 {
@@ -8114,7 +10483,12 @@ func (this *NestedDefinition_NestedMessage_NestedNestedMsg) Equal(that interface
 
 	that1, ok := that.(*NestedDefinition_NestedMessage_NestedNestedMsg)
 	if !ok {
-		return false
+		that2, ok := that.(NestedDefinition_NestedMessage_NestedNestedMsg)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8148,7 +10522,12 @@ func (this *NestedScope) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NestedScope)
 	if !ok {
-		return fmt.Errorf("that is not of type *NestedScope")
+		that2, ok := that.(NestedScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NestedScope")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8156,7 +10535,7 @@ func (this *NestedScope) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NestedScope but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NestedScopebut is not nil && this == nil")
+		return fmt.Errorf("that is type *NestedScope but is not nil && this == nil")
 	}
 	if !this.A.Equal(that1.A) {
 		return fmt.Errorf("A this(%v) Not Equal that(%v)", this.A, that1.A)
@@ -8188,7 +10567,12 @@ func (this *NestedScope) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NestedScope)
 	if !ok {
-		return false
+		that2, ok := that.(NestedScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8228,7 +10612,12 @@ func (this *NinOptNativeDefault) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NinOptNativeDefault)
 	if !ok {
-		return fmt.Errorf("that is not of type *NinOptNativeDefault")
+		that2, ok := that.(NinOptNativeDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NinOptNativeDefault")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8236,7 +10625,7 @@ func (this *NinOptNativeDefault) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NinOptNativeDefault but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NinOptNativeDefaultbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NinOptNativeDefault but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -8382,7 +10771,12 @@ func (this *NinOptNativeDefault) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NinOptNativeDefault)
 	if !ok {
-		return false
+		that2, ok := that.(NinOptNativeDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8536,7 +10930,12 @@ func (this *CustomContainer) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomContainer)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomContainer")
+		that2, ok := that.(CustomContainer)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomContainer")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8544,7 +10943,7 @@ func (this *CustomContainer) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomContainer but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomContainerbut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomContainer but is not nil && this == nil")
 	}
 	if !this.CustomStruct.Equal(&that1.CustomStruct) {
 		return fmt.Errorf("CustomStruct this(%v) Not Equal that(%v)", this.CustomStruct, that1.CustomStruct)
@@ -8564,7 +10963,12 @@ func (this *CustomContainer) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomContainer)
 	if !ok {
-		return false
+		that2, ok := that.(CustomContainer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8592,7 +10996,12 @@ func (this *CustomNameNidOptNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameNidOptNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameNidOptNative")
+		that2, ok := that.(CustomNameNidOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameNidOptNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8600,7 +11009,7 @@ func (this *CustomNameNidOptNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameNidOptNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameNidOptNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameNidOptNative but is not nil && this == nil")
 	}
 	if this.FieldA != that1.FieldA {
 		return fmt.Errorf("FieldA this(%v) Not Equal that(%v)", this.FieldA, that1.FieldA)
@@ -8662,7 +11071,12 @@ func (this *CustomNameNidOptNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameNidOptNative)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameNidOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8732,7 +11146,12 @@ func (this *CustomNameNinOptNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameNinOptNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameNinOptNative")
+		that2, ok := that.(CustomNameNinOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameNinOptNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -8740,7 +11159,7 @@ func (this *CustomNameNinOptNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameNinOptNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameNinOptNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameNinOptNative but is not nil && this == nil")
 	}
 	if this.FieldA != nil && that1.FieldA != nil {
 		if *this.FieldA != *that1.FieldA {
@@ -8886,7 +11305,12 @@ func (this *CustomNameNinOptNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameNinOptNative)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameNinOptNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9040,7 +11464,12 @@ func (this *CustomNameNinRepNative) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameNinRepNative)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameNinRepNative")
+		that2, ok := that.(CustomNameNinRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameNinRepNative")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9048,7 +11477,7 @@ func (this *CustomNameNinRepNative) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameNinRepNative but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameNinRepNativebut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameNinRepNative but is not nil && this == nil")
 	}
 	if len(this.FieldA) != len(that1.FieldA) {
 		return fmt.Errorf("FieldA this(%v) Not Equal that(%v)", len(this.FieldA), len(that1.FieldA))
@@ -9185,7 +11614,12 @@ func (this *CustomNameNinRepNative) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameNinRepNative)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameNinRepNative)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9330,7 +11764,12 @@ func (this *CustomNameNinStruct) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameNinStruct)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameNinStruct")
+		that2, ok := that.(CustomNameNinStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameNinStruct")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9338,7 +11777,7 @@ func (this *CustomNameNinStruct) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameNinStruct but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameNinStructbut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameNinStruct but is not nil && this == nil")
 	}
 	if this.FieldA != nil && that1.FieldA != nil {
 		if *this.FieldA != *that1.FieldA {
@@ -9426,7 +11865,12 @@ func (this *CustomNameNinStruct) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameNinStruct)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameNinStruct)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9522,7 +11966,12 @@ func (this *CustomNameCustomType) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameCustomType)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameCustomType")
+		that2, ok := that.(CustomNameCustomType)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameCustomType")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9530,7 +11979,7 @@ func (this *CustomNameCustomType) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameCustomType but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameCustomTypebut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameCustomType but is not nil && this == nil")
 	}
 	if that1.FieldA == nil {
 		if this.FieldA != nil {
@@ -9577,7 +12026,12 @@ func (this *CustomNameCustomType) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameCustomType)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameCustomType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9632,7 +12086,12 @@ func (this *CustomNameNinEmbeddedStructUnion) VerboseEqual(that interface{}) err
 
 	that1, ok := that.(*CustomNameNinEmbeddedStructUnion)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameNinEmbeddedStructUnion")
+		that2, ok := that.(CustomNameNinEmbeddedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameNinEmbeddedStructUnion")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9640,7 +12099,7 @@ func (this *CustomNameNinEmbeddedStructUnion) VerboseEqual(that interface{}) err
 		}
 		return fmt.Errorf("that is type *CustomNameNinEmbeddedStructUnion but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameNinEmbeddedStructUnionbut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameNinEmbeddedStructUnion but is not nil && this == nil")
 	}
 	if !this.NidOptNative.Equal(that1.NidOptNative) {
 		return fmt.Errorf("NidOptNative this(%v) Not Equal that(%v)", this.NidOptNative, that1.NidOptNative)
@@ -9672,7 +12131,12 @@ func (this *CustomNameNinEmbeddedStructUnion) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameNinEmbeddedStructUnion)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameNinEmbeddedStructUnion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9712,7 +12176,12 @@ func (this *CustomNameEnum) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*CustomNameEnum)
 	if !ok {
-		return fmt.Errorf("that is not of type *CustomNameEnum")
+		that2, ok := that.(CustomNameEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *CustomNameEnum")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9720,7 +12189,7 @@ func (this *CustomNameEnum) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *CustomNameEnum but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *CustomNameEnumbut is not nil && this == nil")
+		return fmt.Errorf("that is type *CustomNameEnum but is not nil && this == nil")
 	}
 	if this.FieldA != nil && that1.FieldA != nil {
 		if *this.FieldA != *that1.FieldA {
@@ -9754,7 +12223,12 @@ func (this *CustomNameEnum) Equal(that interface{}) bool {
 
 	that1, ok := that.(*CustomNameEnum)
 	if !ok {
-		return false
+		that2, ok := that.(CustomNameEnum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9796,7 +12270,12 @@ func (this *NoExtensionsMap) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*NoExtensionsMap)
 	if !ok {
-		return fmt.Errorf("that is not of type *NoExtensionsMap")
+		that2, ok := that.(NoExtensionsMap)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *NoExtensionsMap")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9804,7 +12283,7 @@ func (this *NoExtensionsMap) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *NoExtensionsMap but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *NoExtensionsMapbut is not nil && this == nil")
+		return fmt.Errorf("that is type *NoExtensionsMap but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -9833,7 +12312,12 @@ func (this *NoExtensionsMap) Equal(that interface{}) bool {
 
 	that1, ok := that.(*NoExtensionsMap)
 	if !ok {
-		return false
+		that2, ok := that.(NoExtensionsMap)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9870,7 +12354,12 @@ func (this *Unrecognized) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*Unrecognized)
 	if !ok {
-		return fmt.Errorf("that is not of type *Unrecognized")
+		that2, ok := that.(Unrecognized)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Unrecognized")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9878,7 +12367,7 @@ func (this *Unrecognized) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *Unrecognized but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *Unrecognizedbut is not nil && this == nil")
+		return fmt.Errorf("that is type *Unrecognized but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -9901,7 +12390,12 @@ func (this *Unrecognized) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Unrecognized)
 	if !ok {
-		return false
+		that2, ok := that.(Unrecognized)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9932,7 +12426,12 @@ func (this *UnrecognizedWithInner) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*UnrecognizedWithInner)
 	if !ok {
-		return fmt.Errorf("that is not of type *UnrecognizedWithInner")
+		that2, ok := that.(UnrecognizedWithInner)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *UnrecognizedWithInner")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -9940,7 +12439,7 @@ func (this *UnrecognizedWithInner) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *UnrecognizedWithInner but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *UnrecognizedWithInnerbut is not nil && this == nil")
+		return fmt.Errorf("that is type *UnrecognizedWithInner but is not nil && this == nil")
 	}
 	if len(this.Embedded) != len(that1.Embedded) {
 		return fmt.Errorf("Embedded this(%v) Not Equal that(%v)", len(this.Embedded), len(that1.Embedded))
@@ -9974,7 +12473,12 @@ func (this *UnrecognizedWithInner) Equal(that interface{}) bool {
 
 	that1, ok := that.(*UnrecognizedWithInner)
 	if !ok {
-		return false
+		that2, ok := that.(UnrecognizedWithInner)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10016,7 +12520,12 @@ func (this *UnrecognizedWithInner_Inner) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*UnrecognizedWithInner_Inner)
 	if !ok {
-		return fmt.Errorf("that is not of type *UnrecognizedWithInner_Inner")
+		that2, ok := that.(UnrecognizedWithInner_Inner)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *UnrecognizedWithInner_Inner")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10024,7 +12533,7 @@ func (this *UnrecognizedWithInner_Inner) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *UnrecognizedWithInner_Inner but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *UnrecognizedWithInner_Innerbut is not nil && this == nil")
+		return fmt.Errorf("that is type *UnrecognizedWithInner_Inner but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -10047,7 +12556,12 @@ func (this *UnrecognizedWithInner_Inner) Equal(that interface{}) bool {
 
 	that1, ok := that.(*UnrecognizedWithInner_Inner)
 	if !ok {
-		return false
+		that2, ok := that.(UnrecognizedWithInner_Inner)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10078,7 +12592,12 @@ func (this *UnrecognizedWithEmbed) VerboseEqual(that interface{}) error {
 
 	that1, ok := that.(*UnrecognizedWithEmbed)
 	if !ok {
-		return fmt.Errorf("that is not of type *UnrecognizedWithEmbed")
+		that2, ok := that.(UnrecognizedWithEmbed)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *UnrecognizedWithEmbed")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10086,7 +12605,7 @@ func (this *UnrecognizedWithEmbed) VerboseEqual(that interface{}) error {
 		}
 		return fmt.Errorf("that is type *UnrecognizedWithEmbed but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *UnrecognizedWithEmbedbut is not nil && this == nil")
+		return fmt.Errorf("that is type *UnrecognizedWithEmbed but is not nil && this == nil")
 	}
 	if !this.UnrecognizedWithEmbed_Embedded.Equal(&that1.UnrecognizedWithEmbed_Embedded) {
 		return fmt.Errorf("UnrecognizedWithEmbed_Embedded this(%v) Not Equal that(%v)", this.UnrecognizedWithEmbed_Embedded, that1.UnrecognizedWithEmbed_Embedded)
@@ -10115,7 +12634,12 @@ func (this *UnrecognizedWithEmbed) Equal(that interface{}) bool {
 
 	that1, ok := that.(*UnrecognizedWithEmbed)
 	if !ok {
-		return false
+		that2, ok := that.(UnrecognizedWithEmbed)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10152,7 +12676,12 @@ func (this *UnrecognizedWithEmbed_Embedded) VerboseEqual(that interface{}) error
 
 	that1, ok := that.(*UnrecognizedWithEmbed_Embedded)
 	if !ok {
-		return fmt.Errorf("that is not of type *UnrecognizedWithEmbed_Embedded")
+		that2, ok := that.(UnrecognizedWithEmbed_Embedded)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *UnrecognizedWithEmbed_Embedded")
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10160,7 +12689,7 @@ func (this *UnrecognizedWithEmbed_Embedded) VerboseEqual(that interface{}) error
 		}
 		return fmt.Errorf("that is type *UnrecognizedWithEmbed_Embedded but is nil && this != nil")
 	} else if this == nil {
-		return fmt.Errorf("that is type *UnrecognizedWithEmbed_Embeddedbut is not nil && this == nil")
+		return fmt.Errorf("that is type *UnrecognizedWithEmbed_Embedded but is not nil && this == nil")
 	}
 	if this.Field1 != nil && that1.Field1 != nil {
 		if *this.Field1 != *that1.Field1 {
@@ -10183,7 +12712,12 @@ func (this *UnrecognizedWithEmbed_Embedded) Equal(that interface{}) bool {
 
 	that1, ok := that.(*UnrecognizedWithEmbed_Embedded)
 	if !ok {
-		return false
+		that2, ok := that.(UnrecognizedWithEmbed_Embedded)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -10200,6 +12734,100 @@ func (this *UnrecognizedWithEmbed_Embedded) Equal(that interface{}) bool {
 	} else if this.Field1 != nil {
 		return false
 	} else if that1.Field1 != nil {
+		return false
+	}
+	return true
+}
+func (this *Node) VerboseEqual(that interface{}) error {
+	if that == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that == nil && this != nil")
+	}
+
+	that1, ok := that.(*Node)
+	if !ok {
+		that2, ok := that.(Node)
+		if ok {
+			that1 = &that2
+		} else {
+			return fmt.Errorf("that is not of type *Node")
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return nil
+		}
+		return fmt.Errorf("that is type *Node but is nil && this != nil")
+	} else if this == nil {
+		return fmt.Errorf("that is type *Node but is not nil && this == nil")
+	}
+	if this.Label != nil && that1.Label != nil {
+		if *this.Label != *that1.Label {
+			return fmt.Errorf("Label this(%v) Not Equal that(%v)", *this.Label, *that1.Label)
+		}
+	} else if this.Label != nil {
+		return fmt.Errorf("this.Label == nil && that.Label != nil")
+	} else if that1.Label != nil {
+		return fmt.Errorf("Label this(%v) Not Equal that(%v)", this.Label, that1.Label)
+	}
+	if len(this.Children) != len(that1.Children) {
+		return fmt.Errorf("Children this(%v) Not Equal that(%v)", len(this.Children), len(that1.Children))
+	}
+	for i := range this.Children {
+		if !this.Children[i].Equal(that1.Children[i]) {
+			return fmt.Errorf("Children this[%v](%v) Not Equal that[%v](%v)", i, this.Children[i], i, that1.Children[i])
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
+		return fmt.Errorf("XXX_unrecognized this(%v) Not Equal that(%v)", this.XXX_unrecognized, that1.XXX_unrecognized)
+	}
+	return nil
+}
+func (this *Node) Equal(that interface{}) bool {
+	if that == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	}
+
+	that1, ok := that.(*Node)
+	if !ok {
+		that2, ok := that.(Node)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		if this == nil {
+			return true
+		}
+		return false
+	} else if this == nil {
+		return false
+	}
+	if this.Label != nil && that1.Label != nil {
+		if *this.Label != *that1.Label {
+			return false
+		}
+	} else if this.Label != nil {
+		return false
+	} else if that1.Label != nil {
+		return false
+	}
+	if len(this.Children) != len(that1.Children) {
+		return false
+	}
+	for i := range this.Children {
+		if !this.Children[i].Equal(that1.Children[i]) {
+			return false
+		}
+	}
+	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
 		return false
 	}
 	return true
@@ -11885,6 +14513,8 @@ func NewNidOptEnumFromFace(that NidOptEnumFace) *NidOptEnum {
 type NinOptEnumFace interface {
 	Proto() github_com_gogo_protobuf_proto.Message
 	GetField1() *TheTestEnum
+	GetField2() *YetAnotherTestEnum
+	GetField3() *YetYetAnotherTestEnum
 }
 
 func (this *NinOptEnum) Proto() github_com_gogo_protobuf_proto.Message {
@@ -11899,15 +14529,27 @@ func (this *NinOptEnum) GetField1() *TheTestEnum {
 	return this.Field1
 }
 
+func (this *NinOptEnum) GetField2() *YetAnotherTestEnum {
+	return this.Field2
+}
+
+func (this *NinOptEnum) GetField3() *YetYetAnotherTestEnum {
+	return this.Field3
+}
+
 func NewNinOptEnumFromFace(that NinOptEnumFace) *NinOptEnum {
 	this := &NinOptEnum{}
 	this.Field1 = that.GetField1()
+	this.Field2 = that.GetField2()
+	this.Field3 = that.GetField3()
 	return this
 }
 
 type NidRepEnumFace interface {
 	Proto() github_com_gogo_protobuf_proto.Message
 	GetField1() []TheTestEnum
+	GetField2() []YetAnotherTestEnum
+	GetField3() []YetYetAnotherTestEnum
 }
 
 func (this *NidRepEnum) Proto() github_com_gogo_protobuf_proto.Message {
@@ -11922,15 +14564,27 @@ func (this *NidRepEnum) GetField1() []TheTestEnum {
 	return this.Field1
 }
 
+func (this *NidRepEnum) GetField2() []YetAnotherTestEnum {
+	return this.Field2
+}
+
+func (this *NidRepEnum) GetField3() []YetYetAnotherTestEnum {
+	return this.Field3
+}
+
 func NewNidRepEnumFromFace(that NidRepEnumFace) *NidRepEnum {
 	this := &NidRepEnum{}
 	this.Field1 = that.GetField1()
+	this.Field2 = that.GetField2()
+	this.Field3 = that.GetField3()
 	return this
 }
 
 type NinRepEnumFace interface {
 	Proto() github_com_gogo_protobuf_proto.Message
 	GetField1() []TheTestEnum
+	GetField2() []YetAnotherTestEnum
+	GetField3() []YetYetAnotherTestEnum
 }
 
 func (this *NinRepEnum) Proto() github_com_gogo_protobuf_proto.Message {
@@ -11945,15 +14599,27 @@ func (this *NinRepEnum) GetField1() []TheTestEnum {
 	return this.Field1
 }
 
+func (this *NinRepEnum) GetField2() []YetAnotherTestEnum {
+	return this.Field2
+}
+
+func (this *NinRepEnum) GetField3() []YetYetAnotherTestEnum {
+	return this.Field3
+}
+
 func NewNinRepEnumFromFace(that NinRepEnumFace) *NinRepEnum {
 	this := &NinRepEnum{}
 	this.Field1 = that.GetField1()
+	this.Field2 = that.GetField2()
+	this.Field3 = that.GetField3()
 	return this
 }
 
 type AnotherNinOptEnumFace interface {
 	Proto() github_com_gogo_protobuf_proto.Message
 	GetField1() *AnotherTestEnum
+	GetField2() *YetAnotherTestEnum
+	GetField3() *YetYetAnotherTestEnum
 }
 
 func (this *AnotherNinOptEnum) Proto() github_com_gogo_protobuf_proto.Message {
@@ -11968,9 +14634,19 @@ func (this *AnotherNinOptEnum) GetField1() *AnotherTestEnum {
 	return this.Field1
 }
 
+func (this *AnotherNinOptEnum) GetField2() *YetAnotherTestEnum {
+	return this.Field2
+}
+
+func (this *AnotherNinOptEnum) GetField3() *YetYetAnotherTestEnum {
+	return this.Field3
+}
+
 func NewAnotherNinOptEnumFromFace(that AnotherNinOptEnumFace) *AnotherNinOptEnum {
 	this := &AnotherNinOptEnum{}
 	this.Field1 = that.GetField1()
+	this.Field2 = that.GetField2()
+	this.Field3 = that.GetField3()
 	return this
 }
 
@@ -12790,790 +15466,1589 @@ func NewUnrecognizedWithEmbed_EmbeddedFromFace(that UnrecognizedWithEmbed_Embedd
 	return this
 }
 
+type NodeFace interface {
+	Proto() github_com_gogo_protobuf_proto.Message
+	GetLabel() *string
+	GetChildren() []*Node
+}
+
+func (this *Node) Proto() github_com_gogo_protobuf_proto.Message {
+	return this
+}
+
+func (this *Node) TestProto() github_com_gogo_protobuf_proto.Message {
+	return NewNodeFromFace(this)
+}
+
+func (this *Node) GetLabel() *string {
+	return this.Label
+}
+
+func (this *Node) GetChildren() []*Node {
+	return this.Children
+}
+
+func NewNodeFromFace(that NodeFace) *Node {
+	this := &Node{}
+	this.Label = that.GetLabel()
+	this.Children = that.GetChildren()
+	return this
+}
+
 func (this *NidOptNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidOptNative{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.NidOptNative{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptNative{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "float64"),
-		`Field2:` + valueToGoStringThetest(this.Field2, "float32"),
-		`Field3:` + valueToGoStringThetest(this.Field3, "int32"),
-		`Field4:` + valueToGoStringThetest(this.Field4, "int64"),
-		`Field5:` + valueToGoStringThetest(this.Field5, "uint32"),
-		`Field6:` + valueToGoStringThetest(this.Field6, "uint64"),
-		`Field7:` + valueToGoStringThetest(this.Field7, "int32"),
-		`Field8:` + valueToGoStringThetest(this.Field8, "int64"),
-		`Field9:` + valueToGoStringThetest(this.Field9, "uint32"),
-		`Field10:` + valueToGoStringThetest(this.Field10, "int32"),
-		`Field11:` + valueToGoStringThetest(this.Field11, "uint64"),
-		`Field12:` + valueToGoStringThetest(this.Field12, "int64"),
-		`Field13:` + valueToGoStringThetest(this.Field13, "bool"),
-		`Field14:` + valueToGoStringThetest(this.Field14, "string"),
-		`Field15:` + valueToGoStringThetest(this.Field15, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.NinOptNative{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "float64")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "float32")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "int32")+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+valueToGoStringThetest(this.Field4, "int64")+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+valueToGoStringThetest(this.Field5, "uint32")+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+valueToGoStringThetest(this.Field6, "uint64")+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+valueToGoStringThetest(this.Field7, "int32")+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+valueToGoStringThetest(this.Field8, "int64")+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+valueToGoStringThetest(this.Field9, "uint32")+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+valueToGoStringThetest(this.Field10, "int32")+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+valueToGoStringThetest(this.Field11, "uint64")+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+valueToGoStringThetest(this.Field12, "int64")+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "bool")+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+valueToGoStringThetest(this.Field14, "string")+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+valueToGoStringThetest(this.Field15, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidRepNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidRepNative{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.NidRepNative{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinRepNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinRepNative{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.NinRepNative{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidRepPackedNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidRepPackedNative{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 17)
+	s = append(s, "&test.NidRepPackedNative{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinRepPackedNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinRepPackedNative{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 17)
+	s = append(s, "&test.NinRepPackedNative{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidOptStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidOptStruct{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + strings.Replace(this.Field3.GoString(), `&`, ``, 1),
-		`Field4:` + strings.Replace(this.Field4.GoString(), `&`, ``, 1),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + strings.Replace(this.Field8.GoString(), `&`, ``, 1),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 14)
+	s = append(s, "&test.NidOptStruct{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	s = append(s, "Field3: "+strings.Replace(this.Field3.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Field4: "+strings.Replace(this.Field4.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	s = append(s, "Field8: "+strings.Replace(this.Field8.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptStruct{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "float64"),
-		`Field2:` + valueToGoStringThetest(this.Field2, "float32"),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field6:` + valueToGoStringThetest(this.Field6, "uint64"),
-		`Field7:` + valueToGoStringThetest(this.Field7, "int32"),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field13:` + valueToGoStringThetest(this.Field13, "bool"),
-		`Field14:` + valueToGoStringThetest(this.Field14, "string"),
-		`Field15:` + valueToGoStringThetest(this.Field15, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 14)
+	s = append(s, "&test.NinOptStruct{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "float64")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "float32")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+valueToGoStringThetest(this.Field6, "uint64")+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+valueToGoStringThetest(this.Field7, "int32")+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "bool")+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+valueToGoStringThetest(this.Field14, "string")+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+valueToGoStringThetest(this.Field15, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidRepStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidRepStruct{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + strings.Replace(fmt.Sprintf("%#v", this.Field3), `&`, ``, 1),
-		`Field4:` + strings.Replace(fmt.Sprintf("%#v", this.Field4), `&`, ``, 1),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + strings.Replace(fmt.Sprintf("%#v", this.Field8), `&`, ``, 1),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 14)
+	s = append(s, "&test.NidRepStruct{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinRepStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinRepStruct{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 14)
+	s = append(s, "&test.NinRepStruct{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidEmbeddedStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidEmbeddedStruct{` +
-		`NidOptNative:` + fmt.Sprintf("%#v", this.NidOptNative),
-		`Field200:` + strings.Replace(this.Field200.GoString(), `&`, ``, 1),
-		`Field210:` + fmt.Sprintf("%#v", this.Field210),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NidEmbeddedStruct{")
+	if this.NidOptNative != nil {
+		s = append(s, "NidOptNative: "+fmt.Sprintf("%#v", this.NidOptNative)+",\n")
+	}
+	s = append(s, "Field200: "+strings.Replace(this.Field200.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Field210: "+fmt.Sprintf("%#v", this.Field210)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinEmbeddedStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinEmbeddedStruct{` +
-		`NidOptNative:` + fmt.Sprintf("%#v", this.NidOptNative),
-		`Field200:` + fmt.Sprintf("%#v", this.Field200),
-		`Field210:` + valueToGoStringThetest(this.Field210, "bool"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinEmbeddedStruct{")
+	if this.NidOptNative != nil {
+		s = append(s, "NidOptNative: "+fmt.Sprintf("%#v", this.NidOptNative)+",\n")
+	}
+	if this.Field200 != nil {
+		s = append(s, "Field200: "+fmt.Sprintf("%#v", this.Field200)+",\n")
+	}
+	if this.Field210 != nil {
+		s = append(s, "Field210: "+valueToGoStringThetest(this.Field210, "bool")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidNestedStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidNestedStruct{` +
-		`Field1:` + strings.Replace(this.Field1.GoString(), `&`, ``, 1),
-		`Field2:` + strings.Replace(fmt.Sprintf("%#v", this.Field2), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NidNestedStruct{")
+	s = append(s, "Field1: "+strings.Replace(this.Field1.GoString(), `&`, ``, 1)+",\n")
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinNestedStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinNestedStruct{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NinNestedStruct{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidOptCustom) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidOptCustom{` +
-		`Id:` + fmt.Sprintf("%#v", this.Id),
-		`Value:` + fmt.Sprintf("%#v", this.Value),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NidOptCustom{")
+	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomDash) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomDash{` +
-		`Value:` + valueToGoStringThetest(this.Value, "github_com_gogo_protobuf_test_custom_dash_type.Bytes"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.CustomDash{")
+	if this.Value != nil {
+		s = append(s, "Value: "+valueToGoStringThetest(this.Value, "github_com_gogo_protobuf_test_custom_dash_type.Bytes")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptCustom) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptCustom{` +
-		`Id:` + valueToGoStringThetest(this.Id, "Uuid"),
-		`Value:` + valueToGoStringThetest(this.Value, "github_com_gogo_protobuf_test_custom.Uint128"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NinOptCustom{")
+	if this.Id != nil {
+		s = append(s, "Id: "+valueToGoStringThetest(this.Id, "Uuid")+",\n")
+	}
+	if this.Value != nil {
+		s = append(s, "Value: "+valueToGoStringThetest(this.Value, "github_com_gogo_protobuf_test_custom.Uint128")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidRepCustom) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidRepCustom{` +
-		`Id:` + fmt.Sprintf("%#v", this.Id),
-		`Value:` + fmt.Sprintf("%#v", this.Value),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NidRepCustom{")
+	if this.Id != nil {
+		s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	}
+	if this.Value != nil {
+		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinRepCustom) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinRepCustom{` +
-		`Id:` + fmt.Sprintf("%#v", this.Id),
-		`Value:` + fmt.Sprintf("%#v", this.Value),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NinRepCustom{")
+	if this.Id != nil {
+		s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	}
+	if this.Value != nil {
+		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptNativeUnion) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptNativeUnion{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "float64"),
-		`Field2:` + valueToGoStringThetest(this.Field2, "float32"),
-		`Field3:` + valueToGoStringThetest(this.Field3, "int32"),
-		`Field4:` + valueToGoStringThetest(this.Field4, "int64"),
-		`Field5:` + valueToGoStringThetest(this.Field5, "uint32"),
-		`Field6:` + valueToGoStringThetest(this.Field6, "uint64"),
-		`Field13:` + valueToGoStringThetest(this.Field13, "bool"),
-		`Field14:` + valueToGoStringThetest(this.Field14, "string"),
-		`Field15:` + valueToGoStringThetest(this.Field15, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 13)
+	s = append(s, "&test.NinOptNativeUnion{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "float64")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "float32")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "int32")+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+valueToGoStringThetest(this.Field4, "int64")+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+valueToGoStringThetest(this.Field5, "uint32")+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+valueToGoStringThetest(this.Field6, "uint64")+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "bool")+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+valueToGoStringThetest(this.Field14, "string")+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+valueToGoStringThetest(this.Field15, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptStructUnion) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptStructUnion{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "float64"),
-		`Field2:` + valueToGoStringThetest(this.Field2, "float32"),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field6:` + valueToGoStringThetest(this.Field6, "uint64"),
-		`Field7:` + valueToGoStringThetest(this.Field7, "int32"),
-		`Field13:` + valueToGoStringThetest(this.Field13, "bool"),
-		`Field14:` + valueToGoStringThetest(this.Field14, "string"),
-		`Field15:` + valueToGoStringThetest(this.Field15, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 13)
+	s = append(s, "&test.NinOptStructUnion{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "float64")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "float32")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+valueToGoStringThetest(this.Field6, "uint64")+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+valueToGoStringThetest(this.Field7, "int32")+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "bool")+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+valueToGoStringThetest(this.Field14, "string")+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+valueToGoStringThetest(this.Field15, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinEmbeddedStructUnion) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinEmbeddedStructUnion{` +
-		`NidOptNative:` + fmt.Sprintf("%#v", this.NidOptNative),
-		`Field200:` + fmt.Sprintf("%#v", this.Field200),
-		`Field210:` + valueToGoStringThetest(this.Field210, "bool"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinEmbeddedStructUnion{")
+	if this.NidOptNative != nil {
+		s = append(s, "NidOptNative: "+fmt.Sprintf("%#v", this.NidOptNative)+",\n")
+	}
+	if this.Field200 != nil {
+		s = append(s, "Field200: "+fmt.Sprintf("%#v", this.Field200)+",\n")
+	}
+	if this.Field210 != nil {
+		s = append(s, "Field210: "+valueToGoStringThetest(this.Field210, "bool")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinNestedStructUnion) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinNestedStructUnion{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinNestedStructUnion{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *Tree) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.Tree{` +
-		`Or:` + fmt.Sprintf("%#v", this.Or),
-		`And:` + fmt.Sprintf("%#v", this.And),
-		`Leaf:` + fmt.Sprintf("%#v", this.Leaf),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.Tree{")
+	if this.Or != nil {
+		s = append(s, "Or: "+fmt.Sprintf("%#v", this.Or)+",\n")
+	}
+	if this.And != nil {
+		s = append(s, "And: "+fmt.Sprintf("%#v", this.And)+",\n")
+	}
+	if this.Leaf != nil {
+		s = append(s, "Leaf: "+fmt.Sprintf("%#v", this.Leaf)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *OrBranch) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.OrBranch{` +
-		`Left:` + strings.Replace(this.Left.GoString(), `&`, ``, 1),
-		`Right:` + strings.Replace(this.Right.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.OrBranch{")
+	s = append(s, "Left: "+strings.Replace(this.Left.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Right: "+strings.Replace(this.Right.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *AndBranch) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.AndBranch{` +
-		`Left:` + strings.Replace(this.Left.GoString(), `&`, ``, 1),
-		`Right:` + strings.Replace(this.Right.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.AndBranch{")
+	s = append(s, "Left: "+strings.Replace(this.Left.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Right: "+strings.Replace(this.Right.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *Leaf) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.Leaf{` +
-		`Value:` + fmt.Sprintf("%#v", this.Value),
-		`StrValue:` + fmt.Sprintf("%#v", this.StrValue),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.Leaf{")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "StrValue: "+fmt.Sprintf("%#v", this.StrValue)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *DeepTree) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.DeepTree{` +
-		`Down:` + fmt.Sprintf("%#v", this.Down),
-		`And:` + fmt.Sprintf("%#v", this.And),
-		`Leaf:` + fmt.Sprintf("%#v", this.Leaf),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.DeepTree{")
+	if this.Down != nil {
+		s = append(s, "Down: "+fmt.Sprintf("%#v", this.Down)+",\n")
+	}
+	if this.And != nil {
+		s = append(s, "And: "+fmt.Sprintf("%#v", this.And)+",\n")
+	}
+	if this.Leaf != nil {
+		s = append(s, "Leaf: "+fmt.Sprintf("%#v", this.Leaf)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *ADeepBranch) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.ADeepBranch{` +
-		`Down:` + strings.Replace(this.Down.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.ADeepBranch{")
+	s = append(s, "Down: "+strings.Replace(this.Down.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *AndDeepBranch) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.AndDeepBranch{` +
-		`Left:` + strings.Replace(this.Left.GoString(), `&`, ``, 1),
-		`Right:` + strings.Replace(this.Right.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.AndDeepBranch{")
+	s = append(s, "Left: "+strings.Replace(this.Left.GoString(), `&`, ``, 1)+",\n")
+	s = append(s, "Right: "+strings.Replace(this.Right.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *DeepLeaf) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.DeepLeaf{` +
-		`Tree:` + strings.Replace(this.Tree.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.DeepLeaf{")
+	s = append(s, "Tree: "+strings.Replace(this.Tree.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *Nil) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.Nil{` +
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 4)
+	s = append(s, "&test.Nil{")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidOptEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidOptEnum{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.NidOptEnum{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptEnum{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "test.TheTestEnum"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinOptEnum{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "test.TheTestEnum")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "test.YetAnotherTestEnum")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "test.YetYetAnotherTestEnum")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NidRepEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NidRepEnum{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NidRepEnum{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinRepEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinRepEnum{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinRepEnum{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptEnumDefault) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptEnumDefault{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "test.TheTestEnum"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NinOptEnumDefault{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "test.TheTestEnum")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "test.YetAnotherTestEnum")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "test.YetYetAnotherTestEnum")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *AnotherNinOptEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.AnotherNinOptEnum{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "test.AnotherTestEnum"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.AnotherNinOptEnum{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "test.AnotherTestEnum")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "test.YetAnotherTestEnum")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "test.YetYetAnotherTestEnum")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *AnotherNinOptEnumDefault) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.AnotherNinOptEnumDefault{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "test.AnotherTestEnum"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.AnotherNinOptEnumDefault{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "test.AnotherTestEnum")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "test.YetAnotherTestEnum")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "test.YetYetAnotherTestEnum")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *Timer) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.Timer{` +
-		`Time1:` + fmt.Sprintf("%#v", this.Time1),
-		`Time2:` + fmt.Sprintf("%#v", this.Time2),
-		`Data:` + fmt.Sprintf("%#v", this.Data),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.Timer{")
+	s = append(s, "Time1: "+fmt.Sprintf("%#v", this.Time1)+",\n")
+	s = append(s, "Time2: "+fmt.Sprintf("%#v", this.Time2)+",\n")
+	s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *MyExtendable) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.MyExtendable{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "int64"),
-		`XXX_extensions: ` + extensionToGoStringThetest(this.XXX_extensions),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.MyExtendable{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "int64")+",\n")
+	}
+	if this.XXX_extensions != nil {
+		s = append(s, "XXX_extensions: "+extensionToGoStringThetest(this.XXX_extensions)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *OtherExtenable) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.OtherExtenable{` +
-		`Field2:` + valueToGoStringThetest(this.Field2, "int64"),
-		`Field13:` + valueToGoStringThetest(this.Field13, "int64"),
-		`M:` + fmt.Sprintf("%#v", this.M),
-		`XXX_extensions: ` + extensionToGoStringThetest(this.XXX_extensions),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.OtherExtenable{")
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "int64")+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "int64")+",\n")
+	}
+	if this.M != nil {
+		s = append(s, "M: "+fmt.Sprintf("%#v", this.M)+",\n")
+	}
+	if this.XXX_extensions != nil {
+		s = append(s, "XXX_extensions: "+extensionToGoStringThetest(this.XXX_extensions)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NestedDefinition) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NestedDefinition{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "int64"),
-		`EnumField:` + valueToGoStringThetest(this.EnumField, "test.NestedDefinition_NestedEnum"),
-		`NNM:` + fmt.Sprintf("%#v", this.NNM),
-		`NM:` + fmt.Sprintf("%#v", this.NM),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 8)
+	s = append(s, "&test.NestedDefinition{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "int64")+",\n")
+	}
+	if this.EnumField != nil {
+		s = append(s, "EnumField: "+valueToGoStringThetest(this.EnumField, "test.NestedDefinition_NestedEnum")+",\n")
+	}
+	if this.NNM != nil {
+		s = append(s, "NNM: "+fmt.Sprintf("%#v", this.NNM)+",\n")
+	}
+	if this.NM != nil {
+		s = append(s, "NM: "+fmt.Sprintf("%#v", this.NM)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NestedDefinition_NestedMessage) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NestedDefinition_NestedMessage{` +
-		`NestedField1:` + valueToGoStringThetest(this.NestedField1, "uint64"),
-		`NNM:` + fmt.Sprintf("%#v", this.NNM),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.NestedDefinition_NestedMessage{")
+	if this.NestedField1 != nil {
+		s = append(s, "NestedField1: "+valueToGoStringThetest(this.NestedField1, "uint64")+",\n")
+	}
+	if this.NNM != nil {
+		s = append(s, "NNM: "+fmt.Sprintf("%#v", this.NNM)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NestedDefinition_NestedMessage_NestedNestedMsg) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NestedDefinition_NestedMessage_NestedNestedMsg{` +
-		`NestedNestedField1:` + valueToGoStringThetest(this.NestedNestedField1, "string"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.NestedDefinition_NestedMessage_NestedNestedMsg{")
+	if this.NestedNestedField1 != nil {
+		s = append(s, "NestedNestedField1: "+valueToGoStringThetest(this.NestedNestedField1, "string")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NestedScope) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NestedScope{` +
-		`A:` + fmt.Sprintf("%#v", this.A),
-		`B:` + valueToGoStringThetest(this.B, "test.NestedDefinition_NestedEnum"),
-		`C:` + fmt.Sprintf("%#v", this.C),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.NestedScope{")
+	if this.A != nil {
+		s = append(s, "A: "+fmt.Sprintf("%#v", this.A)+",\n")
+	}
+	if this.B != nil {
+		s = append(s, "B: "+valueToGoStringThetest(this.B, "test.NestedDefinition_NestedEnum")+",\n")
+	}
+	if this.C != nil {
+		s = append(s, "C: "+fmt.Sprintf("%#v", this.C)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NinOptNativeDefault) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NinOptNativeDefault{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "float64"),
-		`Field2:` + valueToGoStringThetest(this.Field2, "float32"),
-		`Field3:` + valueToGoStringThetest(this.Field3, "int32"),
-		`Field4:` + valueToGoStringThetest(this.Field4, "int64"),
-		`Field5:` + valueToGoStringThetest(this.Field5, "uint32"),
-		`Field6:` + valueToGoStringThetest(this.Field6, "uint64"),
-		`Field7:` + valueToGoStringThetest(this.Field7, "int32"),
-		`Field8:` + valueToGoStringThetest(this.Field8, "int64"),
-		`Field9:` + valueToGoStringThetest(this.Field9, "uint32"),
-		`Field10:` + valueToGoStringThetest(this.Field10, "int32"),
-		`Field11:` + valueToGoStringThetest(this.Field11, "uint64"),
-		`Field12:` + valueToGoStringThetest(this.Field12, "int64"),
-		`Field13:` + valueToGoStringThetest(this.Field13, "bool"),
-		`Field14:` + valueToGoStringThetest(this.Field14, "string"),
-		`Field15:` + valueToGoStringThetest(this.Field15, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.NinOptNativeDefault{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "float64")+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "float32")+",\n")
+	}
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+valueToGoStringThetest(this.Field3, "int32")+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+valueToGoStringThetest(this.Field4, "int64")+",\n")
+	}
+	if this.Field5 != nil {
+		s = append(s, "Field5: "+valueToGoStringThetest(this.Field5, "uint32")+",\n")
+	}
+	if this.Field6 != nil {
+		s = append(s, "Field6: "+valueToGoStringThetest(this.Field6, "uint64")+",\n")
+	}
+	if this.Field7 != nil {
+		s = append(s, "Field7: "+valueToGoStringThetest(this.Field7, "int32")+",\n")
+	}
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+valueToGoStringThetest(this.Field8, "int64")+",\n")
+	}
+	if this.Field9 != nil {
+		s = append(s, "Field9: "+valueToGoStringThetest(this.Field9, "uint32")+",\n")
+	}
+	if this.Field10 != nil {
+		s = append(s, "Field10: "+valueToGoStringThetest(this.Field10, "int32")+",\n")
+	}
+	if this.Field11 != nil {
+		s = append(s, "Field11: "+valueToGoStringThetest(this.Field11, "uint64")+",\n")
+	}
+	if this.Field12 != nil {
+		s = append(s, "Field12: "+valueToGoStringThetest(this.Field12, "int64")+",\n")
+	}
+	if this.Field13 != nil {
+		s = append(s, "Field13: "+valueToGoStringThetest(this.Field13, "bool")+",\n")
+	}
+	if this.Field14 != nil {
+		s = append(s, "Field14: "+valueToGoStringThetest(this.Field14, "string")+",\n")
+	}
+	if this.Field15 != nil {
+		s = append(s, "Field15: "+valueToGoStringThetest(this.Field15, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomContainer) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomContainer{` +
-		`CustomStruct:` + strings.Replace(this.CustomStruct.GoString(), `&`, ``, 1),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.CustomContainer{")
+	s = append(s, "CustomStruct: "+strings.Replace(this.CustomStruct.GoString(), `&`, ``, 1)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameNidOptNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameNidOptNative{` +
-		`FieldA:` + fmt.Sprintf("%#v", this.FieldA),
-		`FieldB:` + fmt.Sprintf("%#v", this.FieldB),
-		`FieldC:` + fmt.Sprintf("%#v", this.FieldC),
-		`FieldD:` + fmt.Sprintf("%#v", this.FieldD),
-		`FieldE:` + fmt.Sprintf("%#v", this.FieldE),
-		`FieldF:` + fmt.Sprintf("%#v", this.FieldF),
-		`FieldG:` + fmt.Sprintf("%#v", this.FieldG),
-		`FieldH:` + fmt.Sprintf("%#v", this.FieldH),
-		`FieldI:` + fmt.Sprintf("%#v", this.FieldI),
-		`FieldJ:` + fmt.Sprintf("%#v", this.FieldJ),
-		`FieldK:` + fmt.Sprintf("%#v", this.FieldK),
-		`FieldL:` + fmt.Sprintf("%#v", this.FieldL),
-		`FieldM:` + fmt.Sprintf("%#v", this.FieldM),
-		`FieldN:` + fmt.Sprintf("%#v", this.FieldN),
-		`FieldO:` + fmt.Sprintf("%#v", this.FieldO),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.CustomNameNidOptNative{")
+	s = append(s, "FieldA: "+fmt.Sprintf("%#v", this.FieldA)+",\n")
+	s = append(s, "FieldB: "+fmt.Sprintf("%#v", this.FieldB)+",\n")
+	s = append(s, "FieldC: "+fmt.Sprintf("%#v", this.FieldC)+",\n")
+	s = append(s, "FieldD: "+fmt.Sprintf("%#v", this.FieldD)+",\n")
+	s = append(s, "FieldE: "+fmt.Sprintf("%#v", this.FieldE)+",\n")
+	s = append(s, "FieldF: "+fmt.Sprintf("%#v", this.FieldF)+",\n")
+	s = append(s, "FieldG: "+fmt.Sprintf("%#v", this.FieldG)+",\n")
+	s = append(s, "FieldH: "+fmt.Sprintf("%#v", this.FieldH)+",\n")
+	s = append(s, "FieldI: "+fmt.Sprintf("%#v", this.FieldI)+",\n")
+	s = append(s, "FieldJ: "+fmt.Sprintf("%#v", this.FieldJ)+",\n")
+	s = append(s, "FieldK: "+fmt.Sprintf("%#v", this.FieldK)+",\n")
+	s = append(s, "FieldL: "+fmt.Sprintf("%#v", this.FieldL)+",\n")
+	s = append(s, "FieldM: "+fmt.Sprintf("%#v", this.FieldM)+",\n")
+	s = append(s, "FieldN: "+fmt.Sprintf("%#v", this.FieldN)+",\n")
+	s = append(s, "FieldO: "+fmt.Sprintf("%#v", this.FieldO)+",\n")
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameNinOptNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameNinOptNative{` +
-		`FieldA:` + valueToGoStringThetest(this.FieldA, "float64"),
-		`FieldB:` + valueToGoStringThetest(this.FieldB, "float32"),
-		`FieldC:` + valueToGoStringThetest(this.FieldC, "int32"),
-		`FieldD:` + valueToGoStringThetest(this.FieldD, "int64"),
-		`FieldE:` + valueToGoStringThetest(this.FieldE, "uint32"),
-		`FieldF:` + valueToGoStringThetest(this.FieldF, "uint64"),
-		`FieldG:` + valueToGoStringThetest(this.FieldG, "int32"),
-		`FieldH:` + valueToGoStringThetest(this.FieldH, "int64"),
-		`FieldI:` + valueToGoStringThetest(this.FieldI, "uint32"),
-		`FieldJ:` + valueToGoStringThetest(this.FieldJ, "int32"),
-		`FieldK:` + valueToGoStringThetest(this.FieldK, "uint64"),
-		`FielL:` + valueToGoStringThetest(this.FielL, "int64"),
-		`FieldM:` + valueToGoStringThetest(this.FieldM, "bool"),
-		`FieldN:` + valueToGoStringThetest(this.FieldN, "string"),
-		`FieldO:` + valueToGoStringThetest(this.FieldO, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.CustomNameNinOptNative{")
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+valueToGoStringThetest(this.FieldA, "float64")+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+valueToGoStringThetest(this.FieldB, "float32")+",\n")
+	}
+	if this.FieldC != nil {
+		s = append(s, "FieldC: "+valueToGoStringThetest(this.FieldC, "int32")+",\n")
+	}
+	if this.FieldD != nil {
+		s = append(s, "FieldD: "+valueToGoStringThetest(this.FieldD, "int64")+",\n")
+	}
+	if this.FieldE != nil {
+		s = append(s, "FieldE: "+valueToGoStringThetest(this.FieldE, "uint32")+",\n")
+	}
+	if this.FieldF != nil {
+		s = append(s, "FieldF: "+valueToGoStringThetest(this.FieldF, "uint64")+",\n")
+	}
+	if this.FieldG != nil {
+		s = append(s, "FieldG: "+valueToGoStringThetest(this.FieldG, "int32")+",\n")
+	}
+	if this.FieldH != nil {
+		s = append(s, "FieldH: "+valueToGoStringThetest(this.FieldH, "int64")+",\n")
+	}
+	if this.FieldI != nil {
+		s = append(s, "FieldI: "+valueToGoStringThetest(this.FieldI, "uint32")+",\n")
+	}
+	if this.FieldJ != nil {
+		s = append(s, "FieldJ: "+valueToGoStringThetest(this.FieldJ, "int32")+",\n")
+	}
+	if this.FieldK != nil {
+		s = append(s, "FieldK: "+valueToGoStringThetest(this.FieldK, "uint64")+",\n")
+	}
+	if this.FielL != nil {
+		s = append(s, "FielL: "+valueToGoStringThetest(this.FielL, "int64")+",\n")
+	}
+	if this.FieldM != nil {
+		s = append(s, "FieldM: "+valueToGoStringThetest(this.FieldM, "bool")+",\n")
+	}
+	if this.FieldN != nil {
+		s = append(s, "FieldN: "+valueToGoStringThetest(this.FieldN, "string")+",\n")
+	}
+	if this.FieldO != nil {
+		s = append(s, "FieldO: "+valueToGoStringThetest(this.FieldO, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameNinRepNative) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameNinRepNative{` +
-		`FieldA:` + fmt.Sprintf("%#v", this.FieldA),
-		`FieldB:` + fmt.Sprintf("%#v", this.FieldB),
-		`FieldC:` + fmt.Sprintf("%#v", this.FieldC),
-		`FieldD:` + fmt.Sprintf("%#v", this.FieldD),
-		`FieldE:` + fmt.Sprintf("%#v", this.FieldE),
-		`FieldF:` + fmt.Sprintf("%#v", this.FieldF),
-		`FieldG:` + fmt.Sprintf("%#v", this.FieldG),
-		`FieldH:` + fmt.Sprintf("%#v", this.FieldH),
-		`FieldI:` + fmt.Sprintf("%#v", this.FieldI),
-		`FieldJ:` + fmt.Sprintf("%#v", this.FieldJ),
-		`FieldK:` + fmt.Sprintf("%#v", this.FieldK),
-		`FieldL:` + fmt.Sprintf("%#v", this.FieldL),
-		`FieldM:` + fmt.Sprintf("%#v", this.FieldM),
-		`FieldN:` + fmt.Sprintf("%#v", this.FieldN),
-		`FieldO:` + fmt.Sprintf("%#v", this.FieldO),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 19)
+	s = append(s, "&test.CustomNameNinRepNative{")
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+fmt.Sprintf("%#v", this.FieldA)+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+fmt.Sprintf("%#v", this.FieldB)+",\n")
+	}
+	if this.FieldC != nil {
+		s = append(s, "FieldC: "+fmt.Sprintf("%#v", this.FieldC)+",\n")
+	}
+	if this.FieldD != nil {
+		s = append(s, "FieldD: "+fmt.Sprintf("%#v", this.FieldD)+",\n")
+	}
+	if this.FieldE != nil {
+		s = append(s, "FieldE: "+fmt.Sprintf("%#v", this.FieldE)+",\n")
+	}
+	if this.FieldF != nil {
+		s = append(s, "FieldF: "+fmt.Sprintf("%#v", this.FieldF)+",\n")
+	}
+	if this.FieldG != nil {
+		s = append(s, "FieldG: "+fmt.Sprintf("%#v", this.FieldG)+",\n")
+	}
+	if this.FieldH != nil {
+		s = append(s, "FieldH: "+fmt.Sprintf("%#v", this.FieldH)+",\n")
+	}
+	if this.FieldI != nil {
+		s = append(s, "FieldI: "+fmt.Sprintf("%#v", this.FieldI)+",\n")
+	}
+	if this.FieldJ != nil {
+		s = append(s, "FieldJ: "+fmt.Sprintf("%#v", this.FieldJ)+",\n")
+	}
+	if this.FieldK != nil {
+		s = append(s, "FieldK: "+fmt.Sprintf("%#v", this.FieldK)+",\n")
+	}
+	if this.FieldL != nil {
+		s = append(s, "FieldL: "+fmt.Sprintf("%#v", this.FieldL)+",\n")
+	}
+	if this.FieldM != nil {
+		s = append(s, "FieldM: "+fmt.Sprintf("%#v", this.FieldM)+",\n")
+	}
+	if this.FieldN != nil {
+		s = append(s, "FieldN: "+fmt.Sprintf("%#v", this.FieldN)+",\n")
+	}
+	if this.FieldO != nil {
+		s = append(s, "FieldO: "+fmt.Sprintf("%#v", this.FieldO)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameNinStruct) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameNinStruct{` +
-		`FieldA:` + valueToGoStringThetest(this.FieldA, "float64"),
-		`FieldB:` + valueToGoStringThetest(this.FieldB, "float32"),
-		`FieldC:` + fmt.Sprintf("%#v", this.FieldC),
-		`FieldD:` + fmt.Sprintf("%#v", this.FieldD),
-		`FieldE:` + valueToGoStringThetest(this.FieldE, "uint64"),
-		`FieldF:` + valueToGoStringThetest(this.FieldF, "int32"),
-		`FieldG:` + fmt.Sprintf("%#v", this.FieldG),
-		`FieldH:` + valueToGoStringThetest(this.FieldH, "bool"),
-		`FieldI:` + valueToGoStringThetest(this.FieldI, "string"),
-		`FieldJ:` + valueToGoStringThetest(this.FieldJ, "byte"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 14)
+	s = append(s, "&test.CustomNameNinStruct{")
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+valueToGoStringThetest(this.FieldA, "float64")+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+valueToGoStringThetest(this.FieldB, "float32")+",\n")
+	}
+	if this.FieldC != nil {
+		s = append(s, "FieldC: "+fmt.Sprintf("%#v", this.FieldC)+",\n")
+	}
+	if this.FieldD != nil {
+		s = append(s, "FieldD: "+fmt.Sprintf("%#v", this.FieldD)+",\n")
+	}
+	if this.FieldE != nil {
+		s = append(s, "FieldE: "+valueToGoStringThetest(this.FieldE, "uint64")+",\n")
+	}
+	if this.FieldF != nil {
+		s = append(s, "FieldF: "+valueToGoStringThetest(this.FieldF, "int32")+",\n")
+	}
+	if this.FieldG != nil {
+		s = append(s, "FieldG: "+fmt.Sprintf("%#v", this.FieldG)+",\n")
+	}
+	if this.FieldH != nil {
+		s = append(s, "FieldH: "+valueToGoStringThetest(this.FieldH, "bool")+",\n")
+	}
+	if this.FieldI != nil {
+		s = append(s, "FieldI: "+valueToGoStringThetest(this.FieldI, "string")+",\n")
+	}
+	if this.FieldJ != nil {
+		s = append(s, "FieldJ: "+valueToGoStringThetest(this.FieldJ, "byte")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameCustomType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameCustomType{` +
-		`FieldA:` + valueToGoStringThetest(this.FieldA, "Uuid"),
-		`FieldB:` + valueToGoStringThetest(this.FieldB, "github_com_gogo_protobuf_test_custom.Uint128"),
-		`FieldC:` + fmt.Sprintf("%#v", this.FieldC),
-		`FieldD:` + fmt.Sprintf("%#v", this.FieldD),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 8)
+	s = append(s, "&test.CustomNameCustomType{")
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+valueToGoStringThetest(this.FieldA, "Uuid")+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+valueToGoStringThetest(this.FieldB, "github_com_gogo_protobuf_test_custom.Uint128")+",\n")
+	}
+	if this.FieldC != nil {
+		s = append(s, "FieldC: "+fmt.Sprintf("%#v", this.FieldC)+",\n")
+	}
+	if this.FieldD != nil {
+		s = append(s, "FieldD: "+fmt.Sprintf("%#v", this.FieldD)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameNinEmbeddedStructUnion) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameNinEmbeddedStructUnion{` +
-		`NidOptNative:` + fmt.Sprintf("%#v", this.NidOptNative),
-		`FieldA:` + fmt.Sprintf("%#v", this.FieldA),
-		`FieldB:` + valueToGoStringThetest(this.FieldB, "bool"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 7)
+	s = append(s, "&test.CustomNameNinEmbeddedStructUnion{")
+	if this.NidOptNative != nil {
+		s = append(s, "NidOptNative: "+fmt.Sprintf("%#v", this.NidOptNative)+",\n")
+	}
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+fmt.Sprintf("%#v", this.FieldA)+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+valueToGoStringThetest(this.FieldB, "bool")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *CustomNameEnum) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.CustomNameEnum{` +
-		`FieldA:` + valueToGoStringThetest(this.FieldA, "test.TheTestEnum"),
-		`FieldB:` + fmt.Sprintf("%#v", this.FieldB),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.CustomNameEnum{")
+	if this.FieldA != nil {
+		s = append(s, "FieldA: "+valueToGoStringThetest(this.FieldA, "test.TheTestEnum")+",\n")
+	}
+	if this.FieldB != nil {
+		s = append(s, "FieldB: "+fmt.Sprintf("%#v", this.FieldB)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *NoExtensionsMap) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.NoExtensionsMap{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "int64"),
-		`XXX_extensions:` + fmt.Sprintf("%#v", this.XXX_extensions),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.NoExtensionsMap{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "int64")+",\n")
+	}
+	if this.XXX_extensions != nil {
+		s = append(s, "XXX_extensions: "+fmt.Sprintf("%#v", this.XXX_extensions)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *Unrecognized) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.Unrecognized{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "string") + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.Unrecognized{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "string")+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *UnrecognizedWithInner) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.UnrecognizedWithInner{` +
-		`Embedded:` + fmt.Sprintf("%#v", this.Embedded),
-		`Field2:` + valueToGoStringThetest(this.Field2, "string"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.UnrecognizedWithInner{")
+	if this.Embedded != nil {
+		s = append(s, "Embedded: "+fmt.Sprintf("%#v", this.Embedded)+",\n")
+	}
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "string")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *UnrecognizedWithInner_Inner) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.UnrecognizedWithInner_Inner{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "uint32") + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.UnrecognizedWithInner_Inner{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "uint32")+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *UnrecognizedWithEmbed) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.UnrecognizedWithEmbed{` +
-		`UnrecognizedWithEmbed_Embedded:` + strings.Replace(this.UnrecognizedWithEmbed_Embedded.GoString(), `&`, ``, 1),
-		`Field2:` + valueToGoStringThetest(this.Field2, "string"),
-		`XXX_unrecognized:` + fmt.Sprintf("%#v", this.XXX_unrecognized) + `}`}, ", ")
-	return s
+	s := make([]string, 0, 6)
+	s = append(s, "&test.UnrecognizedWithEmbed{")
+	s = append(s, "UnrecognizedWithEmbed_Embedded: "+strings.Replace(this.UnrecognizedWithEmbed_Embedded.GoString(), `&`, ``, 1)+",\n")
+	if this.Field2 != nil {
+		s = append(s, "Field2: "+valueToGoStringThetest(this.Field2, "string")+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *UnrecognizedWithEmbed_Embedded) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&test.UnrecognizedWithEmbed_Embedded{` +
-		`Field1:` + valueToGoStringThetest(this.Field1, "uint32") + `}`}, ", ")
-	return s
+	s := make([]string, 0, 5)
+	s = append(s, "&test.UnrecognizedWithEmbed_Embedded{")
+	if this.Field1 != nil {
+		s = append(s, "Field1: "+valueToGoStringThetest(this.Field1, "uint32")+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Node) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&test.Node{")
+	if this.Label != nil {
+		s = append(s, "Label: "+valueToGoStringThetest(this.Label, "string")+",\n")
+	}
+	if this.Children != nil {
+		s = append(s, "Children: "+fmt.Sprintf("%#v", this.Children)+",\n")
+	}
+	if this.XXX_unrecognized != nil {
+		s = append(s, "XXX_unrecognized:"+fmt.Sprintf("%#v", this.XXX_unrecognized)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func valueToGoStringThetest(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -13749,7 +17224,7 @@ func NewPopulatedNinOptNative(r randyThetest, easy bool) *NinOptNative {
 func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 	this := &NidRepNative{}
 	if r.Intn(10) != 0 {
-		v17 := r.Intn(100)
+		v17 := r.Intn(10)
 		this.Field1 = make([]float64, v17)
 		for i := 0; i < v17; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -13759,7 +17234,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v18 := r.Intn(100)
+		v18 := r.Intn(10)
 		this.Field2 = make([]float32, v18)
 		for i := 0; i < v18; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -13769,7 +17244,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v19 := r.Intn(100)
+		v19 := r.Intn(10)
 		this.Field3 = make([]int32, v19)
 		for i := 0; i < v19; i++ {
 			this.Field3[i] = int32(r.Int31())
@@ -13779,7 +17254,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v20 := r.Intn(100)
+		v20 := r.Intn(10)
 		this.Field4 = make([]int64, v20)
 		for i := 0; i < v20; i++ {
 			this.Field4[i] = int64(r.Int63())
@@ -13789,21 +17264,21 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v21 := r.Intn(100)
+		v21 := r.Intn(10)
 		this.Field5 = make([]uint32, v21)
 		for i := 0; i < v21; i++ {
 			this.Field5[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v22 := r.Intn(100)
+		v22 := r.Intn(10)
 		this.Field6 = make([]uint64, v22)
 		for i := 0; i < v22; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v23 := r.Intn(100)
+		v23 := r.Intn(10)
 		this.Field7 = make([]int32, v23)
 		for i := 0; i < v23; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -13813,7 +17288,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v24 := r.Intn(100)
+		v24 := r.Intn(10)
 		this.Field8 = make([]int64, v24)
 		for i := 0; i < v24; i++ {
 			this.Field8[i] = int64(r.Int63())
@@ -13823,14 +17298,14 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v25 := r.Intn(100)
+		v25 := r.Intn(10)
 		this.Field9 = make([]uint32, v25)
 		for i := 0; i < v25; i++ {
 			this.Field9[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v26 := r.Intn(100)
+		v26 := r.Intn(10)
 		this.Field10 = make([]int32, v26)
 		for i := 0; i < v26; i++ {
 			this.Field10[i] = int32(r.Int31())
@@ -13840,14 +17315,14 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v27 := r.Intn(100)
+		v27 := r.Intn(10)
 		this.Field11 = make([]uint64, v27)
 		for i := 0; i < v27; i++ {
 			this.Field11[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v28 := r.Intn(100)
+		v28 := r.Intn(10)
 		this.Field12 = make([]int64, v28)
 		for i := 0; i < v28; i++ {
 			this.Field12[i] = int64(r.Int63())
@@ -13857,7 +17332,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v29 := r.Intn(100)
+		v29 := r.Intn(10)
 		this.Field13 = make([]bool, v29)
 		for i := 0; i < v29; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -13871,7 +17346,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v31 := r.Intn(100)
+		v31 := r.Intn(10)
 		this.Field15 = make([][]byte, v31)
 		for i := 0; i < v31; i++ {
 			v32 := r.Intn(100)
@@ -13890,7 +17365,7 @@ func NewPopulatedNidRepNative(r randyThetest, easy bool) *NidRepNative {
 func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 	this := &NinRepNative{}
 	if r.Intn(10) != 0 {
-		v33 := r.Intn(100)
+		v33 := r.Intn(10)
 		this.Field1 = make([]float64, v33)
 		for i := 0; i < v33; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -13900,7 +17375,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v34 := r.Intn(100)
+		v34 := r.Intn(10)
 		this.Field2 = make([]float32, v34)
 		for i := 0; i < v34; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -13910,7 +17385,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v35 := r.Intn(100)
+		v35 := r.Intn(10)
 		this.Field3 = make([]int32, v35)
 		for i := 0; i < v35; i++ {
 			this.Field3[i] = int32(r.Int31())
@@ -13920,7 +17395,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v36 := r.Intn(100)
+		v36 := r.Intn(10)
 		this.Field4 = make([]int64, v36)
 		for i := 0; i < v36; i++ {
 			this.Field4[i] = int64(r.Int63())
@@ -13930,21 +17405,21 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v37 := r.Intn(100)
+		v37 := r.Intn(10)
 		this.Field5 = make([]uint32, v37)
 		for i := 0; i < v37; i++ {
 			this.Field5[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v38 := r.Intn(100)
+		v38 := r.Intn(10)
 		this.Field6 = make([]uint64, v38)
 		for i := 0; i < v38; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v39 := r.Intn(100)
+		v39 := r.Intn(10)
 		this.Field7 = make([]int32, v39)
 		for i := 0; i < v39; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -13954,7 +17429,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v40 := r.Intn(100)
+		v40 := r.Intn(10)
 		this.Field8 = make([]int64, v40)
 		for i := 0; i < v40; i++ {
 			this.Field8[i] = int64(r.Int63())
@@ -13964,14 +17439,14 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v41 := r.Intn(100)
+		v41 := r.Intn(10)
 		this.Field9 = make([]uint32, v41)
 		for i := 0; i < v41; i++ {
 			this.Field9[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v42 := r.Intn(100)
+		v42 := r.Intn(10)
 		this.Field10 = make([]int32, v42)
 		for i := 0; i < v42; i++ {
 			this.Field10[i] = int32(r.Int31())
@@ -13981,14 +17456,14 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v43 := r.Intn(100)
+		v43 := r.Intn(10)
 		this.Field11 = make([]uint64, v43)
 		for i := 0; i < v43; i++ {
 			this.Field11[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v44 := r.Intn(100)
+		v44 := r.Intn(10)
 		this.Field12 = make([]int64, v44)
 		for i := 0; i < v44; i++ {
 			this.Field12[i] = int64(r.Int63())
@@ -13998,7 +17473,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v45 := r.Intn(100)
+		v45 := r.Intn(10)
 		this.Field13 = make([]bool, v45)
 		for i := 0; i < v45; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -14012,7 +17487,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v47 := r.Intn(100)
+		v47 := r.Intn(10)
 		this.Field15 = make([][]byte, v47)
 		for i := 0; i < v47; i++ {
 			v48 := r.Intn(100)
@@ -14031,7 +17506,7 @@ func NewPopulatedNinRepNative(r randyThetest, easy bool) *NinRepNative {
 func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNative {
 	this := &NidRepPackedNative{}
 	if r.Intn(10) != 0 {
-		v49 := r.Intn(100)
+		v49 := r.Intn(10)
 		this.Field1 = make([]float64, v49)
 		for i := 0; i < v49; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -14041,7 +17516,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v50 := r.Intn(100)
+		v50 := r.Intn(10)
 		this.Field2 = make([]float32, v50)
 		for i := 0; i < v50; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -14051,7 +17526,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v51 := r.Intn(100)
+		v51 := r.Intn(10)
 		this.Field3 = make([]int32, v51)
 		for i := 0; i < v51; i++ {
 			this.Field3[i] = int32(r.Int31())
@@ -14061,7 +17536,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v52 := r.Intn(100)
+		v52 := r.Intn(10)
 		this.Field4 = make([]int64, v52)
 		for i := 0; i < v52; i++ {
 			this.Field4[i] = int64(r.Int63())
@@ -14071,21 +17546,21 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v53 := r.Intn(100)
+		v53 := r.Intn(10)
 		this.Field5 = make([]uint32, v53)
 		for i := 0; i < v53; i++ {
 			this.Field5[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v54 := r.Intn(100)
+		v54 := r.Intn(10)
 		this.Field6 = make([]uint64, v54)
 		for i := 0; i < v54; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v55 := r.Intn(100)
+		v55 := r.Intn(10)
 		this.Field7 = make([]int32, v55)
 		for i := 0; i < v55; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -14095,7 +17570,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v56 := r.Intn(100)
+		v56 := r.Intn(10)
 		this.Field8 = make([]int64, v56)
 		for i := 0; i < v56; i++ {
 			this.Field8[i] = int64(r.Int63())
@@ -14105,14 +17580,14 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v57 := r.Intn(100)
+		v57 := r.Intn(10)
 		this.Field9 = make([]uint32, v57)
 		for i := 0; i < v57; i++ {
 			this.Field9[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v58 := r.Intn(100)
+		v58 := r.Intn(10)
 		this.Field10 = make([]int32, v58)
 		for i := 0; i < v58; i++ {
 			this.Field10[i] = int32(r.Int31())
@@ -14122,14 +17597,14 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v59 := r.Intn(100)
+		v59 := r.Intn(10)
 		this.Field11 = make([]uint64, v59)
 		for i := 0; i < v59; i++ {
 			this.Field11[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v60 := r.Intn(100)
+		v60 := r.Intn(10)
 		this.Field12 = make([]int64, v60)
 		for i := 0; i < v60; i++ {
 			this.Field12[i] = int64(r.Int63())
@@ -14139,7 +17614,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v61 := r.Intn(100)
+		v61 := r.Intn(10)
 		this.Field13 = make([]bool, v61)
 		for i := 0; i < v61; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -14154,7 +17629,7 @@ func NewPopulatedNidRepPackedNative(r randyThetest, easy bool) *NidRepPackedNati
 func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNative {
 	this := &NinRepPackedNative{}
 	if r.Intn(10) != 0 {
-		v62 := r.Intn(100)
+		v62 := r.Intn(10)
 		this.Field1 = make([]float64, v62)
 		for i := 0; i < v62; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -14164,7 +17639,7 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v63 := r.Intn(100)
+		v63 := r.Intn(10)
 		this.Field2 = make([]float32, v63)
 		for i := 0; i < v63; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -14174,7 +17649,7 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v64 := r.Intn(100)
+		v64 := r.Intn(10)
 		this.Field3 = make([]int32, v64)
 		for i := 0; i < v64; i++ {
 			this.Field3[i] = int32(r.Int31())
@@ -14184,7 +17659,7 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v65 := r.Intn(100)
+		v65 := r.Intn(10)
 		this.Field4 = make([]int64, v65)
 		for i := 0; i < v65; i++ {
 			this.Field4[i] = int64(r.Int63())
@@ -14194,21 +17669,21 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v66 := r.Intn(100)
+		v66 := r.Intn(10)
 		this.Field5 = make([]uint32, v66)
 		for i := 0; i < v66; i++ {
 			this.Field5[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v67 := r.Intn(100)
+		v67 := r.Intn(10)
 		this.Field6 = make([]uint64, v67)
 		for i := 0; i < v67; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v68 := r.Intn(100)
+		v68 := r.Intn(10)
 		this.Field7 = make([]int32, v68)
 		for i := 0; i < v68; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -14218,7 +17693,7 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v69 := r.Intn(100)
+		v69 := r.Intn(10)
 		this.Field8 = make([]int64, v69)
 		for i := 0; i < v69; i++ {
 			this.Field8[i] = int64(r.Int63())
@@ -14228,14 +17703,14 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v70 := r.Intn(100)
+		v70 := r.Intn(10)
 		this.Field9 = make([]uint32, v70)
 		for i := 0; i < v70; i++ {
 			this.Field9[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v71 := r.Intn(100)
+		v71 := r.Intn(10)
 		this.Field10 = make([]int32, v71)
 		for i := 0; i < v71; i++ {
 			this.Field10[i] = int32(r.Int31())
@@ -14245,14 +17720,14 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v72 := r.Intn(100)
+		v72 := r.Intn(10)
 		this.Field11 = make([]uint64, v72)
 		for i := 0; i < v72; i++ {
 			this.Field11[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v73 := r.Intn(100)
+		v73 := r.Intn(10)
 		this.Field12 = make([]int64, v73)
 		for i := 0; i < v73; i++ {
 			this.Field12[i] = int64(r.Int63())
@@ -14262,7 +17737,7 @@ func NewPopulatedNinRepPackedNative(r randyThetest, easy bool) *NinRepPackedNati
 		}
 	}
 	if r.Intn(10) != 0 {
-		v74 := r.Intn(100)
+		v74 := r.Intn(10)
 		this.Field13 = make([]bool, v74)
 		for i := 0; i < v74; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -14368,7 +17843,7 @@ func NewPopulatedNinOptStruct(r randyThetest, easy bool) *NinOptStruct {
 func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 	this := &NidRepStruct{}
 	if r.Intn(10) != 0 {
-		v86 := r.Intn(100)
+		v86 := r.Intn(10)
 		this.Field1 = make([]float64, v86)
 		for i := 0; i < v86; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -14378,7 +17853,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v87 := r.Intn(100)
+		v87 := r.Intn(10)
 		this.Field2 = make([]float32, v87)
 		for i := 0; i < v87; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -14388,7 +17863,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v88 := r.Intn(10)
+		v88 := r.Intn(5)
 		this.Field3 = make([]NidOptNative, v88)
 		for i := 0; i < v88; i++ {
 			v89 := NewPopulatedNidOptNative(r, easy)
@@ -14396,7 +17871,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v90 := r.Intn(10)
+		v90 := r.Intn(5)
 		this.Field4 = make([]NinOptNative, v90)
 		for i := 0; i < v90; i++ {
 			v91 := NewPopulatedNinOptNative(r, easy)
@@ -14404,14 +17879,14 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v92 := r.Intn(100)
+		v92 := r.Intn(10)
 		this.Field6 = make([]uint64, v92)
 		for i := 0; i < v92; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v93 := r.Intn(100)
+		v93 := r.Intn(10)
 		this.Field7 = make([]int32, v93)
 		for i := 0; i < v93; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -14421,7 +17896,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v94 := r.Intn(10)
+		v94 := r.Intn(5)
 		this.Field8 = make([]NidOptNative, v94)
 		for i := 0; i < v94; i++ {
 			v95 := NewPopulatedNidOptNative(r, easy)
@@ -14429,7 +17904,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v96 := r.Intn(100)
+		v96 := r.Intn(10)
 		this.Field13 = make([]bool, v96)
 		for i := 0; i < v96; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -14443,7 +17918,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v98 := r.Intn(100)
+		v98 := r.Intn(10)
 		this.Field15 = make([][]byte, v98)
 		for i := 0; i < v98; i++ {
 			v99 := r.Intn(100)
@@ -14462,7 +17937,7 @@ func NewPopulatedNidRepStruct(r randyThetest, easy bool) *NidRepStruct {
 func NewPopulatedNinRepStruct(r randyThetest, easy bool) *NinRepStruct {
 	this := &NinRepStruct{}
 	if r.Intn(10) != 0 {
-		v100 := r.Intn(100)
+		v100 := r.Intn(10)
 		this.Field1 = make([]float64, v100)
 		for i := 0; i < v100; i++ {
 			this.Field1[i] = float64(r.Float64())
@@ -14472,7 +17947,7 @@ func NewPopulatedNinRepStruct(r randyThetest, easy bool) *NinRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v101 := r.Intn(100)
+		v101 := r.Intn(10)
 		this.Field2 = make([]float32, v101)
 		for i := 0; i < v101; i++ {
 			this.Field2[i] = float32(r.Float32())
@@ -14482,28 +17957,28 @@ func NewPopulatedNinRepStruct(r randyThetest, easy bool) *NinRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v102 := r.Intn(10)
+		v102 := r.Intn(5)
 		this.Field3 = make([]*NidOptNative, v102)
 		for i := 0; i < v102; i++ {
 			this.Field3[i] = NewPopulatedNidOptNative(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v103 := r.Intn(10)
+		v103 := r.Intn(5)
 		this.Field4 = make([]*NinOptNative, v103)
 		for i := 0; i < v103; i++ {
 			this.Field4[i] = NewPopulatedNinOptNative(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v104 := r.Intn(100)
+		v104 := r.Intn(10)
 		this.Field6 = make([]uint64, v104)
 		for i := 0; i < v104; i++ {
 			this.Field6[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v105 := r.Intn(100)
+		v105 := r.Intn(10)
 		this.Field7 = make([]int32, v105)
 		for i := 0; i < v105; i++ {
 			this.Field7[i] = int32(r.Int31())
@@ -14513,14 +17988,14 @@ func NewPopulatedNinRepStruct(r randyThetest, easy bool) *NinRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v106 := r.Intn(10)
+		v106 := r.Intn(5)
 		this.Field8 = make([]*NidOptNative, v106)
 		for i := 0; i < v106; i++ {
 			this.Field8[i] = NewPopulatedNidOptNative(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v107 := r.Intn(100)
+		v107 := r.Intn(10)
 		this.Field13 = make([]bool, v107)
 		for i := 0; i < v107; i++ {
 			this.Field13[i] = bool(bool(r.Intn(2) == 0))
@@ -14534,7 +18009,7 @@ func NewPopulatedNinRepStruct(r randyThetest, easy bool) *NinRepStruct {
 		}
 	}
 	if r.Intn(10) != 0 {
-		v109 := r.Intn(100)
+		v109 := r.Intn(10)
 		this.Field15 = make([][]byte, v109)
 		for i := 0; i < v109; i++ {
 			v110 := r.Intn(100)
@@ -14587,7 +18062,7 @@ func NewPopulatedNidNestedStruct(r randyThetest, easy bool) *NidNestedStruct {
 	v113 := NewPopulatedNidOptStruct(r, easy)
 	this.Field1 = *v113
 	if r.Intn(10) != 0 {
-		v114 := r.Intn(10)
+		v114 := r.Intn(5)
 		this.Field2 = make([]NidRepStruct, v114)
 		for i := 0; i < v114; i++ {
 			v115 := NewPopulatedNidRepStruct(r, easy)
@@ -14606,7 +18081,7 @@ func NewPopulatedNinNestedStruct(r randyThetest, easy bool) *NinNestedStruct {
 		this.Field1 = NewPopulatedNinOptStruct(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v116 := r.Intn(10)
+		v116 := r.Intn(5)
 		this.Field2 = make([]*NinRepStruct, v116)
 		for i := 0; i < v116; i++ {
 			this.Field2[i] = NewPopulatedNinRepStruct(r, easy)
@@ -14947,8 +18422,16 @@ func NewPopulatedNinOptEnum(r randyThetest, easy bool) *NinOptEnum {
 		v152 := TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
 		this.Field1 = &v152
 	}
+	if r.Intn(10) != 0 {
+		v153 := YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field2 = &v153
+	}
+	if r.Intn(10) != 0 {
+		v154 := YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field3 = &v154
+	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -14956,14 +18439,28 @@ func NewPopulatedNinOptEnum(r randyThetest, easy bool) *NinOptEnum {
 func NewPopulatedNidRepEnum(r randyThetest, easy bool) *NidRepEnum {
 	this := &NidRepEnum{}
 	if r.Intn(10) != 0 {
-		v153 := r.Intn(10)
-		this.Field1 = make([]TheTestEnum, v153)
-		for i := 0; i < v153; i++ {
+		v155 := r.Intn(10)
+		this.Field1 = make([]TheTestEnum, v155)
+		for i := 0; i < v155; i++ {
 			this.Field1[i] = TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
 		}
 	}
+	if r.Intn(10) != 0 {
+		v156 := r.Intn(10)
+		this.Field2 = make([]YetAnotherTestEnum, v156)
+		for i := 0; i < v156; i++ {
+			this.Field2[i] = YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		}
+	}
+	if r.Intn(10) != 0 {
+		v157 := r.Intn(10)
+		this.Field3 = make([]YetYetAnotherTestEnum, v157)
+		for i := 0; i < v157; i++ {
+			this.Field3[i] = YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		}
+	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -14971,14 +18468,28 @@ func NewPopulatedNidRepEnum(r randyThetest, easy bool) *NidRepEnum {
 func NewPopulatedNinRepEnum(r randyThetest, easy bool) *NinRepEnum {
 	this := &NinRepEnum{}
 	if r.Intn(10) != 0 {
-		v154 := r.Intn(10)
-		this.Field1 = make([]TheTestEnum, v154)
-		for i := 0; i < v154; i++ {
+		v158 := r.Intn(10)
+		this.Field1 = make([]TheTestEnum, v158)
+		for i := 0; i < v158; i++ {
 			this.Field1[i] = TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
 		}
 	}
+	if r.Intn(10) != 0 {
+		v159 := r.Intn(10)
+		this.Field2 = make([]YetAnotherTestEnum, v159)
+		for i := 0; i < v159; i++ {
+			this.Field2[i] = YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		}
+	}
+	if r.Intn(10) != 0 {
+		v160 := r.Intn(10)
+		this.Field3 = make([]YetYetAnotherTestEnum, v160)
+		for i := 0; i < v160; i++ {
+			this.Field3[i] = YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		}
+	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -14986,11 +18497,19 @@ func NewPopulatedNinRepEnum(r randyThetest, easy bool) *NinRepEnum {
 func NewPopulatedNinOptEnumDefault(r randyThetest, easy bool) *NinOptEnumDefault {
 	this := &NinOptEnumDefault{}
 	if r.Intn(10) != 0 {
-		v155 := TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
-		this.Field1 = &v155
+		v161 := TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
+		this.Field1 = &v161
+	}
+	if r.Intn(10) != 0 {
+		v162 := YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field2 = &v162
+	}
+	if r.Intn(10) != 0 {
+		v163 := YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field3 = &v163
 	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -14998,11 +18517,19 @@ func NewPopulatedNinOptEnumDefault(r randyThetest, easy bool) *NinOptEnumDefault
 func NewPopulatedAnotherNinOptEnum(r randyThetest, easy bool) *AnotherNinOptEnum {
 	this := &AnotherNinOptEnum{}
 	if r.Intn(10) != 0 {
-		v156 := AnotherTestEnum([]int32{10, 11}[r.Intn(2)])
-		this.Field1 = &v156
+		v164 := AnotherTestEnum([]int32{10, 11}[r.Intn(2)])
+		this.Field1 = &v164
+	}
+	if r.Intn(10) != 0 {
+		v165 := YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field2 = &v165
+	}
+	if r.Intn(10) != 0 {
+		v166 := YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field3 = &v166
 	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -15010,11 +18537,19 @@ func NewPopulatedAnotherNinOptEnum(r randyThetest, easy bool) *AnotherNinOptEnum
 func NewPopulatedAnotherNinOptEnumDefault(r randyThetest, easy bool) *AnotherNinOptEnumDefault {
 	this := &AnotherNinOptEnumDefault{}
 	if r.Intn(10) != 0 {
-		v157 := AnotherTestEnum([]int32{10, 11}[r.Intn(2)])
-		this.Field1 = &v157
+		v167 := AnotherTestEnum([]int32{10, 11}[r.Intn(2)])
+		this.Field1 = &v167
+	}
+	if r.Intn(10) != 0 {
+		v168 := YetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field2 = &v168
+	}
+	if r.Intn(10) != 0 {
+		v169 := YetYetAnotherTestEnum([]int32{0, 1}[r.Intn(2)])
+		this.Field3 = &v169
 	}
 	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 4)
 	}
 	return this
 }
@@ -15029,9 +18564,9 @@ func NewPopulatedTimer(r randyThetest, easy bool) *Timer {
 	if r.Intn(2) == 0 {
 		this.Time2 *= -1
 	}
-	v158 := r.Intn(100)
-	this.Data = make([]byte, v158)
-	for i := 0; i < v158; i++ {
+	v170 := r.Intn(100)
+	this.Data = make([]byte, v170)
+	for i := 0; i < v170; i++ {
 		this.Data[i] = byte(r.Intn(256))
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -15043,11 +18578,11 @@ func NewPopulatedTimer(r randyThetest, easy bool) *Timer {
 func NewPopulatedMyExtendable(r randyThetest, easy bool) *MyExtendable {
 	this := &MyExtendable{}
 	if r.Intn(10) != 0 {
-		v159 := int64(r.Int63())
+		v171 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v159 *= -1
+			v171 *= -1
 		}
-		this.Field1 = &v159
+		this.Field1 = &v171
 	}
 	if !easy && r.Intn(10) != 0 {
 		l := r.Intn(5)
@@ -15070,18 +18605,18 @@ func NewPopulatedMyExtendable(r randyThetest, easy bool) *MyExtendable {
 func NewPopulatedOtherExtenable(r randyThetest, easy bool) *OtherExtenable {
 	this := &OtherExtenable{}
 	if r.Intn(10) != 0 {
-		v160 := int64(r.Int63())
+		v172 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v160 *= -1
+			v172 *= -1
 		}
-		this.Field2 = &v160
+		this.Field2 = &v172
 	}
 	if r.Intn(10) != 0 {
-		v161 := int64(r.Int63())
+		v173 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v161 *= -1
+			v173 *= -1
 		}
-		this.Field13 = &v161
+		this.Field13 = &v173
 	}
 	if r.Intn(10) != 0 {
 		this.M = NewPopulatedMyExtendable(r, easy)
@@ -15114,15 +18649,15 @@ func NewPopulatedOtherExtenable(r randyThetest, easy bool) *OtherExtenable {
 func NewPopulatedNestedDefinition(r randyThetest, easy bool) *NestedDefinition {
 	this := &NestedDefinition{}
 	if r.Intn(10) != 0 {
-		v162 := int64(r.Int63())
+		v174 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v162 *= -1
+			v174 *= -1
 		}
-		this.Field1 = &v162
+		this.Field1 = &v174
 	}
 	if r.Intn(10) != 0 {
-		v163 := NestedDefinition_NestedEnum([]int32{1}[r.Intn(1)])
-		this.EnumField = &v163
+		v175 := NestedDefinition_NestedEnum([]int32{1}[r.Intn(1)])
+		this.EnumField = &v175
 	}
 	if r.Intn(10) != 0 {
 		this.NNM = NewPopulatedNestedDefinition_NestedMessage_NestedNestedMsg(r, easy)
@@ -15139,8 +18674,8 @@ func NewPopulatedNestedDefinition(r randyThetest, easy bool) *NestedDefinition {
 func NewPopulatedNestedDefinition_NestedMessage(r randyThetest, easy bool) *NestedDefinition_NestedMessage {
 	this := &NestedDefinition_NestedMessage{}
 	if r.Intn(10) != 0 {
-		v164 := uint64(uint64(r.Uint32()))
-		this.NestedField1 = &v164
+		v176 := uint64(uint64(r.Uint32()))
+		this.NestedField1 = &v176
 	}
 	if r.Intn(10) != 0 {
 		this.NNM = NewPopulatedNestedDefinition_NestedMessage_NestedNestedMsg(r, easy)
@@ -15154,8 +18689,8 @@ func NewPopulatedNestedDefinition_NestedMessage(r randyThetest, easy bool) *Nest
 func NewPopulatedNestedDefinition_NestedMessage_NestedNestedMsg(r randyThetest, easy bool) *NestedDefinition_NestedMessage_NestedNestedMsg {
 	this := &NestedDefinition_NestedMessage_NestedNestedMsg{}
 	if r.Intn(10) != 0 {
-		v165 := randStringThetest(r)
-		this.NestedNestedField1 = &v165
+		v177 := randStringThetest(r)
+		this.NestedNestedField1 = &v177
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedThetest(r, 11)
@@ -15169,8 +18704,8 @@ func NewPopulatedNestedScope(r randyThetest, easy bool) *NestedScope {
 		this.A = NewPopulatedNestedDefinition_NestedMessage_NestedNestedMsg(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v166 := NestedDefinition_NestedEnum([]int32{1}[r.Intn(1)])
-		this.B = &v166
+		v178 := NestedDefinition_NestedEnum([]int32{1}[r.Intn(1)])
+		this.B = &v178
 	}
 	if r.Intn(10) != 0 {
 		this.C = NewPopulatedNestedDefinition_NestedMessage(r, easy)
@@ -15184,89 +18719,89 @@ func NewPopulatedNestedScope(r randyThetest, easy bool) *NestedScope {
 func NewPopulatedNinOptNativeDefault(r randyThetest, easy bool) *NinOptNativeDefault {
 	this := &NinOptNativeDefault{}
 	if r.Intn(10) != 0 {
-		v167 := float64(r.Float64())
+		v179 := float64(r.Float64())
 		if r.Intn(2) == 0 {
-			v167 *= -1
+			v179 *= -1
 		}
-		this.Field1 = &v167
+		this.Field1 = &v179
 	}
 	if r.Intn(10) != 0 {
-		v168 := float32(r.Float32())
+		v180 := float32(r.Float32())
 		if r.Intn(2) == 0 {
-			v168 *= -1
+			v180 *= -1
 		}
-		this.Field2 = &v168
+		this.Field2 = &v180
 	}
 	if r.Intn(10) != 0 {
-		v169 := int32(r.Int31())
+		v181 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v169 *= -1
+			v181 *= -1
 		}
-		this.Field3 = &v169
+		this.Field3 = &v181
 	}
 	if r.Intn(10) != 0 {
-		v170 := int64(r.Int63())
+		v182 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v170 *= -1
+			v182 *= -1
 		}
-		this.Field4 = &v170
+		this.Field4 = &v182
 	}
 	if r.Intn(10) != 0 {
-		v171 := uint32(r.Uint32())
-		this.Field5 = &v171
+		v183 := uint32(r.Uint32())
+		this.Field5 = &v183
 	}
 	if r.Intn(10) != 0 {
-		v172 := uint64(uint64(r.Uint32()))
-		this.Field6 = &v172
+		v184 := uint64(uint64(r.Uint32()))
+		this.Field6 = &v184
 	}
 	if r.Intn(10) != 0 {
-		v173 := int32(r.Int31())
+		v185 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v173 *= -1
+			v185 *= -1
 		}
-		this.Field7 = &v173
+		this.Field7 = &v185
 	}
 	if r.Intn(10) != 0 {
-		v174 := int64(r.Int63())
+		v186 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v174 *= -1
+			v186 *= -1
 		}
-		this.Field8 = &v174
+		this.Field8 = &v186
 	}
 	if r.Intn(10) != 0 {
-		v175 := uint32(r.Uint32())
-		this.Field9 = &v175
+		v187 := uint32(r.Uint32())
+		this.Field9 = &v187
 	}
 	if r.Intn(10) != 0 {
-		v176 := int32(r.Int31())
+		v188 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v176 *= -1
+			v188 *= -1
 		}
-		this.Field10 = &v176
+		this.Field10 = &v188
 	}
 	if r.Intn(10) != 0 {
-		v177 := uint64(uint64(r.Uint32()))
-		this.Field11 = &v177
+		v189 := uint64(uint64(r.Uint32()))
+		this.Field11 = &v189
 	}
 	if r.Intn(10) != 0 {
-		v178 := int64(r.Int63())
+		v190 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v178 *= -1
+			v190 *= -1
 		}
-		this.Field12 = &v178
+		this.Field12 = &v190
 	}
 	if r.Intn(10) != 0 {
-		v179 := bool(bool(r.Intn(2) == 0))
-		this.Field13 = &v179
+		v191 := bool(bool(r.Intn(2) == 0))
+		this.Field13 = &v191
 	}
 	if r.Intn(10) != 0 {
-		v180 := randStringThetest(r)
-		this.Field14 = &v180
+		v192 := randStringThetest(r)
+		this.Field14 = &v192
 	}
 	if r.Intn(10) != 0 {
-		v181 := r.Intn(100)
-		this.Field15 = make([]byte, v181)
-		for i := 0; i < v181; i++ {
+		v193 := r.Intn(100)
+		this.Field15 = make([]byte, v193)
+		for i := 0; i < v193; i++ {
 			this.Field15[i] = byte(r.Intn(256))
 		}
 	}
@@ -15278,8 +18813,8 @@ func NewPopulatedNinOptNativeDefault(r randyThetest, easy bool) *NinOptNativeDef
 
 func NewPopulatedCustomContainer(r randyThetest, easy bool) *CustomContainer {
 	this := &CustomContainer{}
-	v182 := NewPopulatedNidOptCustom(r, easy)
-	this.CustomStruct = *v182
+	v194 := NewPopulatedNidOptCustom(r, easy)
+	this.CustomStruct = *v194
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedThetest(r, 2)
 	}
@@ -15326,9 +18861,9 @@ func NewPopulatedCustomNameNidOptNative(r randyThetest, easy bool) *CustomNameNi
 	}
 	this.FieldM = bool(bool(r.Intn(2) == 0))
 	this.FieldN = randStringThetest(r)
-	v183 := r.Intn(100)
-	this.FieldO = make([]byte, v183)
-	for i := 0; i < v183; i++ {
+	v195 := r.Intn(100)
+	this.FieldO = make([]byte, v195)
+	for i := 0; i < v195; i++ {
 		this.FieldO[i] = byte(r.Intn(256))
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -15340,89 +18875,89 @@ func NewPopulatedCustomNameNidOptNative(r randyThetest, easy bool) *CustomNameNi
 func NewPopulatedCustomNameNinOptNative(r randyThetest, easy bool) *CustomNameNinOptNative {
 	this := &CustomNameNinOptNative{}
 	if r.Intn(10) != 0 {
-		v184 := float64(r.Float64())
+		v196 := float64(r.Float64())
 		if r.Intn(2) == 0 {
-			v184 *= -1
+			v196 *= -1
 		}
-		this.FieldA = &v184
+		this.FieldA = &v196
 	}
 	if r.Intn(10) != 0 {
-		v185 := float32(r.Float32())
+		v197 := float32(r.Float32())
 		if r.Intn(2) == 0 {
-			v185 *= -1
+			v197 *= -1
 		}
-		this.FieldB = &v185
+		this.FieldB = &v197
 	}
 	if r.Intn(10) != 0 {
-		v186 := int32(r.Int31())
+		v198 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v186 *= -1
+			v198 *= -1
 		}
-		this.FieldC = &v186
+		this.FieldC = &v198
 	}
 	if r.Intn(10) != 0 {
-		v187 := int64(r.Int63())
+		v199 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v187 *= -1
+			v199 *= -1
 		}
-		this.FieldD = &v187
+		this.FieldD = &v199
 	}
 	if r.Intn(10) != 0 {
-		v188 := uint32(r.Uint32())
-		this.FieldE = &v188
+		v200 := uint32(r.Uint32())
+		this.FieldE = &v200
 	}
 	if r.Intn(10) != 0 {
-		v189 := uint64(uint64(r.Uint32()))
-		this.FieldF = &v189
+		v201 := uint64(uint64(r.Uint32()))
+		this.FieldF = &v201
 	}
 	if r.Intn(10) != 0 {
-		v190 := int32(r.Int31())
+		v202 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v190 *= -1
+			v202 *= -1
 		}
-		this.FieldG = &v190
+		this.FieldG = &v202
 	}
 	if r.Intn(10) != 0 {
-		v191 := int64(r.Int63())
+		v203 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v191 *= -1
+			v203 *= -1
 		}
-		this.FieldH = &v191
+		this.FieldH = &v203
 	}
 	if r.Intn(10) != 0 {
-		v192 := uint32(r.Uint32())
-		this.FieldI = &v192
+		v204 := uint32(r.Uint32())
+		this.FieldI = &v204
 	}
 	if r.Intn(10) != 0 {
-		v193 := int32(r.Int31())
+		v205 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v193 *= -1
+			v205 *= -1
 		}
-		this.FieldJ = &v193
+		this.FieldJ = &v205
 	}
 	if r.Intn(10) != 0 {
-		v194 := uint64(uint64(r.Uint32()))
-		this.FieldK = &v194
+		v206 := uint64(uint64(r.Uint32()))
+		this.FieldK = &v206
 	}
 	if r.Intn(10) != 0 {
-		v195 := int64(r.Int63())
+		v207 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v195 *= -1
+			v207 *= -1
 		}
-		this.FielL = &v195
+		this.FielL = &v207
 	}
 	if r.Intn(10) != 0 {
-		v196 := bool(bool(r.Intn(2) == 0))
-		this.FieldM = &v196
+		v208 := bool(bool(r.Intn(2) == 0))
+		this.FieldM = &v208
 	}
 	if r.Intn(10) != 0 {
-		v197 := randStringThetest(r)
-		this.FieldN = &v197
+		v209 := randStringThetest(r)
+		this.FieldN = &v209
 	}
 	if r.Intn(10) != 0 {
-		v198 := r.Intn(100)
-		this.FieldO = make([]byte, v198)
-		for i := 0; i < v198; i++ {
+		v210 := r.Intn(100)
+		this.FieldO = make([]byte, v210)
+		for i := 0; i < v210; i++ {
 			this.FieldO[i] = byte(r.Intn(256))
 		}
 	}
@@ -15435,9 +18970,9 @@ func NewPopulatedCustomNameNinOptNative(r randyThetest, easy bool) *CustomNameNi
 func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNinRepNative {
 	this := &CustomNameNinRepNative{}
 	if r.Intn(10) != 0 {
-		v199 := r.Intn(100)
-		this.FieldA = make([]float64, v199)
-		for i := 0; i < v199; i++ {
+		v211 := r.Intn(10)
+		this.FieldA = make([]float64, v211)
+		for i := 0; i < v211; i++ {
 			this.FieldA[i] = float64(r.Float64())
 			if r.Intn(2) == 0 {
 				this.FieldA[i] *= -1
@@ -15445,9 +18980,9 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v200 := r.Intn(100)
-		this.FieldB = make([]float32, v200)
-		for i := 0; i < v200; i++ {
+		v212 := r.Intn(10)
+		this.FieldB = make([]float32, v212)
+		for i := 0; i < v212; i++ {
 			this.FieldB[i] = float32(r.Float32())
 			if r.Intn(2) == 0 {
 				this.FieldB[i] *= -1
@@ -15455,9 +18990,9 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v201 := r.Intn(100)
-		this.FieldC = make([]int32, v201)
-		for i := 0; i < v201; i++ {
+		v213 := r.Intn(10)
+		this.FieldC = make([]int32, v213)
+		for i := 0; i < v213; i++ {
 			this.FieldC[i] = int32(r.Int31())
 			if r.Intn(2) == 0 {
 				this.FieldC[i] *= -1
@@ -15465,9 +19000,9 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v202 := r.Intn(100)
-		this.FieldD = make([]int64, v202)
-		for i := 0; i < v202; i++ {
+		v214 := r.Intn(10)
+		this.FieldD = make([]int64, v214)
+		for i := 0; i < v214; i++ {
 			this.FieldD[i] = int64(r.Int63())
 			if r.Intn(2) == 0 {
 				this.FieldD[i] *= -1
@@ -15475,23 +19010,23 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v203 := r.Intn(100)
-		this.FieldE = make([]uint32, v203)
-		for i := 0; i < v203; i++ {
+		v215 := r.Intn(10)
+		this.FieldE = make([]uint32, v215)
+		for i := 0; i < v215; i++ {
 			this.FieldE[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v204 := r.Intn(100)
-		this.FieldF = make([]uint64, v204)
-		for i := 0; i < v204; i++ {
+		v216 := r.Intn(10)
+		this.FieldF = make([]uint64, v216)
+		for i := 0; i < v216; i++ {
 			this.FieldF[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v205 := r.Intn(100)
-		this.FieldG = make([]int32, v205)
-		for i := 0; i < v205; i++ {
+		v217 := r.Intn(10)
+		this.FieldG = make([]int32, v217)
+		for i := 0; i < v217; i++ {
 			this.FieldG[i] = int32(r.Int31())
 			if r.Intn(2) == 0 {
 				this.FieldG[i] *= -1
@@ -15499,9 +19034,9 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v206 := r.Intn(100)
-		this.FieldH = make([]int64, v206)
-		for i := 0; i < v206; i++ {
+		v218 := r.Intn(10)
+		this.FieldH = make([]int64, v218)
+		for i := 0; i < v218; i++ {
 			this.FieldH[i] = int64(r.Int63())
 			if r.Intn(2) == 0 {
 				this.FieldH[i] *= -1
@@ -15509,16 +19044,16 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v207 := r.Intn(100)
-		this.FieldI = make([]uint32, v207)
-		for i := 0; i < v207; i++ {
+		v219 := r.Intn(10)
+		this.FieldI = make([]uint32, v219)
+		for i := 0; i < v219; i++ {
 			this.FieldI[i] = uint32(r.Uint32())
 		}
 	}
 	if r.Intn(10) != 0 {
-		v208 := r.Intn(100)
-		this.FieldJ = make([]int32, v208)
-		for i := 0; i < v208; i++ {
+		v220 := r.Intn(10)
+		this.FieldJ = make([]int32, v220)
+		for i := 0; i < v220; i++ {
 			this.FieldJ[i] = int32(r.Int31())
 			if r.Intn(2) == 0 {
 				this.FieldJ[i] *= -1
@@ -15526,16 +19061,16 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v209 := r.Intn(100)
-		this.FieldK = make([]uint64, v209)
-		for i := 0; i < v209; i++ {
+		v221 := r.Intn(10)
+		this.FieldK = make([]uint64, v221)
+		for i := 0; i < v221; i++ {
 			this.FieldK[i] = uint64(uint64(r.Uint32()))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v210 := r.Intn(100)
-		this.FieldL = make([]int64, v210)
-		for i := 0; i < v210; i++ {
+		v222 := r.Intn(10)
+		this.FieldL = make([]int64, v222)
+		for i := 0; i < v222; i++ {
 			this.FieldL[i] = int64(r.Int63())
 			if r.Intn(2) == 0 {
 				this.FieldL[i] *= -1
@@ -15543,26 +19078,26 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 		}
 	}
 	if r.Intn(10) != 0 {
-		v211 := r.Intn(100)
-		this.FieldM = make([]bool, v211)
-		for i := 0; i < v211; i++ {
+		v223 := r.Intn(10)
+		this.FieldM = make([]bool, v223)
+		for i := 0; i < v223; i++ {
 			this.FieldM[i] = bool(bool(r.Intn(2) == 0))
 		}
 	}
 	if r.Intn(10) != 0 {
-		v212 := r.Intn(10)
-		this.FieldN = make([]string, v212)
-		for i := 0; i < v212; i++ {
+		v224 := r.Intn(10)
+		this.FieldN = make([]string, v224)
+		for i := 0; i < v224; i++ {
 			this.FieldN[i] = randStringThetest(r)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v213 := r.Intn(100)
-		this.FieldO = make([][]byte, v213)
-		for i := 0; i < v213; i++ {
-			v214 := r.Intn(100)
-			this.FieldO[i] = make([]byte, v214)
-			for j := 0; j < v214; j++ {
+		v225 := r.Intn(10)
+		this.FieldO = make([][]byte, v225)
+		for i := 0; i < v225; i++ {
+			v226 := r.Intn(100)
+			this.FieldO[i] = make([]byte, v226)
+			for j := 0; j < v226; j++ {
 				this.FieldO[i][j] = byte(r.Intn(256))
 			}
 		}
@@ -15576,55 +19111,55 @@ func NewPopulatedCustomNameNinRepNative(r randyThetest, easy bool) *CustomNameNi
 func NewPopulatedCustomNameNinStruct(r randyThetest, easy bool) *CustomNameNinStruct {
 	this := &CustomNameNinStruct{}
 	if r.Intn(10) != 0 {
-		v215 := float64(r.Float64())
+		v227 := float64(r.Float64())
 		if r.Intn(2) == 0 {
-			v215 *= -1
+			v227 *= -1
 		}
-		this.FieldA = &v215
+		this.FieldA = &v227
 	}
 	if r.Intn(10) != 0 {
-		v216 := float32(r.Float32())
+		v228 := float32(r.Float32())
 		if r.Intn(2) == 0 {
-			v216 *= -1
+			v228 *= -1
 		}
-		this.FieldB = &v216
+		this.FieldB = &v228
 	}
 	if r.Intn(10) != 0 {
 		this.FieldC = NewPopulatedNidOptNative(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v217 := r.Intn(10)
-		this.FieldD = make([]*NinOptNative, v217)
-		for i := 0; i < v217; i++ {
+		v229 := r.Intn(5)
+		this.FieldD = make([]*NinOptNative, v229)
+		for i := 0; i < v229; i++ {
 			this.FieldD[i] = NewPopulatedNinOptNative(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v218 := uint64(uint64(r.Uint32()))
-		this.FieldE = &v218
+		v230 := uint64(uint64(r.Uint32()))
+		this.FieldE = &v230
 	}
 	if r.Intn(10) != 0 {
-		v219 := int32(r.Int31())
+		v231 := int32(r.Int31())
 		if r.Intn(2) == 0 {
-			v219 *= -1
+			v231 *= -1
 		}
-		this.FieldF = &v219
+		this.FieldF = &v231
 	}
 	if r.Intn(10) != 0 {
 		this.FieldG = NewPopulatedNidOptNative(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v220 := bool(bool(r.Intn(2) == 0))
-		this.FieldH = &v220
+		v232 := bool(bool(r.Intn(2) == 0))
+		this.FieldH = &v232
 	}
 	if r.Intn(10) != 0 {
-		v221 := randStringThetest(r)
-		this.FieldI = &v221
+		v233 := randStringThetest(r)
+		this.FieldI = &v233
 	}
 	if r.Intn(10) != 0 {
-		v222 := r.Intn(100)
-		this.FieldJ = make([]byte, v222)
-		for i := 0; i < v222; i++ {
+		v234 := r.Intn(100)
+		this.FieldJ = make([]byte, v234)
+		for i := 0; i < v234; i++ {
 			this.FieldJ[i] = byte(r.Intn(256))
 		}
 	}
@@ -15643,19 +19178,19 @@ func NewPopulatedCustomNameCustomType(r randyThetest, easy bool) *CustomNameCust
 		this.FieldB = github_com_gogo_protobuf_test_custom.NewPopulatedUint128(r)
 	}
 	if r.Intn(10) != 0 {
-		v223 := r.Intn(10)
-		this.FieldC = make([]Uuid, v223)
-		for i := 0; i < v223; i++ {
-			v224 := NewPopulatedUuid(r)
-			this.FieldC[i] = *v224
+		v235 := r.Intn(10)
+		this.FieldC = make([]Uuid, v235)
+		for i := 0; i < v235; i++ {
+			v236 := NewPopulatedUuid(r)
+			this.FieldC[i] = *v236
 		}
 	}
 	if r.Intn(10) != 0 {
-		v225 := r.Intn(10)
-		this.FieldD = make([]github_com_gogo_protobuf_test_custom.Uint128, v225)
-		for i := 0; i < v225; i++ {
-			v226 := github_com_gogo_protobuf_test_custom.NewPopulatedUint128(r)
-			this.FieldD[i] = *v226
+		v237 := r.Intn(10)
+		this.FieldD = make([]github_com_gogo_protobuf_test_custom.Uint128, v237)
+		for i := 0; i < v237; i++ {
+			v238 := github_com_gogo_protobuf_test_custom.NewPopulatedUint128(r)
+			this.FieldD[i] = *v238
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -15673,8 +19208,8 @@ func NewPopulatedCustomNameNinEmbeddedStructUnion(r randyThetest, easy bool) *Cu
 	case 1:
 		this.FieldA = NewPopulatedNinOptNative(r, easy)
 	case 2:
-		v227 := bool(bool(r.Intn(2) == 0))
-		this.FieldB = &v227
+		v239 := bool(bool(r.Intn(2) == 0))
+		this.FieldB = &v239
 	}
 	return this
 }
@@ -15682,13 +19217,13 @@ func NewPopulatedCustomNameNinEmbeddedStructUnion(r randyThetest, easy bool) *Cu
 func NewPopulatedCustomNameEnum(r randyThetest, easy bool) *CustomNameEnum {
 	this := &CustomNameEnum{}
 	if r.Intn(10) != 0 {
-		v228 := TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
-		this.FieldA = &v228
+		v240 := TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
+		this.FieldA = &v240
 	}
 	if r.Intn(10) != 0 {
-		v229 := r.Intn(10)
-		this.FieldB = make([]TheTestEnum, v229)
-		for i := 0; i < v229; i++ {
+		v241 := r.Intn(10)
+		this.FieldB = make([]TheTestEnum, v241)
+		for i := 0; i < v241; i++ {
 			this.FieldB[i] = TheTestEnum([]int32{0, 1, 2}[r.Intn(3)])
 		}
 	}
@@ -15701,11 +19236,11 @@ func NewPopulatedCustomNameEnum(r randyThetest, easy bool) *CustomNameEnum {
 func NewPopulatedNoExtensionsMap(r randyThetest, easy bool) *NoExtensionsMap {
 	this := &NoExtensionsMap{}
 	if r.Intn(10) != 0 {
-		v230 := int64(r.Int63())
+		v242 := int64(r.Int63())
 		if r.Intn(2) == 0 {
-			v230 *= -1
+			v242 *= -1
 		}
-		this.Field1 = &v230
+		this.Field1 = &v242
 	}
 	if !easy && r.Intn(10) != 0 {
 		l := r.Intn(5)
@@ -15728,8 +19263,8 @@ func NewPopulatedNoExtensionsMap(r randyThetest, easy bool) *NoExtensionsMap {
 func NewPopulatedUnrecognized(r randyThetest, easy bool) *Unrecognized {
 	this := &Unrecognized{}
 	if r.Intn(10) != 0 {
-		v231 := randStringThetest(r)
-		this.Field1 = &v231
+		v243 := randStringThetest(r)
+		this.Field1 = &v243
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -15739,15 +19274,15 @@ func NewPopulatedUnrecognized(r randyThetest, easy bool) *Unrecognized {
 func NewPopulatedUnrecognizedWithInner(r randyThetest, easy bool) *UnrecognizedWithInner {
 	this := &UnrecognizedWithInner{}
 	if r.Intn(10) != 0 {
-		v232 := r.Intn(10)
-		this.Embedded = make([]*UnrecognizedWithInner_Inner, v232)
-		for i := 0; i < v232; i++ {
+		v244 := r.Intn(5)
+		this.Embedded = make([]*UnrecognizedWithInner_Inner, v244)
+		for i := 0; i < v244; i++ {
 			this.Embedded[i] = NewPopulatedUnrecognizedWithInner_Inner(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v233 := randStringThetest(r)
-		this.Field2 = &v233
+		v245 := randStringThetest(r)
+		this.Field2 = &v245
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedThetest(r, 3)
@@ -15758,8 +19293,8 @@ func NewPopulatedUnrecognizedWithInner(r randyThetest, easy bool) *UnrecognizedW
 func NewPopulatedUnrecognizedWithInner_Inner(r randyThetest, easy bool) *UnrecognizedWithInner_Inner {
 	this := &UnrecognizedWithInner_Inner{}
 	if r.Intn(10) != 0 {
-		v234 := uint32(r.Uint32())
-		this.Field1 = &v234
+		v246 := uint32(r.Uint32())
+		this.Field1 = &v246
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -15768,11 +19303,11 @@ func NewPopulatedUnrecognizedWithInner_Inner(r randyThetest, easy bool) *Unrecog
 
 func NewPopulatedUnrecognizedWithEmbed(r randyThetest, easy bool) *UnrecognizedWithEmbed {
 	this := &UnrecognizedWithEmbed{}
-	v235 := NewPopulatedUnrecognizedWithEmbed_Embedded(r, easy)
-	this.UnrecognizedWithEmbed_Embedded = *v235
+	v247 := NewPopulatedUnrecognizedWithEmbed_Embedded(r, easy)
+	this.UnrecognizedWithEmbed_Embedded = *v247
 	if r.Intn(10) != 0 {
-		v236 := randStringThetest(r)
-		this.Field2 = &v236
+		v248 := randStringThetest(r)
+		this.Field2 = &v248
 	}
 	if !easy && r.Intn(10) != 0 {
 		this.XXX_unrecognized = randUnrecognizedThetest(r, 3)
@@ -15783,10 +19318,29 @@ func NewPopulatedUnrecognizedWithEmbed(r randyThetest, easy bool) *UnrecognizedW
 func NewPopulatedUnrecognizedWithEmbed_Embedded(r randyThetest, easy bool) *UnrecognizedWithEmbed_Embedded {
 	this := &UnrecognizedWithEmbed_Embedded{}
 	if r.Intn(10) != 0 {
-		v237 := uint32(r.Uint32())
-		this.Field1 = &v237
+		v249 := uint32(r.Uint32())
+		this.Field1 = &v249
 	}
 	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedNode(r randyThetest, easy bool) *Node {
+	this := &Node{}
+	if r.Intn(10) != 0 {
+		v250 := randStringThetest(r)
+		this.Label = &v250
+	}
+	if r.Intn(10) == 0 {
+		v251 := r.Intn(5)
+		this.Children = make([]*Node, v251)
+		for i := 0; i < v251; i++ {
+			this.Children[i] = NewPopulatedNode(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+		this.XXX_unrecognized = randUnrecognizedThetest(r, 3)
 	}
 	return this
 }
@@ -15810,9 +19364,9 @@ func randUTF8RuneThetest(r randyThetest) rune {
 	return rune(ru + 61)
 }
 func randStringThetest(r randyThetest) string {
-	v238 := r.Intn(100)
-	tmps := make([]rune, v238)
-	for i := 0; i < v238; i++ {
+	v252 := r.Intn(100)
+	tmps := make([]rune, v252)
+	for i := 0; i < v252; i++ {
 		tmps[i] = randUTF8RuneThetest(r)
 	}
 	return string(tmps)
@@ -15834,11 +19388,11 @@ func randFieldThetest(data []byte, r randyThetest, fieldNumber int, wire int) []
 	switch wire {
 	case 0:
 		data = encodeVarintPopulateThetest(data, uint64(key))
-		v239 := r.Int63()
+		v253 := r.Int63()
 		if r.Intn(2) == 0 {
-			v239 *= -1
+			v253 *= -1
 		}
-		data = encodeVarintPopulateThetest(data, uint64(v239))
+		data = encodeVarintPopulateThetest(data, uint64(v253))
 	case 1:
 		data = encodeVarintPopulateThetest(data, uint64(key))
 		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -16837,6 +20391,12 @@ func (m *NinOptEnum) Size() (n int) {
 	if m.Field1 != nil {
 		n += 1 + sovThetest(uint64(*m.Field1))
 	}
+	if m.Field2 != nil {
+		n += 1 + sovThetest(uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		n += 1 + sovThetest(uint64(*m.Field3))
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -16848,6 +20408,16 @@ func (m *NidRepEnum) Size() (n int) {
 	_ = l
 	if len(m.Field1) > 0 {
 		for _, e := range m.Field1 {
+			n += 1 + sovThetest(uint64(e))
+		}
+	}
+	if len(m.Field2) > 0 {
+		for _, e := range m.Field2 {
+			n += 1 + sovThetest(uint64(e))
+		}
+	}
+	if len(m.Field3) > 0 {
+		for _, e := range m.Field3 {
 			n += 1 + sovThetest(uint64(e))
 		}
 	}
@@ -16865,6 +20435,16 @@ func (m *NinRepEnum) Size() (n int) {
 			n += 1 + sovThetest(uint64(e))
 		}
 	}
+	if len(m.Field2) > 0 {
+		for _, e := range m.Field2 {
+			n += 1 + sovThetest(uint64(e))
+		}
+	}
+	if len(m.Field3) > 0 {
+		for _, e := range m.Field3 {
+			n += 1 + sovThetest(uint64(e))
+		}
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -16876,6 +20456,12 @@ func (m *NinOptEnumDefault) Size() (n int) {
 	_ = l
 	if m.Field1 != nil {
 		n += 1 + sovThetest(uint64(*m.Field1))
+	}
+	if m.Field2 != nil {
+		n += 1 + sovThetest(uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		n += 1 + sovThetest(uint64(*m.Field3))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -16889,6 +20475,12 @@ func (m *AnotherNinOptEnum) Size() (n int) {
 	if m.Field1 != nil {
 		n += 1 + sovThetest(uint64(*m.Field1))
 	}
+	if m.Field2 != nil {
+		n += 1 + sovThetest(uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		n += 1 + sovThetest(uint64(*m.Field3))
+	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
 	}
@@ -16900,6 +20492,12 @@ func (m *AnotherNinOptEnumDefault) Size() (n int) {
 	_ = l
 	if m.Field1 != nil {
 		n += 1 + sovThetest(uint64(*m.Field1))
+	}
+	if m.Field2 != nil {
+		n += 1 + sovThetest(uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		n += 1 + sovThetest(uint64(*m.Field3))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -17443,6 +21041,25 @@ func (m *UnrecognizedWithEmbed_Embedded) Size() (n int) {
 	return n
 }
 
+func (m *Node) Size() (n int) {
+	var l int
+	_ = l
+	if m.Label != nil {
+		l = len(*m.Label)
+		n += 1 + l + sovThetest(uint64(l))
+	}
+	if len(m.Children) > 0 {
+		for _, e := range m.Children {
+			l = e.Size()
+			n += 1 + l + sovThetest(uint64(l))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func sovThetest(x uint64) (n int) {
 	for {
 		n++
@@ -17978,6 +21595,8 @@ func (this *NinOptEnum) String() string {
 	}
 	s := strings.Join([]string{`&NinOptEnum{`,
 		`Field1:` + valueToStringThetest(this.Field1) + `,`,
+		`Field2:` + valueToStringThetest(this.Field2) + `,`,
+		`Field3:` + valueToStringThetest(this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -17989,6 +21608,8 @@ func (this *NidRepEnum) String() string {
 	}
 	s := strings.Join([]string{`&NidRepEnum{`,
 		`Field1:` + fmt.Sprintf("%v", this.Field1) + `,`,
+		`Field2:` + fmt.Sprintf("%v", this.Field2) + `,`,
+		`Field3:` + fmt.Sprintf("%v", this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -18000,6 +21621,8 @@ func (this *NinRepEnum) String() string {
 	}
 	s := strings.Join([]string{`&NinRepEnum{`,
 		`Field1:` + fmt.Sprintf("%v", this.Field1) + `,`,
+		`Field2:` + fmt.Sprintf("%v", this.Field2) + `,`,
+		`Field3:` + fmt.Sprintf("%v", this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -18011,6 +21634,8 @@ func (this *NinOptEnumDefault) String() string {
 	}
 	s := strings.Join([]string{`&NinOptEnumDefault{`,
 		`Field1:` + valueToStringThetest(this.Field1) + `,`,
+		`Field2:` + valueToStringThetest(this.Field2) + `,`,
+		`Field3:` + valueToStringThetest(this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -18022,6 +21647,8 @@ func (this *AnotherNinOptEnum) String() string {
 	}
 	s := strings.Join([]string{`&AnotherNinOptEnum{`,
 		`Field1:` + valueToStringThetest(this.Field1) + `,`,
+		`Field2:` + valueToStringThetest(this.Field2) + `,`,
+		`Field3:` + valueToStringThetest(this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -18033,6 +21660,8 @@ func (this *AnotherNinOptEnumDefault) String() string {
 	}
 	s := strings.Join([]string{`&AnotherNinOptEnumDefault{`,
 		`Field1:` + valueToStringThetest(this.Field1) + `,`,
+		`Field2:` + valueToStringThetest(this.Field2) + `,`,
+		`Field3:` + valueToStringThetest(this.Field3) + `,`,
 		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
@@ -18359,6 +21988,18 @@ func (this *UnrecognizedWithEmbed_Embedded) String() string {
 	}
 	s := strings.Join([]string{`&UnrecognizedWithEmbed_Embedded{`,
 		`Field1:` + valueToStringThetest(this.Field1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Node) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Node{`,
+		`Label:` + valueToStringThetest(this.Label) + `,`,
+		`Children:` + strings.Replace(fmt.Sprintf("%v", this.Children), "Node", "Node", 1) + `,`,
+		`XXX_unrecognized:` + fmt.Sprintf("%v", this.XXX_unrecognized) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -20975,6 +24616,16 @@ func (m *NinOptEnum) MarshalTo(data []byte) (int, error) {
 		i++
 		i = encodeVarintThetest(data, i, uint64(*m.Field1))
 	}
+	if m.Field2 != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field3))
+	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
 	}
@@ -20999,6 +24650,20 @@ func (m *NidRepEnum) MarshalTo(data []byte) (int, error) {
 	if len(m.Field1) > 0 {
 		for _, num := range m.Field1 {
 			data[i] = 0x8
+			i++
+			i = encodeVarintThetest(data, i, uint64(num))
+		}
+	}
+	if len(m.Field2) > 0 {
+		for _, num := range m.Field2 {
+			data[i] = 0x10
+			i++
+			i = encodeVarintThetest(data, i, uint64(num))
+		}
+	}
+	if len(m.Field3) > 0 {
+		for _, num := range m.Field3 {
+			data[i] = 0x18
 			i++
 			i = encodeVarintThetest(data, i, uint64(num))
 		}
@@ -21031,6 +24696,20 @@ func (m *NinRepEnum) MarshalTo(data []byte) (int, error) {
 			i = encodeVarintThetest(data, i, uint64(num))
 		}
 	}
+	if len(m.Field2) > 0 {
+		for _, num := range m.Field2 {
+			data[i] = 0x10
+			i++
+			i = encodeVarintThetest(data, i, uint64(num))
+		}
+	}
+	if len(m.Field3) > 0 {
+		for _, num := range m.Field3 {
+			data[i] = 0x18
+			i++
+			i = encodeVarintThetest(data, i, uint64(num))
+		}
+	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
 	}
@@ -21056,6 +24735,16 @@ func (m *NinOptEnumDefault) MarshalTo(data []byte) (int, error) {
 		data[i] = 0x8
 		i++
 		i = encodeVarintThetest(data, i, uint64(*m.Field1))
+	}
+	if m.Field2 != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field3))
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
@@ -21083,6 +24772,16 @@ func (m *AnotherNinOptEnum) MarshalTo(data []byte) (int, error) {
 		i++
 		i = encodeVarintThetest(data, i, uint64(*m.Field1))
 	}
+	if m.Field2 != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field3))
+	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
 	}
@@ -21108,6 +24807,16 @@ func (m *AnotherNinOptEnumDefault) MarshalTo(data []byte) (int, error) {
 		data[i] = 0x8
 		i++
 		i = encodeVarintThetest(data, i, uint64(*m.Field1))
+	}
+	if m.Field2 != nil {
+		data[i] = 0x10
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field2))
+	}
+	if m.Field3 != nil {
+		data[i] = 0x18
+		i++
+		i = encodeVarintThetest(data, i, uint64(*m.Field3))
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(data[i:], m.XXX_unrecognized)
@@ -22303,6 +26012,45 @@ func (m *UnrecognizedWithEmbed_Embedded) MarshalTo(data []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Node) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Node) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Label != nil {
+		data[i] = 0xa
+		i++
+		i = encodeVarintThetest(data, i, uint64(len(*m.Label)))
+		i += copy(data[i:], *m.Label)
+	}
+	if len(m.Children) > 0 {
+		for _, msg := range m.Children {
+			data[i] = 0x12
+			i++
+			i = encodeVarintThetest(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(data[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func encodeFixed64Thetest(data []byte, offset int, v uint64) int {
 	data[offset] = uint8(v)
 	data[offset+1] = uint8(v >> 8)
@@ -22329,4 +26077,195 @@ func encodeVarintThetest(data []byte, offset int, v uint64) int {
 	}
 	data[offset] = uint8(v)
 	return offset + 1
+}
+
+var fileDescriptorThetest = []byte{
+	// 2989 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xcc, 0x5a, 0x4d, 0x6c, 0xdb, 0xc8,
+	0x15, 0x36, 0x39, 0x92, 0x23, 0x8f, 0x65, 0x5b, 0xe1, 0x6e, 0xb4, 0x84, 0xd6, 0xb5, 0x1d, 0x56,
+	0x71, 0xbd, 0x42, 0x62, 0x4b, 0xb2, 0xec, 0x38, 0xda, 0xee, 0x16, 0x96, 0xe4, 0x34, 0x49, 0x63,
+	0x39, 0xd0, 0x3a, 0x6d, 0x03, 0x14, 0x28, 0x64, 0x8b, 0xb6, 0x85, 0xda, 0x94, 0x21, 0x51, 0x69,
+	0xd2, 0x43, 0xb1, 0xd8, 0x43, 0x11, 0xf4, 0x5a, 0xf4, 0xd8, 0x6e, 0x8a, 0xa2, 0xc0, 0xf6, 0xb6,
+	0x87, 0xa2, 0x28, 0x8a, 0xa2, 0x9b, 0x4b, 0x01, 0xf7, 0x16, 0xf4, 0x54, 0x14, 0x45, 0xb0, 0x9b,
+	0x5e, 0xf6, 0xb8, 0x3d, 0x75, 0x0f, 0x7b, 0xe8, 0x90, 0x9c, 0x19, 0xce, 0x0c, 0x49, 0x91, 0x8a,
+	0x9d, 0x76, 0x0f, 0xd4, 0x0f, 0xdf, 0x7b, 0x33, 0x8f, 0xef, 0xfb, 0xde, 0xe3, 0x23, 0x67, 0x60,
+	0x76, 0xb7, 0x73, 0xb4, 0xd3, 0xe9, 0x2d, 0xf5, 0x8d, 0x5e, 0x73, 0x4f, 0x3f, 0x6a, 0x76, 0x7b,
+	0x07, 0xcd, 0x43, 0xbd, 0xbb, 0x64, 0x1e, 0xe8, 0xa6, 0xde, 0x33, 0x17, 0x8f, 0xbb, 0x1d, 0xb3,
+	0xa3, 0xc4, 0xac, 0xdf, 0x99, 0x2b, 0xfb, 0x6d, 0xf3, 0xa0, 0xbf, 0xb3, 0x88, 0x4c, 0x96, 0xf6,
+	0x3b, 0xfb, 0x9d, 0x25, 0x5b, 0xb8, 0xd3, 0xdf, 0xb3, 0xff, 0xd9, 0x7f, 0xec, 0x5f, 0x8e, 0x91,
+	0xf6, 0x4f, 0x00, 0x93, 0xf5, 0x76, 0x6b, 0xeb, 0xd8, 0xac, 0x37, 0xcd, 0xf6, 0x7d, 0x5d, 0x99,
+	0x86, 0xa3, 0xd7, 0xdb, 0xfa, 0x61, 0xab, 0xa0, 0x4a, 0x73, 0xd2, 0x82, 0x54, 0x89, 0x9d, 0x3c,
+	0x9b, 0x1d, 0x69, 0x8c, 0xee, 0xd9, 0xe7, 0xa8, 0xb4, 0xa8, 0xca, 0x48, 0x2a, 0x73, 0xd2, 0x22,
+	0x95, 0x2e, 0xab, 0x00, 0x49, 0xe3, 0x9c, 0x74, 0x99, 0x4a, 0x4b, 0x6a, 0x0c, 0x49, 0x01, 0x27,
+	0x2d, 0x51, 0xe9, 0x8a, 0x1a, 0x47, 0xd2, 0x09, 0x4e, 0xba, 0x42, 0xa5, 0xab, 0xea, 0x28, 0x92,
+	0xc6, 0x38, 0xe9, 0x2a, 0x95, 0x5e, 0x55, 0xcf, 0x21, 0xe9, 0x79, 0x4e, 0x7a, 0x95, 0x4a, 0xd7,
+	0xd4, 0x04, 0x92, 0x2a, 0x9c, 0x74, 0x8d, 0x4a, 0xaf, 0xa9, 0x63, 0x48, 0x7a, 0x8e, 0x93, 0x5e,
+	0x53, 0x66, 0xe0, 0x39, 0x27, 0x1a, 0x79, 0x15, 0x22, 0xf1, 0x14, 0x16, 0x9f, 0x73, 0xc2, 0x91,
+	0x77, 0xe5, 0x05, 0x75, 0x1c, 0xc9, 0x47, 0x79, 0x79, 0xc1, 0x95, 0x17, 0xd5, 0x24, 0x92, 0xa7,
+	0x78, 0x79, 0xd1, 0x95, 0x2f, 0xab, 0x13, 0x48, 0x9e, 0xe0, 0xe5, 0xcb, 0xae, 0xbc, 0xa4, 0x4e,
+	0x22, 0xf9, 0x18, 0x2f, 0x2f, 0xb9, 0xf2, 0x15, 0x75, 0x0a, 0xc9, 0x93, 0xbc, 0x7c, 0x45, 0x7b,
+	0xcf, 0x86, 0xd7, 0x70, 0xe1, 0x4d, 0xf3, 0xf0, 0x52, 0x60, 0xd3, 0x3c, 0xb0, 0x14, 0xd2, 0x34,
+	0x0f, 0x29, 0x05, 0x33, 0xcd, 0x83, 0x49, 0x61, 0x4c, 0xf3, 0x30, 0x52, 0x00, 0xd3, 0x3c, 0x80,
+	0x14, 0xba, 0x34, 0x0f, 0x1d, 0x05, 0x2d, 0xcd, 0x83, 0x46, 0xe1, 0x4a, 0xf3, 0x70, 0x51, 0xa0,
+	0x54, 0x01, 0x28, 0x17, 0x22, 0x55, 0x80, 0xc8, 0x05, 0x47, 0x15, 0xc0, 0x71, 0x61, 0x51, 0x05,
+	0x58, 0x5c, 0x40, 0x54, 0x01, 0x10, 0x17, 0x0a, 0x55, 0x80, 0xc2, 0x05, 0x01, 0xe7, 0x58, 0x43,
+	0x3f, 0xf6, 0xc9, 0x31, 0x30, 0x30, 0xc7, 0xc0, 0xc0, 0x1c, 0x03, 0x03, 0x73, 0x0c, 0x0c, 0xcc,
+	0x31, 0x30, 0x30, 0xc7, 0xc0, 0xc0, 0x1c, 0x03, 0x03, 0x73, 0x0c, 0x0c, 0xcc, 0x31, 0x30, 0x38,
+	0xc7, 0x40, 0x48, 0x8e, 0x81, 0x90, 0x1c, 0x03, 0x21, 0x39, 0x06, 0x42, 0x72, 0x0c, 0x84, 0xe4,
+	0x18, 0x08, 0xcc, 0x31, 0x17, 0xde, 0x34, 0x0f, 0xaf, 0x6f, 0x8e, 0x81, 0x80, 0x1c, 0x03, 0x01,
+	0x39, 0x06, 0x02, 0x72, 0x0c, 0x04, 0xe4, 0x18, 0x08, 0xc8, 0x31, 0x10, 0x90, 0x63, 0x20, 0x20,
+	0xc7, 0x40, 0x50, 0x8e, 0x81, 0xc0, 0x1c, 0x03, 0x81, 0x39, 0x06, 0x02, 0x73, 0x0c, 0x04, 0xe6,
+	0x18, 0x08, 0xcc, 0x31, 0xc0, 0xe6, 0xd8, 0x9f, 0x00, 0x54, 0x9c, 0x1c, 0xbb, 0xd3, 0xdc, 0xfd,
+	0x81, 0xde, 0xc2, 0x50, 0xcc, 0x08, 0x99, 0x36, 0x6a, 0x41, 0x97, 0x72, 0x21, 0x99, 0x11, 0x72,
+	0x8d, 0x97, 0x17, 0xa9, 0x9c, 0x64, 0x1b, 0x2f, 0x5f, 0xa6, 0x72, 0x92, 0x6f, 0xbc, 0xbc, 0x44,
+	0xe5, 0x24, 0xe3, 0x78, 0xf9, 0x0a, 0x95, 0x93, 0x9c, 0xe3, 0xe5, 0xab, 0x54, 0x4e, 0xb2, 0x8e,
+	0x97, 0x5f, 0xa5, 0x72, 0x92, 0x77, 0xbc, 0x7c, 0x8d, 0xca, 0x49, 0xe6, 0xf1, 0xf2, 0x6b, 0xca,
+	0x9c, 0x98, 0x7b, 0x44, 0x81, 0x42, 0x3b, 0x27, 0x66, 0x9f, 0xa0, 0x51, 0x70, 0x35, 0x48, 0xfe,
+	0x09, 0x1a, 0x45, 0x57, 0x83, 0x64, 0xa0, 0xa0, 0xb1, 0xac, 0x3d, 0xb2, 0xe1, 0x33, 0x44, 0xf8,
+	0x32, 0x02, 0x7c, 0x32, 0x03, 0x5d, 0x46, 0x80, 0x4e, 0x66, 0x60, 0xcb, 0x08, 0xb0, 0xc9, 0x0c,
+	0x64, 0x19, 0x01, 0x32, 0x99, 0x81, 0x2b, 0x23, 0xc0, 0x25, 0x33, 0x50, 0x65, 0x04, 0xa8, 0x64,
+	0x06, 0xa6, 0x8c, 0x00, 0x93, 0xcc, 0x40, 0x94, 0x11, 0x20, 0x92, 0x19, 0x78, 0x32, 0x02, 0x3c,
+	0x32, 0x03, 0xcd, 0xb4, 0x08, 0x8d, 0xcc, 0xc2, 0x32, 0x2d, 0xc2, 0x22, 0xb3, 0x90, 0x4c, 0x8b,
+	0x90, 0xc8, 0x2c, 0x1c, 0xd3, 0x22, 0x1c, 0x32, 0x0b, 0xc5, 0x17, 0x32, 0xe9, 0x08, 0xdf, 0x31,
+	0xbb, 0xfd, 0x5d, 0xf3, 0x54, 0x1d, 0x61, 0x9e, 0x6b, 0x1f, 0xc6, 0x8b, 0xca, 0xa2, 0xdd, 0xb0,
+	0xb2, 0x1d, 0xa7, 0x70, 0x07, 0xcb, 0x73, 0x8d, 0x05, 0x63, 0x61, 0xf8, 0x5b, 0x94, 0x4e, 0xd5,
+	0x1b, 0xe6, 0xb9, 0x36, 0x23, 0xdc, 0xbf, 0xb5, 0x97, 0xde, 0xb1, 0x3d, 0x91, 0x49, 0xc7, 0x86,
+	0xc3, 0x3f, 0x6c, 0xc7, 0x96, 0x0b, 0x0f, 0x39, 0x0d, 0x76, 0x2e, 0x3c, 0xd8, 0x9e, 0xbb, 0x4e,
+	0xd4, 0x0e, 0x2e, 0x17, 0x1e, 0x5a, 0x1a, 0xd4, 0xb3, 0xed, 0xb7, 0x30, 0x83, 0x51, 0x31, 0xf1,
+	0x61, 0xf0, 0xb0, 0xfd, 0x56, 0x9e, 0x2b, 0x25, 0xc3, 0x32, 0x18, 0x0c, 0xcd, 0xe0, 0x61, 0x3b,
+	0xaf, 0x3c, 0x57, 0x5e, 0x86, 0x66, 0xf0, 0x4b, 0xe8, 0x87, 0x30, 0x83, 0xdd, 0xf0, 0x0f, 0xdb,
+	0x0f, 0xe5, 0xc2, 0x43, 0xee, 0xcb, 0x60, 0x30, 0x04, 0x83, 0xa3, 0xf4, 0x47, 0xb9, 0xf0, 0xd0,
+	0xfa, 0x33, 0xf8, 0xd4, 0xdd, 0xcc, 0xfb, 0x12, 0x3c, 0x8f, 0xa6, 0xd9, 0x38, 0xda, 0xd1, 0x5b,
+	0x2d, 0xbd, 0x85, 0xe3, 0x98, 0xe7, 0x2a, 0x41, 0x00, 0xd4, 0x4f, 0x9f, 0xcd, 0xba, 0x11, 0x5e,
+	0x81, 0x09, 0x27, 0xc2, 0xf9, 0xbc, 0x7a, 0x22, 0x85, 0x54, 0xb8, 0xc4, 0x1e, 0x56, 0x55, 0x2e,
+	0x12, 0x33, 0x74, 0xef, 0xf9, 0x9b, 0xc4, 0x54, 0x39, 0xac, 0x52, 0xc8, 0x6b, 0x3f, 0xb3, 0x3d,
+	0x34, 0x4e, 0xed, 0xe1, 0x52, 0x24, 0x0f, 0x19, 0xdf, 0x5e, 0xf7, 0xf8, 0xc6, 0x78, 0xd5, 0x87,
+	0x53, 0xc8, 0xac, 0x8e, 0xcc, 0xa3, 0xb9, 0xe4, 0xe8, 0x08, 0xf5, 0x20, 0xcf, 0xd1, 0x92, 0xb5,
+	0xa0, 0x94, 0xe6, 0x6b, 0x84, 0xd6, 0xb6, 0xa6, 0x35, 0xb8, 0x69, 0x73, 0x41, 0xd3, 0xba, 0x95,
+	0x9d, 0x4e, 0x98, 0x0b, 0x9a, 0xd0, 0xcd, 0x21, 0x3a, 0xd5, 0x03, 0x72, 0x73, 0xae, 0xf6, 0x7b,
+	0x66, 0xe7, 0x08, 0x15, 0x07, 0xf9, 0x66, 0xcb, 0x9e, 0x23, 0x59, 0x49, 0x5a, 0x4e, 0xfd, 0xe3,
+	0xd9, 0x6c, 0xec, 0x6e, 0x1f, 0xf9, 0x2a, 0xb7, 0x5b, 0xca, 0x2d, 0x18, 0xff, 0x76, 0xf3, 0xb0,
+	0xaf, 0xdb, 0xb7, 0x88, 0x64, 0xa5, 0x84, 0x15, 0x2e, 0x07, 0xbe, 0x23, 0xb2, 0x26, 0x5e, 0xda,
+	0xb5, 0x87, 0x5e, 0xbc, 0xdb, 0x36, 0xcc, 0x42, 0x71, 0xad, 0x11, 0xbf, 0x6f, 0x0d, 0xa1, 0x7d,
+	0x0f, 0x42, 0x67, 0xce, 0x5a, 0xb3, 0x77, 0xa0, 0xd4, 0xc9, 0xc8, 0xce, 0xd4, 0x6b, 0x68, 0xd4,
+	0x52, 0x94, 0x51, 0xaf, 0xb4, 0x90, 0xf5, 0x15, 0xf3, 0xe1, 0xb1, 0xbe, 0x58, 0x79, 0x88, 0xce,
+	0x93, 0xd1, 0x8f, 0xc9, 0x5d, 0x0f, 0x5f, 0x97, 0xca, 0x5c, 0x57, 0x82, 0xbb, 0xa6, 0xeb, 0xfc,
+	0x35, 0xe5, 0x5f, 0xf4, 0x7a, 0x1e, 0x90, 0x9b, 0x84, 0x10, 0x49, 0x10, 0x16, 0x49, 0x70, 0xda,
+	0x48, 0x1e, 0x93, 0xfa, 0x28, 0x5c, 0x2b, 0x18, 0x74, 0xad, 0xe0, 0x34, 0xd7, 0xfa, 0x1f, 0x27,
+	0x5b, 0x69, 0x3e, 0xdd, 0x35, 0xda, 0x1d, 0xe3, 0x4b, 0xf7, 0x2e, 0xe8, 0x4c, 0xbb, 0x80, 0x72,
+	0xec, 0xe4, 0xf1, 0xac, 0xa4, 0xbd, 0x2f, 0x93, 0x2b, 0x77, 0x12, 0xe9, 0xc5, 0xae, 0xfc, 0xcb,
+	0xd2, 0x53, 0xbd, 0x8c, 0x08, 0xfd, 0x52, 0x82, 0x69, 0x4f, 0x25, 0x77, 0xc2, 0x74, 0xb6, 0xe5,
+	0xdc, 0x18, 0xb6, 0x9c, 0x63, 0x07, 0x7f, 0x27, 0xc1, 0x57, 0x85, 0xf2, 0xea, 0xb8, 0xb7, 0x24,
+	0xb8, 0xf7, 0x9a, 0x77, 0x26, 0x5b, 0x91, 0xf1, 0x8e, 0x85, 0x57, 0x30, 0x60, 0x46, 0xa6, 0xb8,
+	0x97, 0x04, 0xdc, 0xa7, 0xa9, 0x81, 0x4f, 0xb8, 0x08, 0x03, 0xb0, 0xdb, 0x1d, 0x18, 0xdb, 0xee,
+	0xea, 0xd6, 0x2b, 0x08, 0x79, 0xab, 0x8b, 0x3d, 0x9c, 0x74, 0xec, 0xb7, 0xba, 0x95, 0x6e, 0xd3,
+	0xd8, 0x3d, 0x68, 0xc8, 0x9d, 0x2e, 0xba, 0xd9, 0x82, 0x75, 0xa3, 0x85, 0x3d, 0x9a, 0x72, 0x14,
+	0xd0, 0x09, 0xac, 0x01, 0x9a, 0x46, 0x0b, 0x0d, 0x11, 0xbb, 0xad, 0x37, 0xf7, 0xb0, 0x13, 0xd0,
+	0xd1, 0xb1, 0xce, 0x34, 0x62, 0x87, 0xe8, 0x13, 0x4f, 0xf8, 0x5d, 0x98, 0x20, 0x03, 0x2b, 0x59,
+	0xcb, 0x62, 0xcf, 0xc4, 0xd3, 0x62, 0x0b, 0xcb, 0x1d, 0x7c, 0xe7, 0x42, 0x76, 0x7b, 0xa6, 0x32,
+	0x0f, 0xe3, 0x8d, 0xf6, 0xfe, 0x81, 0x89, 0x27, 0xf7, 0xaa, 0xc5, 0xbb, 0x96, 0x58, 0xbb, 0x07,
+	0xc7, 0xa8, 0x47, 0x67, 0x3c, 0x74, 0xcd, 0xb9, 0x34, 0xf4, 0x24, 0xcc, 0xdc, 0x4f, 0xc8, 0x7b,
+	0x4b, 0xa7, 0x7a, 0x29, 0x73, 0x30, 0x81, 0xc2, 0xec, 0x16, 0x7d, 0xd2, 0x91, 0x26, 0x7a, 0xf8,
+	0xac, 0xf6, 0x9e, 0x04, 0x13, 0x35, 0x5d, 0x3f, 0xb6, 0x03, 0x7e, 0x09, 0xc6, 0x6a, 0x9d, 0x1f,
+	0x1a, 0xd8, 0xc1, 0xf3, 0x38, 0xa2, 0x96, 0x18, 0xc7, 0x34, 0xd6, 0x42, 0x62, 0xa4, 0xc6, 0xc4,
+	0xfd, 0x15, 0x1a, 0x77, 0x46, 0xcf, 0x8e, 0xbd, 0xc6, 0xc5, 0x1e, 0x03, 0x68, 0x29, 0x79, 0xe2,
+	0x7f, 0x15, 0x8e, 0x33, 0xb3, 0x28, 0x0b, 0xd8, 0x0d, 0x59, 0x34, 0x64, 0x63, 0x65, 0x79, 0xa2,
+	0xe9, 0x70, 0x82, 0x9b, 0xd8, 0x32, 0x65, 0x42, 0x1c, 0x60, 0x6a, 0x87, 0x39, 0xc7, 0x87, 0xd9,
+	0x5f, 0x15, 0x87, 0x3a, 0xef, 0xc4, 0xc8, 0x0e, 0x77, 0xd6, 0x21, 0x67, 0x30, 0x88, 0x26, 0xfa,
+	0xad, 0xc5, 0x21, 0xa8, 0xb7, 0x0f, 0xb5, 0xb7, 0x20, 0x74, 0x52, 0x7e, 0xc3, 0xe8, 0x1f, 0x09,
+	0x59, 0x37, 0x49, 0x02, 0xbc, 0x7d, 0xa0, 0x6f, 0xa3, 0x6f, 0x4b, 0x85, 0xef, 0xa7, 0xac, 0x02,
+	0x03, 0x9d, 0x14, 0xb3, 0xed, 0xdf, 0x08, 0xb5, 0xf7, 0xed, 0xc4, 0x2c, 0x55, 0xd5, 0x51, 0xbd,
+	0xa7, 0x9b, 0xeb, 0x46, 0xc7, 0x3c, 0xd0, 0xbb, 0x82, 0x45, 0x51, 0x59, 0xe6, 0x12, 0x76, 0xb2,
+	0xf8, 0x3a, 0xb5, 0x08, 0x34, 0x5a, 0xd6, 0x3e, 0xb4, 0x1d, 0xb4, 0x5a, 0x01, 0xcf, 0x05, 0x82,
+	0x08, 0x17, 0xa8, 0xac, 0x72, 0xfd, 0xdb, 0x00, 0x37, 0x85, 0x47, 0xcb, 0x6b, 0xdc, 0x73, 0xce,
+	0x60, 0x67, 0xf9, 0x67, 0x4c, 0x12, 0x53, 0xe2, 0xf2, 0x1b, 0xa1, 0x2e, 0x07, 0x74, 0xb7, 0xc3,
+	0xc6, 0x14, 0x44, 0x8d, 0xe9, 0x1f, 0x69, 0xc7, 0x61, 0x9d, 0xae, 0xe9, 0x7b, 0xcd, 0xfe, 0xa1,
+	0xa9, 0x5c, 0x0e, 0xc5, 0xbe, 0x2c, 0x55, 0xa9, 0xab, 0xa5, 0xa8, 0xf0, 0x97, 0xe5, 0x4a, 0x85,
+	0xba, 0x7b, 0x75, 0x08, 0x0a, 0x94, 0xe5, 0x6a, 0x95, 0x96, 0xed, 0xc4, 0x23, 0x94, 0xc5, 0x1f,
+	0x3c, 0x9e, 0x1d, 0xd1, 0x7e, 0x8b, 0x9c, 0xc7, 0x9a, 0x0c, 0x71, 0xaf, 0x08, 0xce, 0x5f, 0x20,
+	0x35, 0xc3, 0x2f, 0x02, 0xff, 0x33, 0xf2, 0xfe, 0x45, 0x82, 0xaa, 0xc7, 0x57, 0x12, 0xef, 0x7c,
+	0x24, 0x97, 0xcb, 0xd2, 0xc6, 0xff, 0x3f, 0xe6, 0xf7, 0x60, 0x7c, 0xbb, 0x7d, 0xa4, 0x77, 0xad,
+	0x3b, 0x81, 0xf5, 0xc3, 0x71, 0x99, 0x2c, 0xe6, 0xc4, 0x4d, 0xeb, 0x14, 0x91, 0x39, 0xce, 0x71,
+	0x32, 0x6b, 0x3d, 0x21, 0x56, 0x6b, 0x9a, 0x4d, 0xdb, 0x83, 0x24, 0xad, 0xaf, 0xe8, 0x8c, 0xb6,
+	0x0c, 0x93, 0x9b, 0x0f, 0x37, 0x1e, 0x98, 0xba, 0xd1, 0x6a, 0xee, 0x1c, 0x8a, 0x6b, 0xa0, 0xa4,
+	0x5f, 0x2d, 0xe4, 0xe2, 0x89, 0x56, 0xea, 0x44, 0x2a, 0xc7, 0x6c, 0x7f, 0xee, 0xc3, 0xc9, 0x2d,
+	0xcb, 0x6d, 0xdb, 0xce, 0x36, 0x9b, 0x83, 0xd2, 0x26, 0xdf, 0x08, 0xb1, 0xa3, 0x36, 0xa4, 0x23,
+	0xa1, 0x7d, 0x04, 0x34, 0x3c, 0x42, 0xdb, 0x06, 0x68, 0xdb, 0x96, 0x8b, 0x25, 0x26, 0x53, 0xe7,
+	0xd1, 0x27, 0x4c, 0x4d, 0xe0, 0x79, 0xff, 0x0a, 0x60, 0xca, 0x69, 0x75, 0x10, 0x88, 0x6d, 0xa3,
+	0x6d, 0x7a, 0xfb, 0x55, 0xea, 0xb1, 0xf2, 0x0d, 0x38, 0x66, 0x85, 0xd4, 0x96, 0x61, 0xc0, 0x2e,
+	0xe2, 0x16, 0x45, 0x18, 0x02, 0x9f, 0xb0, 0xa9, 0x33, 0xa6, 0x13, 0x1b, 0xf4, 0x80, 0x01, 0xea,
+	0xf5, 0x4d, 0x7c, 0x73, 0x2b, 0x0d, 0x34, 0xdd, 0xd4, 0x7b, 0xbd, 0xe6, 0xbe, 0x8e, 0xff, 0xe1,
+	0x73, 0xbd, 0xfd, 0x06, 0x30, 0xea, 0x9b, 0x88, 0x36, 0x32, 0x1a, 0xc6, 0x69, 0x78, 0xb3, 0x51,
+	0x86, 0x69, 0xc8, 0xc6, 0x66, 0xe6, 0xcf, 0x12, 0x9c, 0xe0, 0xce, 0xa2, 0xbb, 0x6d, 0xd2, 0x39,
+	0xc1, 0x5c, 0xee, 0x68, 0x23, 0x69, 0x30, 0xe7, 0x88, 0xcf, 0xf2, 0x29, 0x7d, 0xce, 0xac, 0xa3,
+	0xa7, 0x76, 0xfe, 0xbc, 0xb2, 0x08, 0x15, 0xf6, 0x14, 0x76, 0x02, 0xda, 0x0d, 0xb5, 0x62, 0x78,
+	0x24, 0xda, 0x57, 0x50, 0x15, 0xa6, 0x71, 0x55, 0xa6, 0xe0, 0xf8, 0xf6, 0xbd, 0x3b, 0x1b, 0xdf,
+	0xaf, 0x6f, 0xbc, 0xb3, 0xbd, 0x51, 0x4b, 0x49, 0xda, 0xef, 0x25, 0x38, 0x8e, 0xdb, 0xd6, 0xdd,
+	0xce, 0xb1, 0xae, 0x54, 0xa0, 0xb4, 0x8e, 0x19, 0xf4, 0x62, 0x7e, 0x4b, 0x4d, 0x74, 0x77, 0x92,
+	0x2a, 0xd1, 0xa1, 0x96, 0x76, 0x94, 0x22, 0x94, 0xaa, 0x18, 0xe0, 0x68, 0xc8, 0x48, 0xbb, 0xda,
+	0xbf, 0x01, 0x7c, 0x85, 0x6d, 0xa3, 0x49, 0x3d, 0xb9, 0xc8, 0x3f, 0x37, 0x95, 0xc7, 0x0a, 0xc5,
+	0xe5, 0xd2, 0xa2, 0xf5, 0x41, 0x29, 0x79, 0x91, 0x7f, 0x84, 0xf2, 0xaa, 0x78, 0xb6, 0x89, 0x94,
+	0x63, 0x8c, 0xd4, 0xb3, 0x4d, 0x84, 0x93, 0x7a, 0xb6, 0x89, 0x70, 0x52, 0xcf, 0x36, 0x11, 0x4e,
+	0xea, 0x59, 0x0a, 0xe0, 0xa4, 0x9e, 0x6d, 0x22, 0x9c, 0xd4, 0xb3, 0x4d, 0x84, 0x93, 0x7a, 0xb7,
+	0x89, 0x60, 0x71, 0xe0, 0x36, 0x11, 0x5e, 0xee, 0xdd, 0x26, 0xc2, 0xcb, 0xbd, 0xdb, 0x44, 0xca,
+	0xa8, 0x3f, 0xeb, 0xeb, 0xc1, 0x8b, 0x0e, 0xbc, 0xfd, 0xa0, 0x67, 0x40, 0xb7, 0x00, 0x6f, 0xc1,
+	0x29, 0xe7, 0x7d, 0x44, 0xb5, 0x63, 0x98, 0xcd, 0xb6, 0x81, 0x4a, 0xf1, 0xd7, 0x61, 0xd2, 0x39,
+	0xe5, 0x3c, 0xe5, 0xf8, 0x3d, 0x05, 0x3a, 0x72, 0x5c, 0x6e, 0x93, 0xbb, 0x8c, 0xb6, 0xf6, 0x45,
+	0x0c, 0xa6, 0x1d, 0x71, 0xbd, 0x79, 0xa4, 0x73, 0x9b, 0x8c, 0xe6, 0x85, 0x25, 0xa5, 0x49, 0xcb,
+	0xfc, 0xf9, 0xb3, 0x59, 0xe7, 0xec, 0x3a, 0x25, 0xd3, 0xbc, 0xb0, 0xb8, 0xc4, 0xeb, 0xb9, 0xf7,
+	0x9f, 0x79, 0x61, 0xe3, 0x11, 0xaf, 0x47, 0x6f, 0x37, 0x54, 0x8f, 0x6c, 0x41, 0xe2, 0xf5, 0x6a,
+	0x94, 0x65, 0xf3, 0xc2, 0x66, 0x24, 0x5e, 0x6f, 0x83, 0xf2, 0x6d, 0x5e, 0x58, 0x7a, 0xe2, 0xf5,
+	0xae, 0x53, 0xe6, 0xcd, 0x0b, 0x8b, 0x50, 0xbc, 0xde, 0x37, 0x29, 0x07, 0xe7, 0x85, 0xad, 0x4a,
+	0xbc, 0xde, 0x0d, 0xca, 0xc6, 0x79, 0x61, 0xd3, 0x12, 0xaf, 0x77, 0x93, 0xf2, 0x72, 0x41, 0xdc,
+	0xbe, 0xc4, 0x2b, 0xde, 0x72, 0x19, 0xba, 0x20, 0x6e, 0x64, 0xe2, 0x35, 0xbf, 0xe5, 0x72, 0x75,
+	0x41, 0xdc, 0xd2, 0xc4, 0x6b, 0xde, 0x76, 0x59, 0xbb, 0x20, 0x2e, 0x95, 0xf1, 0x9a, 0x9b, 0x2e,
+	0x7f, 0x17, 0xc4, 0x45, 0x33, 0x5e, 0xb3, 0xee, 0x32, 0x79, 0x41, 0x5c, 0x3e, 0xe3, 0x35, 0xb7,
+	0xdc, 0x77, 0xe8, 0x1f, 0x09, 0xf4, 0x63, 0x36, 0x41, 0x69, 0x02, 0xfd, 0xa0, 0x0f, 0xf5, 0x34,
+	0x81, 0x7a, 0xd0, 0x87, 0x76, 0x9a, 0x40, 0x3b, 0xe8, 0x43, 0x39, 0x4d, 0xa0, 0x1c, 0xf4, 0xa1,
+	0x9b, 0x26, 0xd0, 0x0d, 0xfa, 0x50, 0x4d, 0x13, 0xa8, 0x06, 0x7d, 0x68, 0xa6, 0x09, 0x34, 0x83,
+	0x3e, 0x14, 0xd3, 0x04, 0x8a, 0x41, 0x1f, 0x7a, 0x69, 0x02, 0xbd, 0xa0, 0x0f, 0xb5, 0xb2, 0x22,
+	0xb5, 0xa0, 0x1f, 0xad, 0xb2, 0x22, 0xad, 0xa0, 0x1f, 0xa5, 0xbe, 0x2a, 0x52, 0x6a, 0x0c, 0x69,
+	0xc5, 0xad, 0x53, 0x0c, 0x9b, 0xb2, 0x22, 0x9b, 0xa0, 0x1f, 0x93, 0xb2, 0x22, 0x93, 0xa0, 0x1f,
+	0x8b, 0xb2, 0x22, 0x8b, 0xa0, 0x1f, 0x83, 0x9e, 0x88, 0x0c, 0x72, 0xb7, 0xf8, 0x68, 0xc2, 0x8a,
+	0x62, 0x18, 0x83, 0x40, 0x04, 0x06, 0x81, 0x08, 0x0c, 0x02, 0x11, 0x18, 0x04, 0x22, 0x30, 0x08,
+	0x44, 0x60, 0x10, 0x88, 0xc0, 0x20, 0x10, 0x81, 0x41, 0x20, 0x0a, 0x83, 0x40, 0x24, 0x06, 0x81,
+	0x20, 0x06, 0x65, 0xc5, 0x0d, 0x0f, 0xd0, 0xaf, 0x20, 0x65, 0xc5, 0x95, 0xcf, 0x70, 0x0a, 0x81,
+	0x48, 0x14, 0x02, 0x41, 0x14, 0xfa, 0x08, 0x35, 0x52, 0x1c, 0x85, 0xf0, 0xf2, 0xd0, 0x59, 0x55,
+	0xa0, 0xd5, 0x08, 0xfb, 0x2b, 0xfc, 0x38, 0xb5, 0x1a, 0x61, 0x8d, 0x7a, 0x10, 0xcf, 0xbc, 0x55,
+	0x68, 0x23, 0x42, 0x15, 0xba, 0x4e, 0x39, 0xb4, 0x1a, 0x61, 0xdf, 0x85, 0x97, 0x7b, 0x6b, 0x83,
+	0x8a, 0xc0, 0x8d, 0x48, 0x45, 0xe0, 0x66, 0xa4, 0x22, 0x70, 0xcb, 0x45, 0xf0, 0x27, 0x32, 0x7c,
+	0xd5, 0x45, 0xd0, 0xf9, 0xb5, 0xfd, 0xf0, 0xd8, 0x2a, 0x01, 0xee, 0x0a, 0x95, 0x42, 0x56, 0x6d,
+	0x18, 0x18, 0xad, 0xf5, 0x9b, 0x3b, 0xfc, 0x5a, 0x55, 0x79, 0xd8, 0xf5, 0x1b, 0x06, 0x71, 0xfc,
+	0x2e, 0x34, 0x0b, 0xc1, 0xcd, 0x56, 0xcf, 0xae, 0x16, 0x7e, 0xd3, 0x56, 0x1b, 0xa0, 0xdd, 0xea,
+	0x29, 0x0d, 0x38, 0x6a, 0xcf, 0xdb, 0xb3, 0xe1, 0x3d, 0xcd, 0xc4, 0x08, 0x7a, 0x7b, 0xe2, 0x9e,
+	0xf6, 0x44, 0x82, 0x73, 0x1c, 0x95, 0xcf, 0x66, 0xc5, 0xe0, 0xcd, 0x48, 0x2b, 0x06, 0x5c, 0x82,
+	0xb8, 0xab, 0x07, 0x5f, 0xf3, 0x2e, 0x54, 0xb3, 0x59, 0x22, 0xae, 0x24, 0xfc, 0x18, 0x4e, 0xba,
+	0x57, 0x60, 0x3f, 0xb2, 0xad, 0x84, 0xbf, 0xcc, 0xf4, 0x4b, 0xcd, 0x15, 0xe1, 0x25, 0xda, 0x40,
+	0x33, 0x9a, 0xad, 0x5a, 0x19, 0x3d, 0x71, 0x76, 0xec, 0x57, 0x06, 0x3d, 0x14, 0xac, 0xde, 0x66,
+	0xf3, 0x38, 0xec, 0x5d, 0x44, 0xc2, 0x6a, 0xcd, 0x4f, 0x7e, 0x85, 0xda, 0xf3, 0xcb, 0x30, 0x79,
+	0xd7, 0xe8, 0xea, 0xbb, 0x9d, 0x7d, 0xa3, 0xfd, 0x23, 0xbd, 0x25, 0x18, 0x8e, 0x11, 0xc3, 0x72,
+	0xec, 0xa9, 0xa5, 0xfd, 0x73, 0x09, 0x5e, 0x60, 0xd5, 0xbf, 0x83, 0xb0, 0xbf, 0x69, 0x58, 0x3d,
+	0xfd, 0x5b, 0x30, 0xa1, 0x63, 0xe0, 0xec, 0x7b, 0xd7, 0x38, 0x79, 0x8c, 0xf4, 0x55, 0x5f, 0xb4,
+	0x3f, 0x1b, 0xd4, 0x44, 0x78, 0xc5, 0x41, 0xa6, 0x2d, 0x66, 0x2e, 0xc1, 0xb8, 0x33, 0x3e, 0xef,
+	0xd7, 0x84, 0xe0, 0xd7, 0x6f, 0x7c, 0xfc, 0xb2, 0x79, 0xa4, 0xdc, 0xe2, 0xfc, 0x62, 0x9e, 0x56,
+	0x7d, 0xd5, 0x17, 0x09, 0xf9, 0x2a, 0x09, 0xab, 0xff, 0xb3, 0x19, 0x15, 0xee, 0xe4, 0x02, 0x4c,
+	0x6c, 0x88, 0x3a, 0xfe, 0x7e, 0xd6, 0x60, 0xac, 0xde, 0x69, 0xe9, 0xca, 0xab, 0x30, 0x7e, 0xbb,
+	0xb9, 0xa3, 0x1f, 0xe2, 0x20, 0xc7, 0x0f, 0xad, 0x3f, 0xa8, 0xfd, 0x4e, 0x54, 0x0f, 0xda, 0x87,
+	0xad, 0xae, 0x6e, 0xe0, 0x25, 0x7b, 0xfc, 0x06, 0xdd, 0xb2, 0x69, 0x24, 0x76, 0xb1, 0x2c, 0xa7,
+	0xc1, 0x71, 0x86, 0x12, 0x4a, 0x1c, 0x3d, 0xfe, 0xa7, 0x46, 0xac, 0xaf, 0x4a, 0x4a, 0xb2, 0xbe,
+	0xaa, 0x29, 0x39, 0x77, 0x09, 0x4e, 0x09, 0x2f, 0xc8, 0x2c, 0x49, 0x2d, 0x05, 0xad, 0xaf, 0x8d,
+	0xd4, 0x78, 0x26, 0xf6, 0xe8, 0xd7, 0x33, 0x23, 0xb9, 0x37, 0xa1, 0xe2, 0x7d, 0x95, 0xa6, 0x8c,
+	0x42, 0x79, 0xdd, 0x1a, 0xf2, 0x35, 0x28, 0x57, 0xd0, 0x98, 0x99, 0xa9, 0x9f, 0xfe, 0x62, 0x6e,
+	0xbc, 0xa2, 0x9b, 0xa6, 0xde, 0x45, 0xda, 0x95, 0x0a, 0x36, 0x7e, 0x1b, 0x5e, 0xf0, 0x7d, 0x15,
+	0x67, 0xd9, 0x57, 0xab, 0x8e, 0x7d, 0xad, 0xe6, 0xb1, 0xaf, 0xd5, 0x6c, 0x7b, 0xa9, 0x4c, 0x96,
+	0x34, 0xd7, 0x15, 0x9f, 0x17, 0x5f, 0x6a, 0x8b, 0x59, 0x42, 0x5d, 0x2f, 0xbf, 0x8d, 0x75, 0x2b,
+	0xbe, 0xba, 0x7a, 0xc8, 0x92, 0x68, 0xa5, 0x5c, 0xc5, 0xf6, 0x55, 0x5f, 0xfb, 0x3d, 0x61, 0xdd,
+	0x8e, 0xaf, 0x41, 0x78, 0x90, 0x6a, 0x79, 0x09, 0x97, 0xf6, 0xf5, 0x82, 0x72, 0x81, 0x20, 0xc3,
+	0xe5, 0x1d, 0x76, 0xda, 0xa9, 0xf2, 0xeb, 0x05, 0x34, 0xab, 0x63, 0x50, 0x09, 0x34, 0x08, 0xf6,
+	0xdc, 0x19, 0xa4, 0x52, 0x28, 0xdf, 0xc0, 0x83, 0x54, 0x03, 0x07, 0x09, 0x71, 0xdf, 0x19, 0xa9,
+	0x5a, 0xa8, 0xdc, 0x39, 0xf9, 0x64, 0x66, 0xe4, 0x29, 0x3a, 0xfe, 0x8e, 0x8e, 0x8f, 0x3f, 0x99,
+	0x91, 0x3e, 0x45, 0xc7, 0x67, 0xe8, 0xf8, 0x1c, 0x1d, 0xef, 0x3e, 0x9f, 0x91, 0x3e, 0x40, 0xc7,
+	0x87, 0xe8, 0xf8, 0x03, 0x3a, 0x9e, 0xa0, 0xe3, 0xe4, 0x39, 0xd2, 0x47, 0xc7, 0xc7, 0xe8, 0xf7,
+	0xa7, 0xe8, 0xfb, 0x33, 0xf4, 0xfd, 0x39, 0x3a, 0xde, 0xfd, 0xd7, 0xcc, 0xc8, 0x63, 0x74, 0xfc,
+	0x37, 0x00, 0x00, 0xff, 0xff, 0x84, 0x7d, 0x2a, 0x75, 0x43, 0x34, 0x00, 0x00,
 }

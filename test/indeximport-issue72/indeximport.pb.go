@@ -14,28 +14,33 @@
 package indeximport
 
 import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
 import math "math"
 import index "github.com/gogo/protobuf/test/indeximport-issue72/index"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/gogoproto"
 
 import bytes "bytes"
 
 import io "io"
-import fmt "fmt"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.GoGoProtoPackageIsVersion1
+
 type IndexQueries struct {
-	Queries          []*index.IndexQuery `protobuf:"bytes,1,rep" json:"Queries,omitempty"`
+	Queries          []*index.IndexQuery `protobuf:"bytes,1,rep,name=Queries,json=queries" json:"Queries,omitempty"`
 	XXX_unrecognized []byte              `json:"-"`
 }
 
-func (m *IndexQueries) Reset()         { *m = IndexQueries{} }
-func (m *IndexQueries) String() string { return proto.CompactTextString(m) }
-func (*IndexQueries) ProtoMessage()    {}
+func (m *IndexQueries) Reset()                    { *m = IndexQueries{} }
+func (m *IndexQueries) String() string            { return proto.CompactTextString(m) }
+func (*IndexQueries) ProtoMessage()               {}
+func (*IndexQueries) Descriptor() ([]byte, []int) { return fileDescriptorIndeximport, []int{0} }
 
 func (m *IndexQueries) GetQueries() []*index.IndexQuery {
 	if m != nil {
@@ -44,6 +49,9 @@ func (m *IndexQueries) GetQueries() []*index.IndexQuery {
 	return nil
 }
 
+func init() {
+	proto.RegisterType((*IndexQueries)(nil), "indeximport.IndexQueries")
+}
 func (this *IndexQueries) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
@@ -54,7 +62,12 @@ func (this *IndexQueries) Equal(that interface{}) bool {
 
 	that1, ok := that.(*IndexQueries)
 	if !ok {
-		return false
+		that2, ok := that.(IndexQueries)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -140,7 +153,7 @@ func encodeVarintIndeximport(data []byte, offset int, v uint64) int {
 func NewPopulatedIndexQueries(r randyIndeximport, easy bool) *IndexQueries {
 	this := &IndexQueries{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(10)
+		v1 := r.Intn(5)
 		this.Queries = make([]*index.IndexQuery, v1)
 		for i := 0; i < v1; i++ {
 			this.Queries[i] = index.NewPopulatedIndexQuery(r, easy)
@@ -256,8 +269,12 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
+		preIndex := iNdEx
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowIndeximport
+			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
@@ -270,6 +287,12 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 		}
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IndexQueries: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IndexQueries: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
@@ -277,6 +300,9 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowIndeximport
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -287,10 +313,10 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 					break
 				}
 			}
-			postIndex := iNdEx + msglen
 			if msglen < 0 {
 				return ErrInvalidLengthIndeximport
 			}
+			postIndex := iNdEx + msglen
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
@@ -300,15 +326,7 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 			}
 			iNdEx = postIndex
 		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			iNdEx -= sizeOfWire
+			iNdEx = preIndex
 			skippy, err := skipIndeximport(data[iNdEx:])
 			if err != nil {
 				return err
@@ -324,6 +342,9 @@ func (m *IndexQueries) Unmarshal(data []byte) error {
 		}
 	}
 
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
 	return nil
 }
 func skipIndeximport(data []byte) (n int, err error) {
@@ -332,6 +353,9 @@ func skipIndeximport(data []byte) (n int, err error) {
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowIndeximport
+			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
 			}
@@ -345,7 +369,10 @@ func skipIndeximport(data []byte) (n int, err error) {
 		wireType := int(wire & 0x7)
 		switch wireType {
 		case 0:
-			for {
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowIndeximport
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -361,6 +388,9 @@ func skipIndeximport(data []byte) (n int, err error) {
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowIndeximport
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -381,6 +411,9 @@ func skipIndeximport(data []byte) (n int, err error) {
 				var innerWire uint64
 				var start int = iNdEx
 				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowIndeximport
+					}
 					if iNdEx >= l {
 						return 0, io.ErrUnexpectedEOF
 					}
@@ -416,4 +449,20 @@ func skipIndeximport(data []byte) (n int, err error) {
 
 var (
 	ErrInvalidLengthIndeximport = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowIndeximport   = fmt.Errorf("proto: integer overflow")
 )
+
+var fileDescriptorIndeximport = []byte{
+	// 163 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x12, 0xcc, 0xcc, 0x4b, 0x49,
+	0xad, 0xc8, 0xcc, 0x2d, 0xc8, 0x2f, 0x2a, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x46,
+	0x12, 0x92, 0x72, 0x4e, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0x4f, 0xcf,
+	0x4f, 0xcf, 0xd7, 0x07, 0xab, 0x49, 0x2a, 0x4d, 0xd3, 0x2f, 0x49, 0x2d, 0x2e, 0xd1, 0x47, 0x52,
+	0xaa, 0x9b, 0x59, 0x5c, 0x5c, 0x9a, 0x6a, 0x6e, 0x04, 0x11, 0x83, 0x90, 0x10, 0x13, 0xa5, 0x74,
+	0x71, 0x1a, 0x02, 0xe2, 0x81, 0x39, 0x60, 0x16, 0x44, 0xb9, 0x92, 0x35, 0x17, 0x8f, 0x27, 0x48,
+	0x77, 0x60, 0x69, 0x6a, 0x51, 0x66, 0x6a, 0xb1, 0x90, 0x36, 0x17, 0x3b, 0x94, 0x29, 0xc1, 0xa8,
+	0xc0, 0xac, 0xc1, 0x6d, 0x24, 0xa8, 0x07, 0x31, 0x1d, 0xae, 0xaa, 0x32, 0x88, 0xbd, 0x10, 0xa2,
+	0xc2, 0x49, 0xe2, 0xc7, 0x43, 0x39, 0xc6, 0x15, 0x8f, 0xe4, 0x18, 0x77, 0x00, 0xf1, 0x09, 0x20,
+	0xbe, 0x00, 0xc4, 0x0f, 0x80, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xf1, 0x51, 0xf2, 0x07, 0xeb,
+	0x00, 0x00, 0x00,
+}

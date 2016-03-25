@@ -14,28 +14,33 @@ It has these top-level messages:
 package proto
 
 import proto1 "github.com/gogo/protobuf/proto"
+import fmt "fmt"
 import math "math"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/gogoproto"
 
 import bytes "bytes"
 
 import io "io"
-import fmt "fmt"
 import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto1.Marshal
+var _ = fmt.Errorf
 var _ = math.Inf
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto1.GoGoProtoPackageIsVersion1
 
 type Foo struct {
 	Bar              *uint64 `protobuf:"varint,1,req,name=bar" json:"bar,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Foo) Reset()         { *m = Foo{} }
-func (m *Foo) String() string { return proto1.CompactTextString(m) }
-func (*Foo) ProtoMessage()    {}
+func (m *Foo) Reset()                    { *m = Foo{} }
+func (m *Foo) String() string            { return proto1.CompactTextString(m) }
+func (*Foo) ProtoMessage()               {}
+func (*Foo) Descriptor() ([]byte, []int) { return fileDescriptorProto, []int{0} }
 
 func (m *Foo) GetBar() uint64 {
 	if m != nil && m.Bar != nil {
@@ -44,6 +49,9 @@ func (m *Foo) GetBar() uint64 {
 	return 0
 }
 
+func init() {
+	proto1.RegisterType((*Foo)(nil), "proto.Foo")
+}
 func (this *Foo) Equal(that interface{}) bool {
 	if that == nil {
 		if this == nil {
@@ -54,7 +62,12 @@ func (this *Foo) Equal(that interface{}) bool {
 
 	that1, ok := that.(*Foo)
 	if !ok {
-		return false
+		that2, ok := that.(Foo)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
 	}
 	if that1 == nil {
 		if this == nil {
@@ -165,8 +178,12 @@ func (m *Foo) Unmarshal(data []byte) error {
 	l := len(data)
 	iNdEx := 0
 	for iNdEx < l {
+		preIndex := iNdEx
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowProto
+			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
 			}
@@ -179,6 +196,12 @@ func (m *Foo) Unmarshal(data []byte) error {
 		}
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Foo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Foo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
@@ -186,6 +209,9 @@ func (m *Foo) Unmarshal(data []byte) error {
 			}
 			var v uint64
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowProto
+				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
@@ -199,15 +225,7 @@ func (m *Foo) Unmarshal(data []byte) error {
 			m.Bar = &v
 			hasFields[0] |= uint64(0x00000001)
 		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			iNdEx -= sizeOfWire
+			iNdEx = preIndex
 			skippy, err := skipProto(data[iNdEx:])
 			if err != nil {
 				return err
@@ -226,6 +244,9 @@ func (m *Foo) Unmarshal(data []byte) error {
 		return github_com_gogo_protobuf_proto.NewRequiredNotSetError("bar")
 	}
 
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
 	return nil
 }
 func skipProto(data []byte) (n int, err error) {
@@ -234,6 +255,9 @@ func skipProto(data []byte) (n int, err error) {
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowProto
+			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
 			}
@@ -247,7 +271,10 @@ func skipProto(data []byte) (n int, err error) {
 		wireType := int(wire & 0x7)
 		switch wireType {
 		case 0:
-			for {
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowProto
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -263,6 +290,9 @@ func skipProto(data []byte) (n int, err error) {
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowProto
+				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
 				}
@@ -283,6 +313,9 @@ func skipProto(data []byte) (n int, err error) {
 				var innerWire uint64
 				var start int = iNdEx
 				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowProto
+					}
 					if iNdEx >= l {
 						return 0, io.ErrUnexpectedEOF
 					}
@@ -318,4 +351,16 @@ func skipProto(data []byte) (n int, err error) {
 
 var (
 	ErrInvalidLengthProto = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowProto   = fmt.Errorf("proto: integer overflow")
 )
+
+var fileDescriptorProto = []byte{
+	// 106 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x2e, 0x28, 0xca, 0x2f,
+	0xc9, 0xd7, 0x03, 0x93, 0x42, 0xac, 0x60, 0x4a, 0x4a, 0x37, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49,
+	0x2f, 0x39, 0x3f, 0x57, 0x3f, 0x3d, 0x3f, 0x3d, 0x5f, 0x1f, 0x2c, 0x9c, 0x54, 0x9a, 0x06, 0xe6,
+	0x81, 0x39, 0x60, 0x16, 0x44, 0x97, 0x92, 0x38, 0x17, 0xb3, 0x5b, 0x7e, 0xbe, 0x90, 0x00, 0x17,
+	0x73, 0x52, 0x62, 0x91, 0x04, 0xa3, 0x02, 0x93, 0x06, 0x4b, 0x10, 0x88, 0xe9, 0x24, 0xf0, 0xe3,
+	0xa1, 0x1c, 0xe3, 0x8a, 0x47, 0x72, 0x8c, 0x3b, 0x80, 0xf8, 0x02, 0x10, 0x03, 0x02, 0x00, 0x00,
+	0xff, 0xff, 0x54, 0x06, 0x1b, 0x76, 0x6e, 0x00, 0x00, 0x00,
+}
