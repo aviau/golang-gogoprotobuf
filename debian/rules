@@ -6,6 +6,5 @@ export DH_GOPKG := github.com/gogo/protobuf
 %:
 	dh $@ --buildsystem=golang --with=golang
 
-override_dh_auto_build:
-	dh_auto_build
-	rm -vf debian/tmp/usr/bin/mixbench
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
