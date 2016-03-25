@@ -9,10 +9,129 @@ Copyright:
   2013, Vastech SA (PTY) LTD.
 License: BSD-3-Clause
 
+Files:
+    Makefile
+    codec/*
+    gogoproto/Makefile
+    gogoproto/doc.go
+    gogoproto/gogo.proto
+    gogoproto/helper.go
+    io/*
+    plugin/defaultcheck/*
+    plugin/description/*
+    plugin/embedcheck/*
+    plugin/enumstringer/*
+    plugin/equal/*
+    plugin/face/*
+    plugin/gostring/*
+    plugin/marshalto/*
+    plugin/oneofcheck/*
+    plugin/populate/*
+    plugin/size/*
+    plugin/stringer/*
+    plugin/testgen/*
+    plugin/union/*
+    plugin/unmarshal/*
+    proto/decode_gogo.go
+    proto/extensions_gogo.go
+    proto/lib_gogo.go
+    proto/pointer_unsafe_gogo.go
+    proto/properties_gogo.go
+    proto/skip_gogo.go
+    proto/text_gogo.go
+    protoc-gen-combo/*
+    protoc-gen-gofast/*
+    protoc-gen-gogo/descriptor/helper.go
+    protoc-gen-gogo/generator/helper.go
+    protoc-gen-gogofast/*
+    protoc-gen-gogofaster/*
+    protoc-gen-gogoslick/*
+    protoc-min-version/*
+    sortkeys/*
+    test/Makefile
+    test/asymetric-issue125/*
+    test/casttype/*
+    test/castvalue/*
+    test/combos/*
+    test/custom-dash-type/*
+    test/custom/*
+    test/custombytesnonstruct/Makefile
+    test/defaultconflict/*
+    test/embedconflict/*
+    test/empty-issue70/Makefile
+    test/enumcustomname/Makefile
+    test/enumprefix/*
+    test/enumstringer/*
+    test/example/*
+    test/filedotname/*
+    test/fuzztests/*
+    test/group/*
+    test/importdedup/*
+    test/indeximport-issue72/*
+    test/issue34/Makefile
+    test/issue42order/*
+    test/issue8/Makefile
+    test/mapsproto2/Makefile
+    test/mixbench/mixbench.go
+    test/moredefaults/*
+    test/oneof/*
+    test/oneof3/*
+    test/packed/*
+    test/protosize/Makefile
+    test/required/Makefile
+    test/sizeunderscore/Makefile
+    test/tags/*
+    test/theproto3/Makefile
+    test/thetest.proto
+    test/unmarshalmerge/*
+    test/unrecognized/*
+    test/unrecognizedgroup/*
+    test/uuid.go
+    vanity/command/*
+    vanity/enum.go
+    vanity/field.go
+    vanity/file.go
+    vanity/foreach.go
+    vanity/msg.go
+    vanity/test/gogovanity.proto
+    vanity/test/proto3.proto
+    vanity/test/vanity.proto
+    version/*
+Copyright:
+    2013,2015-2016 Vastech SA (PTY) LTD
+License: BSD-2-Clause
+
 Files: debian/*
 Copyright: 2014 Jelmer Vernooij <jelmer@debian.org>
            2015 Alexandre Viau <alexandre@alexandreviau.net>
+           2016 Dmitry Smirnov <onlyjob@debian.org>
 License: BSD-3-Clause
+Comment:
+ Consider my changes as BSD-2-Clause or BSD-3-Clause licensed.
+  -- Dmitry Smirnov <onlyjob@debian.org>
+
+License: BSD-2-Clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ ․
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+ ․
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+ ․
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
 
 License: BSD-3-Clause
  Redistribution and use in source and binary forms, with or without

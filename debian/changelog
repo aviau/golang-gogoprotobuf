@@ -1,3 +1,16 @@
+golang-gogoprotobuf (0.2-1) UNRELEASED; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Standards-Version: 3.9.7.
+  * Vcs-Browser URL to HTTPS.
+  * Enabled post-build tests.
+  * Don't install "/usr/bin/mixbench".
+  * Build-Depends += "protobuf-compiler".
+  * Prepare for package split, see #798708.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Fri, 25 Mar 2016 11:07:18 +1100
+
 golang-gogoprotobuf (0.0~git20150828.0.6cab0cc-1) unstable; urgency=medium
 
   * Team upload.
