@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 9), dh-golang (>= 1.9), golang-go (>= 1.0)
 Standards-Version: 3.9.7
 Homepage: https://github.com/gogo/protobuf
 Vcs-Git: git://anonscm.debian.org/pkg-go/packages/golang-gogoprotobuf.git
-Vcs-Browser: http://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf.git
 
 Package: golang-gogoprotobuf-dev
 Architecture: any
