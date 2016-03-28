@@ -11,51 +11,40 @@ Vcs-Git: git://anonscm.debian.org/pkg-go/packages/golang-gogoprotobuf.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf.git
 
 Package: golang-gogoprotobuf-dev
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, protobuf-compiler
-Description: Alternative protocol buffer support for the Go programming language
+Section: oldlibs
+Architecture: all
+Depends: ${misc:Depends}
+    ,golang-github-gogo-protobuf-dev
+    ,gogoprotobuf
+Description: transitional package -- safe to remove
+ This transitional package facilitates migration to
+ "golang-github-gogo-protobuf-dev" and can be safely removed.
+
+Package: golang-github-gogo-protobuf-dev
+Architecture: all
+Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
+Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
+Depends: ${misc:Depends}
+Recommends: gogoprotobuf
+Description: alternative protocol buffer support for Golang - sources
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
  goprotobuf, but provides faster marshalling and unmarshalling and can
  generate extra helper code, tests and benchmarks.
  .
- This package contains the source.
+ This package provides sources.
 
-#Package: golang-gogoprotobuf-dev
-#Section: oldlibs
-#Architecture: all
-#Depends: ${misc:Depends}
-#    ,golang-github-gogo-protobuf-dev
-#    ,gogoprotobuf
-#Description: transitional package -- safe to remove
-# This transitional package facilitates migration to
-# "golang-github-gogo-protobuf-dev" and can be safely removed.
-
-#Package: golang-github-gogo-protobuf-dev
-#Architecture: all
-#Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
-#Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
-#Depends: ${misc:Depends}
-#Recommends: gogoprotobuf
-#Description: alternative protocol buffer support for Golang - sources
-# An alternative protocol buffer support for the Go programming language,
-# forked from golang-goprotobuf. It is backwards compatible with
-# goprotobuf, but provides faster marshalling and unmarshalling and can
-# generate extra helper code, tests and benchmarks.
-# .
-# This package provides sources.
-
-#Package: gogoprotobuf
-#Architecture: any
-#Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
-#Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
-#Depends: ${shlibs:Depends}, ${misc:Depends}
-#    ,golang-github-gogo-protobuf-dev (= ${source:Version})
-#    ,protobuf-compiler
-#Description: alternative protocol buffer support for Golang - utilities
-# An alternative protocol buffer support for the Go programming language,
-# forked from golang-goprotobuf. It is backwards compatible with
-# goprotobuf, but provides faster marshalling and unmarshalling and can
-# generate extra helper code, tests and benchmarks.
-# .
-# This package provides utilities.
+Package: gogoprotobuf
+Architecture: any
+Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
+Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
+Depends: ${shlibs:Depends}, ${misc:Depends}
+    ,golang-github-gogo-protobuf-dev (= ${source:Version})
+    ,protobuf-compiler
+Description: alternative protocol buffer support for Golang - utilities
+ An alternative protocol buffer support for the Go programming language,
+ forked from golang-goprotobuf. It is backwards compatible with
+ goprotobuf, but provides faster marshalling and unmarshalling and can
+ generate extra helper code, tests and benchmarks.
+ .
+ This package provides utilities.

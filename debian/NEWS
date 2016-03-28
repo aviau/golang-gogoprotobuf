@@ -1,0 +1,6 @@
+golang-gogoprotobuf (0.2-1) unstable; urgency=medium
+
+  From now on "protoc-gen-gogo" and other executables are shipped in new
+  "gogoprotobuf" package.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Mon, 28 Mar 2016 12:18:15 +1100
