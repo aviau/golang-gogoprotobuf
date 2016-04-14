@@ -1,0 +1,28 @@
+Last-Update: 2016-04-13
+Forwarded: non-needed
+Origin: upstream, https://github.com/gogo/protobuf/commit/4f262e4b0f3a6cea646e15798109335551e21756.patch
+Bug-Upstream: https://github.com/gogo/protobuf/issues/164
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=819994
+Description: fix failing tests on various architectures;
+ customtype arrays were not handled correctly.
+
+--- a/proto/decode_gogo.go
++++ b/proto/decode_gogo.go
+@@ -114,16 +114,10 @@
+ 		oldHeader.Data = slice.Pointer()
+ 		oldHeader.Len = v.Len()
+ 		oldHeader.Cap = v.Cap()
+ 	default:
+-		l := 1
+ 		size := reflect.TypeOf(value).Elem().Size()
+-		if kind == reflect.Array {
+-			l = reflect.TypeOf(value).Elem().Len()
+-			size = reflect.TypeOf(value).Size()
+-		}
+-		total := int(size) * l
+-		structPointer_Copy(toStructPointer(reflect.ValueOf(value)), structPointer_Add(base, f), total)
++		structPointer_Copy(toStructPointer(reflect.ValueOf(value)), structPointer_Add(base, f), int(size))
+ 	}
+ }
+ 
+ func (o *Buffer) dec_custom_bytes(p *Properties, base structPointer) error {
