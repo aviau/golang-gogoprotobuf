@@ -1,3 +1,10 @@
+golang-gogoprotobuf (0.2-5) UNRELEASED; urgency=medium
+
+  * Team upload.
+  * Use a secure transport for the Vcs-Git and Vcs-Browser URL
+
+ -- Paul Tagliamonte <paultag@debian.org>  Wed, 29 Jun 2016 20:43:07 -0400
+
 golang-gogoprotobuf (0.2-4) unstable; urgency=medium
 
   * Team upload.
