@@ -1,8 +1,27 @@
-golang-gogoprotobuf (0.2-4~bpo8+1) jessie-backports; urgency=medium
+golang-gogoprotobuf (0.2-5~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
 
  -- Tim Potter <tpot@hpe.com>  Fri, 17 Jun 2016 14:54:30 +1000
+
+golang-gogoprotobuf (0.2-5) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Dmitry Smirnov ]
+  * Ignore test failures on armhf (Closes: #824717).
+
+  [ Paul Tagliamonte ]
+  * Use a secure transport for the Vcs-Git and Vcs-Browser URL
+
+  [ Tim Potter ]
+  * Add me as uploader
+
+  [ Jelmer Vernooĳ ]
+  * Unicodify my surname.
+  * Move debian-specific ignores to debian/.gitignore.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sun, 10 Jul 2016 18:46:25 +1000
 
 golang-gogoprotobuf (0.2-4) unstable; urgency=medium
 

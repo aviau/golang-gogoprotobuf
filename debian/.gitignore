@@ -1,0 +1,8 @@
+*.debhelper.log
+*.substvars
+golang-gogoprotobuf-dev/
+golang-github-gogo-protobuf-dev/
+files
+tmp/
+debhelper-build-stamp
+gogoprotobuf
