@@ -1,3 +1,11 @@
+golang-gogoprotobuf (0.3-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release (Closes: #835161).
+    - removed obsolete "arch32.patch".
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Fri, 26 Aug 2016 09:11:56 +1000
+
 golang-gogoprotobuf (0.2-5) unstable; urgency=medium
 
   * Team upload.
