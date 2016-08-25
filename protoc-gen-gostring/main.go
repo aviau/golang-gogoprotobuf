@@ -1,5 +1,7 @@
-// Copyright (c) 2015, Vastech SA (PTY) LTD. All rights reserved.
-// http://github.com/gogo/protobuf/gogoproto
+// Protocol Buffers for Go with Gadgets
+//
+// Copyright (c) 2016, The GoGo Authors. All rights reserved.
+// http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -24,16 +26,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package theproto3
+package main
 
 import (
-	"github.com/gogo/protobuf/proto"
-	"testing"
+	"github.com/gogo/protobuf/plugin/gostring"
+	"github.com/gogo/protobuf/vanity/command"
 )
 
-func TestNilMaps(t *testing.T) {
-	m := &AllMaps{StringToMsgMap: map[string]*FloatingPoint{"a": nil}}
-	if _, err := proto.Marshal(m); err == nil {
-		t.Fatalf("expected error")
-	}
+func main() {
+	req := command.Read()
+	p := gostring.NewGoString()
+	p.Overwrite()
+	resp := command.GeneratePlugin(req, p, "_gostring.gen.go")
+	command.Write(resp)
 }
