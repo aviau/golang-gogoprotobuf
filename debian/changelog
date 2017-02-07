@@ -1,6 +1,7 @@
 golang-gogoprotobuf (0.3+git20170120.144.265e960d-1) UNRELEASED; urgency=medium
 
-  * New upstream snapshot.
+  * New upstream snapshot.  This ensures generated code can be compiled
+    using the golang-grpc 1.x package.
 
  -- Tim Potter <tpot@hpe.com>  Wed, 25 Jan 2017 08:39:04 +1100
 
