@@ -1,4 +1,4 @@
-golang-gogoprotobuf (0.3+git20170120.144.265e960d-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (0.3+git20170120.144.265e960d-1) unstable; urgency=medium
 
   * New upstream snapshot.  This ensures generated code can be compiled
     using the golang-grpc 1.x package.
