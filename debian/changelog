@@ -1,3 +1,9 @@
+golang-gogoprotobuf (0.3+git20170120.144.265e960d-2) unstable; urgency=medium
+
+  * Replace golang-go with golang-any in Build-Depends, remove golang-go from Depends
+
+ -- Konstantinos Margaritis <markos@debian.org>  Wed, 09 Aug 2017 12:37:26 +0300
+
 golang-gogoprotobuf (0.3+git20170120.144.265e960d-1) unstable; urgency=medium
 
   * New upstream snapshot.  This ensures generated code can be compiled
