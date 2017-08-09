@@ -3,8 +3,10 @@ Section: devel
 Priority: extra
 Maintainer: pkg-go <pkg-go-maintainers@lists.alioth.debian.org>
 Uploaders: Jelmer Vernooĳ <jelmer@debian.org>, Tim Potter <tpot@hpe.com>
-Build-Depends: debhelper (>= 9), dh-golang (>= 1.9), golang-go (>= 1.0)
-    ,protobuf-compiler
+Build-Depends: debhelper (>= 9),
+               dh-golang (>= 1.9),
+               golang-any (>= 1.0),
+               protobuf-compiler
 Standards-Version: 3.9.8
 Homepage: https://github.com/gogo/protobuf
 Vcs-Git: https://anonscm.debian.org/git/pkg-go/packages/golang-gogoprotobuf.git
@@ -13,9 +15,7 @@ Vcs-Browser: https://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf
 Package: golang-gogoprotobuf-dev
 Section: oldlibs
 Architecture: all
-Depends: ${misc:Depends}
-    ,golang-github-gogo-protobuf-dev
-    ,gogoprotobuf
+Depends: gogoprotobuf, golang-github-gogo-protobuf-dev, ${misc:Depends}
 Description: transitional package -- safe to remove
  This transitional package facilitates migration to
  "golang-github-gogo-protobuf-dev" and can be safely removed.
@@ -38,9 +38,10 @@ Package: gogoprotobuf
 Architecture: any
 Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
 Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
-Depends: ${shlibs:Depends}, ${misc:Depends}
-    ,golang-github-gogo-protobuf-dev (= ${source:Version})
-    ,protobuf-compiler
+Depends: golang-github-gogo-protobuf-dev (= ${source:Version}),
+         protobuf-compiler,
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: alternative protocol buffer support for Golang - utilities
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
