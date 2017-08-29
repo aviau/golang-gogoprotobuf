@@ -1,8 +1,12 @@
 golang-gogoprotobuf (0.4-1) UNRELEASED; urgency=medium
 
+  * Add myself to Uploaders.
   * New upstream release.
-  * Exclude from compilation packages without .go files.
   * Force usage of go 1.7 on ppc64el. Closes: 871914.
+  * debian/control: Update Standards-Version (no changes).
+  * debian/control: Mark package as autopkgtest-able.
+  * debian/rules: Replace DH_GOPKG with XS-Go-Import-Path.
+  * debian/rules: Exclude from compilation packages without .go files.
 
  -- Martín Ferrari <tincho@debian.org>  Tue, 29 Aug 2017 02:28:34 +0000
 

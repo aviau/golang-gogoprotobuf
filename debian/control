@@ -2,16 +2,20 @@ Source: golang-gogoprotobuf
 Section: devel
 Priority: extra
 Maintainer: pkg-go <pkg-go-maintainers@lists.alioth.debian.org>
-Uploaders: Jelmer Vernooĳ <jelmer@debian.org>, Tim Potter <tpot@hpe.com>
+Uploaders: Jelmer Vernooĳ <jelmer@debian.org>,
+           Martín Ferrari <tincho@debian.org>,
+           Tim Potter <tpot@hpe.com>,
 Build-Depends: debhelper (>= 9),
                dh-golang (>= 1.9),
-               golang-any [!ppc64el],
                golang-1.7-go [ppc64el],
-               protobuf-compiler
-Standards-Version: 3.9.8
+               golang-any [!ppc64el],
+               protobuf-compiler,
+Standards-Version: 4.1.0
 Homepage: https://github.com/gogo/protobuf
 Vcs-Git: https://anonscm.debian.org/git/pkg-go/packages/golang-gogoprotobuf.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf.git
+Testsuite: autopkgtest-pkg-go
+XS-Go-Import-Path: github.com/gogo/protobuf
 
 Package: golang-gogoprotobuf-dev
 Section: oldlibs
@@ -42,7 +46,7 @@ Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
 Depends: golang-github-gogo-protobuf-dev (= ${source:Version}),
          protobuf-compiler,
          ${misc:Depends},
-         ${shlibs:Depends}
+         ${shlibs:Depends},
 Description: alternative protocol buffer support for Golang - utilities
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
