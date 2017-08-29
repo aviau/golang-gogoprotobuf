@@ -1,0 +1,9 @@
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-combo
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gofast
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gogo
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gogofast
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gogofaster
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gogoslick
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gogotypes
+gogoprotobuf: statically-linked-binary usr/bin/protoc-gen-gostring
+gogoprotobuf: statically-linked-binary usr/bin/protoc-min-version
