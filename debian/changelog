@@ -2,6 +2,7 @@ golang-gogoprotobuf (0.4-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Exclude from compilation packages without .go files.
+  * Force usage of go 1.7 on ppc64el. Closes: 871914.
 
  -- Martín Ferrari <tincho@debian.org>  Tue, 29 Aug 2017 02:28:34 +0000
 

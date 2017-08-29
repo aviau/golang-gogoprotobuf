@@ -3,6 +3,11 @@
 #export DH_VERBOSE=1
 export DH_GOPKG := github.com/gogo/protobuf
 
+# Use go-1.7 on certain architectures (#871914).
+ifneq (,$(filter $(DEB_HOST_ARCH),ppc64el))
+export PATH := /usr/lib/go-1.7/bin:$(PATH)
+endif
+
 %:
 	dh $@ --buildsystem=golang --with=golang --builddirectory=_build
 
