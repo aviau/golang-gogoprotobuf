@@ -6,6 +6,10 @@ export DH_GOPKG := github.com/gogo/protobuf
 %:
 	dh $@ --buildsystem=golang --with=golang --builddirectory=_build
 
+override_dh_auto_build:
+	# Need to exclude packages without .go files.
+	DH_GOLANG_EXCLUDES=test/sizerconflict dh_auto_build
+
 override_dh_auto_test:
 ifneq (,$(filter $(DEB_HOST_ARCH),armhf))
 ## Ignore test failures:
