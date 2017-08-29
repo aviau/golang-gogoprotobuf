@@ -1,4 +1,4 @@
-golang-gogoprotobuf (0.4-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (0.4-1) unstable; urgency=high
 
   * Add myself to Uploaders.
   * New upstream release. Closes: 871915.
@@ -9,7 +9,7 @@ golang-gogoprotobuf (0.4-1) UNRELEASED; urgency=medium
   * debian/rules: Replace DH_GOPKG with XS-Go-Import-Path.
   * debian/rules: Exclude from compilation packages without .go files.
 
- -- Martín Ferrari <tincho@debian.org>  Tue, 29 Aug 2017 02:28:34 +0000
+ -- Martín Ferrari <tincho@debian.org>  Tue, 29 Aug 2017 04:26:42 +0000
 
 golang-gogoprotobuf (0.3+git20170120.144.265e960d-2) unstable; urgency=medium
 
