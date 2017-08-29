@@ -1,7 +1,7 @@
 golang-gogoprotobuf (0.4-1) UNRELEASED; urgency=medium
 
   * Add myself to Uploaders.
-  * New upstream release.
+  * New upstream release. Closes: 871915.
   * Force usage of go 1.7 on ppc64el. Closes: 871914.
   * Lintian now fails to recognise the go binaries: add overrides.
   * debian/control: Update Standards-Version (no changes).
