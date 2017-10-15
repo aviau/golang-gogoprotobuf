@@ -4,6 +4,7 @@ golang-gogoprotobuf (0.5-1) UNRELEASED; urgency=medium
   * Stop using go 1.7 on ppc64el, as upstream fixed the issues.
   * Exclude package without non-test files from compilation.
   * Remove lintian overrides.
+  * Update debian/copyright.
 
  -- Martín Ferrari <tincho@debian.org>  Sun, 15 Oct 2017 21:32:15 +0000
 

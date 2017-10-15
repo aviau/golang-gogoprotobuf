@@ -47,9 +47,6 @@ Files:
     test/casttype/combos/marshaler/casttype.proto
     test/casttype/combos/neither/casttype.proto
     test/casttype/combos/unmarshaler/casttype.proto
-    test/casttype/combos/unsafeboth/casttype.proto
-    test/casttype/combos/unsafemarshaler/casttype.proto
-    test/casttype/combos/unsafeunmarshaler/casttype.proto
     test/casttype/mytypes.go
     test/castvalue/Makefile
     test/castvalue/castvalue.proto
@@ -59,12 +56,6 @@ Files:
     test/castvalue/combos/marshaler/mytypes.go
     test/castvalue/combos/unmarshaler/castvalue.proto
     test/castvalue/combos/unmarshaler/mytypes.go
-    test/castvalue/combos/unsafeboth/castvalue.proto
-    test/castvalue/combos/unsafeboth/mytypes.go
-    test/castvalue/combos/unsafemarshaler/castvalue.proto
-    test/castvalue/combos/unsafemarshaler/mytypes.go
-    test/castvalue/combos/unsafeunmarshaler/castvalue.proto
-    test/castvalue/combos/unsafeunmarshaler/mytypes.go
     test/castvalue/mytypes.go
     test/combos/both/bug_test.go
     test/combos/both/thetest.proto
@@ -75,15 +66,6 @@ Files:
     test/combos/unmarshaler/bug_test.go
     test/combos/unmarshaler/thetest.proto
     test/combos/unmarshaler/uuid.go
-    test/combos/unsafeboth/bug_test.go
-    test/combos/unsafeboth/thetest.proto
-    test/combos/unsafeboth/uuid.go
-    test/combos/unsafemarshaler/bug_test.go
-    test/combos/unsafemarshaler/thetest.proto
-    test/combos/unsafemarshaler/uuid.go
-    test/combos/unsafeunmarshaler/bug_test.go
-    test/combos/unsafeunmarshaler/thetest.proto
-    test/combos/unsafeunmarshaler/uuid.go
     test/custom-dash-type/*
     test/custom/*
     test/custombytesnonstruct/Makefile
@@ -135,9 +117,6 @@ Files:
     test/mapsproto2/combos/marshaler/mapsproto2_test.go
     test/mapsproto2/combos/neither/mapsproto2_test.go
     test/mapsproto2/combos/unmarshaler/mapsproto2_test.go
-    test/mapsproto2/combos/unsafeboth/mapsproto2_test.go
-    test/mapsproto2/combos/unsafemarshaler/mapsproto2_test.go
-    test/mapsproto2/combos/unsafeunmarshaler/mapsproto2_test.go
     test/mapsproto2/mapsproto2_test.go.in
     test/mixbench/mixbench.go
     test/moredefaults/Makefile
@@ -151,18 +130,12 @@ Files:
     test/oneof/combos/marshaler/one.proto
     test/oneof/combos/neither/one.proto
     test/oneof/combos/unmarshaler/one.proto
-    test/oneof/combos/unsafeboth/one.proto
-    test/oneof/combos/unsafemarshaler/one.proto
-    test/oneof/combos/unsafeunmarshaler/one.proto
     test/oneof/one.proto
     test/oneof3/Makefile
     test/oneof3/combos/both/one.proto
     test/oneof3/combos/marshaler/one.proto
     test/oneof3/combos/neither/one.proto
     test/oneof3/combos/unmarshaler/one.proto
-    test/oneof3/combos/unsafeboth/one.proto
-    test/oneof3/combos/unsafemarshaler/one.proto
-    test/oneof3/combos/unsafeunmarshaler/one.proto
     test/oneof3/one.proto
     test/oneofembed/Makefile
     test/oneofembed/oneofembed.proto
@@ -185,9 +158,6 @@ Files:
     test/theproto3/combos/marshaler/proto3_test.go
     test/theproto3/combos/neither/proto3_test.go
     test/theproto3/combos/unmarshaler/proto3_test.go
-    test/theproto3/combos/unsafeboth/proto3_test.go
-    test/theproto3/combos/unsafemarshaler/proto3_test.go
-    test/theproto3/combos/unsafeunmarshaler/proto3_test.go
     test/theproto3/proto3_test.go.in
     test/thetest.proto
     test/unmarshalmerge/Makefile
