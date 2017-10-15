@@ -1,13 +1,15 @@
 #!/usr/bin/make -f
 
 #export DH_VERBOSE=1
+export DH_GOLANG_EXCLUDES =
 
 %:
 	dh $@ --buildsystem=golang --with=golang --builddirectory=_build
 
+# Need to exclude packages without .go files.
+override_dh_auto_build: DH_GOLANG_EXCLUDES += test/jsonpb-gogo
 override_dh_auto_build:
-	# Need to exclude packages without .go files.
-	DH_GOLANG_EXCLUDES=test/sizerconflict dh_auto_build
+	dh_auto_build
 
 override_dh_auto_test:
 ifneq (,$(filter $(DEB_HOST_ARCH),armhf))
