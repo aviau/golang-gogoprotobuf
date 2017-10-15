@@ -1,4 +1,4 @@
-golang-gogoprotobuf (0.5-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (0.5-1) unstable; urgency=medium
 
   * New upstream release.
   * Stop using go 1.7 on ppc64el, as upstream fixed the issues.
@@ -6,7 +6,7 @@ golang-gogoprotobuf (0.5-1) UNRELEASED; urgency=medium
   * Remove lintian overrides.
   * Update debian/copyright.
 
- -- Martín Ferrari <tincho@debian.org>  Sun, 15 Oct 2017 21:32:15 +0000
+ -- Martín Ferrari <tincho@debian.org>  Sun, 15 Oct 2017 22:07:23 +0000
 
 golang-gogoprotobuf (0.4-1) unstable; urgency=high
 
