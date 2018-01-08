@@ -1,3 +1,10 @@
+golang-gogoprotobuf (0.5-1~bpo9+1) UNRELEASED; urgency=medium
+
+  * Rebuild for stretch-backports.
+  * Automated cme updates.
+
+ -- Martín Ferrari <tincho@debian.org>  Mon, 08 Jan 2018 13:01:04 +0000
+
 golang-gogoprotobuf (0.5-1) unstable; urgency=medium
 
   * New upstream release.
