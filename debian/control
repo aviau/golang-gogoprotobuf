@@ -1,35 +1,37 @@
 Source: golang-gogoprotobuf
-Section: devel
-Priority: extra
 Maintainer: pkg-go <pkg-go-maintainers@lists.alioth.debian.org>
 Uploaders: Jelmer Vernooĳ <jelmer@debian.org>,
            Martín Ferrari <tincho@debian.org>,
            Tim Potter <tpot@hpe.com>,
+Section: devel
+Testsuite: autopkgtest-pkg-go
+Priority: optional
 Build-Depends: debhelper (>= 9),
                dh-golang (>= 1.9),
                golang-any,
                protobuf-compiler,
-Standards-Version: 4.1.0
-Homepage: https://github.com/gogo/protobuf
-Vcs-Git: https://anonscm.debian.org/git/pkg-go/packages/golang-gogoprotobuf.git
+Standards-Version: 4.1.3
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-go/packages/golang-gogoprotobuf.git
-Testsuite: autopkgtest-pkg-go
+Vcs-Git: https://anonscm.debian.org/git/pkg-go/packages/golang-gogoprotobuf.git
+Homepage: https://github.com/gogo/protobuf
 XS-Go-Import-Path: github.com/gogo/protobuf
 
 Package: golang-gogoprotobuf-dev
-Section: oldlibs
 Architecture: all
-Depends: gogoprotobuf, golang-github-gogo-protobuf-dev, ${misc:Depends}
+Section: oldlibs
+Depends: gogoprotobuf,
+         golang-github-gogo-protobuf-dev,
+         ${misc:Depends},
 Description: transitional package -- safe to remove
  This transitional package facilitates migration to
  "golang-github-gogo-protobuf-dev" and can be safely removed.
 
 Package: golang-github-gogo-protobuf-dev
 Architecture: all
-Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
-Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
-Depends: ${misc:Depends}
-Recommends: gogoprotobuf
+Depends: ${misc:Depends},
+Recommends: gogoprotobuf,
+Breaks: golang-gogoprotobuf-dev (<< 0.2-1),
+Replaces: golang-gogoprotobuf-dev (<< 0.2-1),
 Description: alternative protocol buffer support for Golang - sources
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
@@ -40,12 +42,12 @@ Description: alternative protocol buffer support for Golang - sources
 
 Package: gogoprotobuf
 Architecture: any
-Breaks: golang-gogoprotobuf-dev (<< 0.2-1)
-Replaces: golang-gogoprotobuf-dev (<< 0.2-1)
 Depends: golang-github-gogo-protobuf-dev (= ${source:Version}),
          protobuf-compiler,
          ${misc:Depends},
          ${shlibs:Depends},
+Breaks: golang-gogoprotobuf-dev (<< 0.2-1),
+Replaces: golang-gogoprotobuf-dev (<< 0.2-1),
 Description: alternative protocol buffer support for Golang - utilities
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
