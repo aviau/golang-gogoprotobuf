@@ -48,6 +48,7 @@ Depends: golang-github-gogo-protobuf-dev (= ${source:Version}),
          ${shlibs:Depends},
 Breaks: golang-gogoprotobuf-dev (<< 0.2-1),
 Replaces: golang-gogoprotobuf-dev (<< 0.2-1),
+Built-Using: ${misc:Built-Using}
 Description: alternative protocol buffer support for Golang - utilities
  An alternative protocol buffer support for the Go programming language,
  forked from golang-goprotobuf. It is backwards compatible with
