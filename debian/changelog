@@ -1,3 +1,14 @@
+golang-gogoprotobuf (0.5-2) unstable; urgency=medium
+
+  [ Martín Ferrari ]
+  * Team upload.
+  * Automated cme updates.
+
+  [ Michael Stapelberg ]
+  * Set Built-Using
+
+ -- Michael Stapelberg <stapelberg@debian.org>  Mon, 05 Mar 2018 18:47:27 +0100
+
 golang-gogoprotobuf (0.5-1) unstable; urgency=medium
 
   * New upstream release.
