@@ -65,7 +65,7 @@ regenerate:
 	make -C proto/testdata regenerate
 	make -C jsonpb/jsonpb_test_proto regenerate
 	make -C _conformance regenerate
-	make -C types regenerate
+	make -C protobuf regenerate
 	make -C test regenerate
 	make -C test/example regenerate
 	make -C test/unrecognized regenerate
@@ -88,6 +88,7 @@ regenerate:
 	make -C test/issue42order regenerate
 	make -C proto generate-test-pbs
 	make -C test/importdedup regenerate
+	make -C test/importduplicate regenerate
 	make -C test/custombytesnonstruct regenerate
 	make -C test/required regenerate
 	make -C test/casttype regenerate
@@ -117,6 +118,7 @@ regenerate:
 	make -C test/int64support regenerate
 	make -C test/issue322 regenerate
 	make -C test/issue330 regenerate
+	make -C test/importcustom-issue389 regenerate
 	make gofmt
 
 tests:
@@ -152,7 +154,7 @@ contributors:
 	git log --format='%aN <%aE>' | sort -fu > CONTRIBUTORS
 
 js:
-ifeq (go1.9, $(findstring go1.9, $(GO_VERSION)))
+ifeq (go1.10, $(findstring go1.10, $(GO_VERSION)))
 	go get -u github.com/gopherjs/gopherjs
 	gopherjs build github.com/gogo/protobuf/protoc-gen-gogo
 endif
