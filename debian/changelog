@@ -1,10 +1,10 @@
-golang-gogoprotobuf (1.0.0+git20180330.1ef32a8b-1) UNRELEASED; urgency=medium
+golang-gogoprotobuf (1.0.0+git20180330.1ef32a8b-1) unstable; urgency=medium
 
   * Team upload.
   * New upstream release.
   * Point Vcs-* urls to salsa.debian.org.
 
- -- Alexandre Viau <aviau@debian.org>  Mon, 02 Apr 2018 21:33:25 -0400
+ -- Alexandre Viau <aviau@debian.org>  Fri, 13 Apr 2018 08:58:57 -0400
 
 golang-gogoprotobuf (0.5-2) unstable; urgency=medium
 
