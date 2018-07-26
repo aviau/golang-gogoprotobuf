@@ -6,7 +6,7 @@ Uploaders: Jelmer Vernooĳ <jelmer@debian.org>,
 Section: devel
 Testsuite: autopkgtest-pkg-go
 Priority: optional
-Build-Depends: debhelper (>= 9),
+Build-Depends: debhelper (>= 11~),
                dh-golang (>= 1.9),
                golang-any,
                protobuf-compiler,
