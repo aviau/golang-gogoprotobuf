@@ -1,3 +1,12 @@
+golang-gogoprotobuf (1.1.1-1) UNRELEASED; urgency=medium
+
+  * Team upload
+  * New upstream release
+  * debhelper & compat to version 11
+  * rules: export DH_GOLANG_GO_GENERATE := 1
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Thu, 26 Jul 2018 12:02:08 +1000
+
 golang-gogoprotobuf (1.0.0+git20180330.1ef32a8b-1) unstable; urgency=medium
 
   * Team upload.
