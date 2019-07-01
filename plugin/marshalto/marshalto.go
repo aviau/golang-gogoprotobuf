@@ -297,10 +297,10 @@ func (p *marshalto) mapField(numGen NumGen, field *descriptor.FieldDescriptorPro
 		descriptor.FieldDescriptorProto_TYPE_BYTES:
 		if gogoproto.IsCustomType(field) && kvField.IsBytes() {
 			p.callVarint(varName, `.Size()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
-			p.P(`if err != nil {`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`if err`, numGen.Current(), ` != nil {`)
 			p.In()
-			p.P(`return 0, err`)
+			p.P(`return 0, err`, numGen.Current())
 			p.Out()
 			p.P(`}`)
 			p.P(`i+=n`, numGen.Current())
@@ -313,22 +313,49 @@ func (p *marshalto) mapField(numGen NumGen, field *descriptor.FieldDescriptorPro
 	case descriptor.FieldDescriptorProto_TYPE_SINT64:
 		p.callVarint(`(uint64(`, varName, `) << 1) ^ uint64((`, varName, ` >> 63))`)
 	case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
-		if gogoproto.IsStdTime(field) {
+		if gogoproto.IsStdTime(kvField) {
 			p.callVarint(p.typesPkg.Use(), `.SizeOfStdTime(*`, varName, `)`)
-			p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdTimeMarshalTo(*`, varName, `, dAtA[i:])`)
-		} else if gogoproto.IsStdDuration(field) {
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdTimeMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdDuration(kvField) {
 			p.callVarint(p.typesPkg.Use(), `.SizeOfStdDuration(*`, varName, `)`)
-			p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(*`, varName, `, dAtA[i:])`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdDurationMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdDouble(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdDouble(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdDoubleMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdFloat(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdFloat(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdFloatMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdInt64(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt64(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdInt64MarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdUInt64(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt64(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdUInt64MarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdInt32(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt32(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdInt32MarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdUInt32(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt32(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdUInt32MarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdBool(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdBool(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdBoolMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdString(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdString(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdStringMarshalTo(*`, varName, `, dAtA[i:])`)
+		} else if gogoproto.IsStdBytes(kvField) {
+			p.callVarint(p.typesPkg.Use(), `.SizeOfStdBytes(*`, varName, `)`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdBytesMarshalTo(*`, varName, `, dAtA[i:])`)
 		} else if protoSizer {
 			p.callVarint(varName, `.ProtoSize()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, varName, `.MarshalTo(dAtA[i:])`)
 		} else {
 			p.callVarint(varName, `.Size()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, varName, `.MarshalTo(dAtA[i:])`)
 		}
-		p.P(`if err != nil {`)
+		p.P(`if err`, numGen.Current(), ` != nil {`)
 		p.In()
-		p.P(`return 0, err`)
+		p.P(`return 0, err`, numGen.Current())
 		p.Out()
 		p.P(`}`)
 		p.P(`i+=n`, numGen.Current())
@@ -781,8 +808,7 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				sum = append(sum, `soz`+p.localName+`(uint64(v))`)
 			case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
 				if valuegoTyp != valuegoAliasTyp &&
-					!gogoproto.IsStdTime(field) &&
-					!gogoproto.IsStdDuration(field) {
+					!gogoproto.IsStdType(m.ValueAliasField) {
 					if nullable {
 						// cast back to the type that has the generated methods on it
 						accessor = `((` + valuegoTyp + `)(` + accessor + `))`
@@ -795,10 +821,28 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				p.P(`msgSize := 0`)
 				p.P(`if `, accessor, ` != nil {`)
 				p.In()
-				if gogoproto.IsStdTime(field) {
+				if gogoproto.IsStdTime(m.ValueAliasField) {
 					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdTime(*`, accessor, `)`)
-				} else if gogoproto.IsStdDuration(field) {
+				} else if gogoproto.IsStdDuration(m.ValueAliasField) {
 					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdDuration(*`, accessor, `)`)
+				} else if gogoproto.IsStdDouble(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdDouble(*`, accessor, `)`)
+				} else if gogoproto.IsStdFloat(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdFloat(*`, accessor, `)`)
+				} else if gogoproto.IsStdInt64(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdInt64(*`, accessor, `)`)
+				} else if gogoproto.IsStdUInt64(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdUInt64(*`, accessor, `)`)
+				} else if gogoproto.IsStdInt32(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdInt32(*`, accessor, `)`)
+				} else if gogoproto.IsStdUInt32(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdUInt32(*`, accessor, `)`)
+				} else if gogoproto.IsStdBool(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdBool(*`, accessor, `)`)
+				} else if gogoproto.IsStdString(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdString(*`, accessor, `)`)
+				} else if gogoproto.IsStdBytes(m.ValueAliasField) {
+					p.P(`msgSize = `, p.typesPkg.Use(), `.SizeOfStdBytes(*`, accessor, `)`)
 				} else if protoSizer {
 					p.P(`msgSize = `, accessor, `.ProtoSize()`)
 				} else {
@@ -828,7 +872,7 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				p.In()
 			}
 			p.encodeKey(2, wireToType(valuewire))
-			p.mapField(numGen, field, m.ValueField, accessor, protoSizer)
+			p.mapField(numGen, field, m.ValueAliasField, accessor, protoSizer)
 			if nullableMsg || plainBytes {
 				p.Out()
 				p.P(`}`)
@@ -852,6 +896,60 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				}
 				p.callVarint(p.typesPkg.Use(), `.SizeOfStdDuration(`, varName, `)`)
 				p.P(`n, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdDouble(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdDouble(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdDoubleMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdFloat(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdFloat(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdFloatMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdInt64(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt64(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdInt64MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdUInt64(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt64(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdUInt64MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdInt32(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt32(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdInt32MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdUInt32(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt32(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdUInt32MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdBool(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdBool(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdBoolMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdString(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdString(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdStringMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdBytes(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdBytes(`, varName, `)`)
+				p.P(`n, err := `, p.typesPkg.Use(), `.StdBytesMarshalTo(`, varName, `, dAtA[i:])`)
 			} else if protoSizer {
 				p.callVarint(varName, ".ProtoSize()")
 				p.P(`n, err := `, varName, `.MarshalTo(dAtA[i:])`)
@@ -875,23 +973,77 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 					varName = "*" + varName
 				}
 				p.callVarint(p.typesPkg.Use(), `.SizeOfStdTime(`, varName, `)`)
-				p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdTimeMarshalTo(`, varName, `, dAtA[i:])`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdTimeMarshalTo(`, varName, `, dAtA[i:])`)
 			} else if gogoproto.IsStdDuration(field) {
 				if gogoproto.IsNullable(field) {
 					varName = "*" + varName
 				}
 				p.callVarint(p.typesPkg.Use(), `.SizeOfStdDuration(`, varName, `)`)
-				p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(`, varName, `, dAtA[i:])`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdDurationMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdDouble(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdDouble(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdDoubleMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdFloat(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdFloat(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdFloatMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdInt64(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt64(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdInt64MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdUInt64(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt64(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdUInt64MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdInt32(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdInt32(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdInt32MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdUInt32(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdUInt32(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdUInt32MarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdBool(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdBool(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdBoolMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdString(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdString(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdStringMarshalTo(`, varName, `, dAtA[i:])`)
+			} else if gogoproto.IsStdBytes(field) {
+				if gogoproto.IsNullable(field) {
+					varName = "*" + varName
+				}
+				p.callVarint(p.typesPkg.Use(), `.SizeOfStdBytes(`, varName, `)`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, p.typesPkg.Use(), `.StdBytesMarshalTo(`, varName, `, dAtA[i:])`)
 			} else if protoSizer {
 				p.callVarint(varName, `.ProtoSize()`)
-				p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, varName, `.MarshalTo(dAtA[i:])`)
 			} else {
 				p.callVarint(varName, `.Size()`)
-				p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := `, varName, `.MarshalTo(dAtA[i:])`)
 			}
-			p.P(`if err != nil {`)
+			p.P(`if err`, numGen.Current(), ` != nil {`)
 			p.In()
-			p.P(`return 0, err`)
+			p.P(`return 0, err`, numGen.Current())
 			p.Out()
 			p.P(`}`)
 			p.P(`i+=n`, numGen.Current())
@@ -945,10 +1097,10 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				} else {
 					p.callVarint(`m.`, fieldname, `.Size()`)
 				}
-				p.P(`n`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
-				p.P(`if err != nil {`)
+				p.P(`n`, numGen.Next(), `, err`, numGen.Current(), ` := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
+				p.P(`if err`, numGen.Current(), ` != nil {`)
 				p.In()
-				p.P(`return 0, err`)
+				p.P(`return 0, err`, numGen.Current())
 				p.Out()
 				p.P(`}`)
 				p.P(`i+=n`, numGen.Current())
@@ -1121,10 +1273,10 @@ func (p *marshalto) Generate(file *generator.FileDescriptor) {
 					oneofs[fieldname] = struct{}{}
 					p.P(`if m.`, fieldname, ` != nil {`)
 					p.In()
-					p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
-					p.P(`if err != nil {`)
+					p.P(`nn`, numGen.Next(), `, err`, numGen.Current(), ` := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
+					p.P(`if err`, numGen.Current(), ` != nil {`)
 					p.In()
-					p.P(`return 0, err`)
+					p.P(`return 0, err`, numGen.Current())
 					p.Out()
 					p.P(`}`)
 					p.P(`i+=nn`, numGen.Current())
